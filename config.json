@@ -1,0 +1,16 @@
+{
+    "Logger": {
+        "level": "debug",
+        "pretty": true,
+        "color": "level"
+    },
+    "Database": {
+        "url": "47.94.151.96",
+        "user": "root",
+        "password": "Lydia_668",
+        "database": "news"
+    },
+    "Loop": {
+        "checkInterval": 1500
+    }
+}
