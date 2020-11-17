@@ -8,6 +8,7 @@ export interface Stock {
 
 export interface StockInfo {
     info: Stock,
-    data?: {},
+    data?: {
+    },
     last?: Date
 }

@@ -90,6 +90,19 @@ export default class DBConnector extends Module {
     }
 
     insertRuntimeData(data: RuntimeData): Promise<void> {
+        const opts = this.assembleInsertSqlOpts('m_runtime_data', data);
+
+        logger.debug('sql = ' + opts.sql);
+
+        return new Promise<void>((resolve, reject) => {
+            this.execute(opts, (err, result) => {
+                if (err) return reject(err);
+                resolve();
+            });
+        });
+    }
+
+    private assembleInsertSqlOpts(table: string, data: any): MySQL.QueryOptions {
         const cols = Object.keys(data).join(',');
         let holders = '';
         const values = [];
@@ -101,18 +114,9 @@ export default class DBConnector extends Module {
                 holders += ',';
             }
         }
-        const opts = {
-            sql: 'INSERT INTO m_runtime_data (' + cols + ') VALUES (' + holders + ')',
+        return {
+            sql: 'INSERT INTO ' + table + ' (' + cols + ') VALUES (' + holders + ')',
             values: values
-        };
-
-        logger.debug('sql = ' + opts.sql);
-
-        return new Promise<void>((resolve, reject) => {
-            this.execute(opts, (err, result) => {
-                if (err) return reject(err);
-                resolve();
-            });
-        });
+        };        
     }
 }

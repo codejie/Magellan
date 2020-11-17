@@ -11,6 +11,9 @@ export class Scheduler extends Module {
 
     timer!: ReturnType<typeof setTimeout>;
 
+    dayOpenChecked: number = 0;
+    dayCloseChecked:
+
     constructor(app: App) {
         super(app);
     }
@@ -37,5 +40,6 @@ export class Scheduler extends Module {
 
     private setCheckTimer(): void {
         this.timer = setTimeout(this.timerCallback.bind(this), (this.config.Loop as LoopOptions).checkInterval);
+
     }
 }
