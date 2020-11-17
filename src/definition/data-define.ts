@@ -1,3 +1,10 @@
+export interface BaseInfo {
+    id: number,
+    type: number,
+    code: string,
+    market: number,
+    name: string
+}
 
 export interface RuntimeData {
     price: number,

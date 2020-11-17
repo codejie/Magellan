@@ -1,4 +1,6 @@
-import { default as MySQL, Pool } from "mysql";
+import { default as MySQL, Pool, queryCallback, QueryOptions } from "mysql";
+import { BaseInfo, RuntimeData } from "./definition/data-define";
+import logger from "./logger";
 import Module from "./module";
 
 interface DatabaseOptions {
@@ -11,7 +13,9 @@ interface DatabaseOptions {
 }
 
 export default class DBConnector extends Module {
+
     protected pool!: Pool;
+
     init(): Promise<void> {
         const opts = (this.config.Database as DatabaseOptions);
         return new Promise<void>((resolve, reject) => {
@@ -40,6 +44,75 @@ export default class DBConnector extends Module {
                  });
             }
             resolve();
+        });
+    }
+
+    query(opts: string | QueryOptions, callback?: queryCallback): void | Promise<any> {
+        if (callback) {
+            this.pool.query(opts, callback);
+        } else {
+            return new Promise<Object>((resolve, reject) => {
+                this.pool.query(opts, (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });          
+            });
+        }
+    }
+
+    execute(opts: string | QueryOptions, callback?: (error: Error | null, result: any) => void): void | Promise<any> {
+        this.pool.query(opts, (err, results, fields) => {
+            if (callback) {
+                callback(err, results);
+            } else {
+                return new Promise<boolean>((resolve, reject) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            }
+        });
+    }    
+
+    loadBaseInfo(): Promise<BaseInfo[]> {
+        const sql = 'SELECT id,type,code,market,name FROM m_base_info WHERE state=1';
+        return new Promise<BaseInfo[]>((resolve, reject) => {
+            this.query(sql, (err, results) => {
+                if (err) return reject(err);
+                const ret:BaseInfo[] = [];
+                if (results && results.length > 0) {
+                    results.forEach((r: any) => {
+                        ret.push(r as BaseInfo);
+                    });
+                }
+                resolve(ret);
+            });    
+        });
+    }
+
+    insertRuntimeData(data: RuntimeData): Promise<void> {
+        const cols = Object.keys(data).join(',');
+        let holders = '';
+        const values = [];
+        const items = Object.values(data);
+        for (let i = 0; i < items.length; ++ i) {
+            holders += '?';
+            values.push(items[i]);
+            if (i != items.length - 1) {
+                holders += ',';
+            }
+        }
+        const opts = {
+            sql: 'INSERT INTO m_runtime_data (' + cols + ') VALUES (' + holders + ')',
+            values: values
+        };
+
+        logger.debug('sql = ' + opts.sql);
+
+        return new Promise<void>((resolve, reject) => {
+            this.execute(opts, (err, result) => {
+                if (err) return reject(err);
+                resolve();
+            });
         });
     }
 }

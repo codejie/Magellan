@@ -5,3 +5,9 @@ export interface Stock {
     market?: number,
     code: string
 }
+
+export interface StockInfo {
+    info: Stock,
+    data?: {},
+    last?: Date
+}

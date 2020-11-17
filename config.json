@@ -5,10 +5,11 @@
         "color": "level"
     },
     "Database": {
-        "url": "47.94.151.96",
+        "type": "mysql",
+        "host": "47.94.151.96",
         "user": "root",
         "password": "Lydia_668",
-        "database": "news"
+        "database": "news"   
     },
     "Loop": {
         "checkInterval": 1500
