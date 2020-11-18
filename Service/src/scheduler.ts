@@ -12,7 +12,7 @@ export class Scheduler extends Module {
     timer!: ReturnType<typeof setTimeout>;
 
     dayOpenChecked: number = 0;
-    dayCloseChecked:
+    // dayCloseChecked:
 
     constructor(app: App) {
         super(app);
