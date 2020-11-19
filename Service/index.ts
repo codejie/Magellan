@@ -3,6 +3,7 @@ import { App, ConfigObject } from "./src/app"
 import config from './config.json'
 
 async function main(): Promise<void> {
+    // process.env.NODE_ENV = "production";
     logger.debug('hello')
     process.on('uncaughtException', error => {
         logger.error('uncaughtException - ', error);
@@ -50,7 +51,7 @@ async function main(): Promise<void> {
     } catch (error) {
         logger.error('app runtim error - ', error);
     }
-    process.stdin.resume();
+    // process.stdin.resume();
     // await app.shutdown();
 }
 

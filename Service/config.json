@@ -12,6 +12,6 @@
         "database": "news"   
     },
     "Loop": {
-        "checkInterval": 1500
+        "checkInterval": 150000
     }
 }
