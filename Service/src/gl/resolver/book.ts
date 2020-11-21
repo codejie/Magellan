@@ -1,5 +1,5 @@
-export const resolvers: any = {
+export default {
     Query: {
-        Book: () => { name: 'bookkkk' }
+        hello: () => "world"
     }
 }

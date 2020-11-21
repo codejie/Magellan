@@ -8,7 +8,21 @@
 				"$tsc"
 			],
 			"group": "build",
-			"label": "tsc: build - tsconfig.json"
+			"label": "tsc: build - tsconfig.json",
+			"dependsOn":[
+				"copy graphql"
+			]
+		},
+		{
+			"type": "shell",
+			"label": "copy graphql",
+			"command": "cp",
+			"args":[
+				"-Force",
+				"-r",
+				"./src/gl/schema",
+				"./dist/src/gl/schema"
+			]
 		}
 	]
 }

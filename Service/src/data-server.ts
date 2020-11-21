@@ -1,8 +1,12 @@
 import { ApolloServer, gql } from "apollo-server-fastify";
+import { loadFilesSync } from "@graphql-tools/load-files";
+import { mergeTypeDefs, mergeResolvers } from "@graphql-tools/merge";
 import fastify from "fastify";
 import { App } from "./app";
 import logger from "./logger";
 import Module from "./module";
+import path from "path";
+import QLDataSource from "./gl/ql-datasource";
 
 
 export default class DataServer extends Module {
@@ -28,23 +32,52 @@ export default class DataServer extends Module {
         //     }
         // }
 
-        const typeDefs = gql`
-            type Query {
-                "A simple type for getting started!"
-                hello: String
-            }
-        `;
+        // const typeDefs = gql`
+        //     type Book {
+        //         name: String
+        //     }
 
-        // A map of functions which return data for the schema.
-        const resolvers = {
-            Query: {
-                hello: () => 'world',
-            },
-        };
+        //     type Query {
+        //         "A simple type for getting started!"
+        //         hello: String,
+        //         book: Book
+        //     }
+
+        //     extend type Query {
+        //         b(id: String): Book
+        //     }
+        // `;
+
+        // // A map of functions which return data for the schema.
+        // const resolvers = {
+        //     Query: {
+        //         hello: () => 'world',
+        //         book: () => {
+        //             return {
+        //                 name:'book'
+        //             }
+        //         },
+        //         b: (parent: any, args: any, context: any, info: any) => {
+        //             logger.debug('id=' + args.id);
+        //             return {
+        //                 name: args.id
+        //             };
+        //         } 
+        //     }
+        // };
+
+        const typeDefs = mergeTypeDefs(loadFilesSync(path.join(__dirname, './gl/schema'), { extensions:['graphql']}));
+        const resolvers = mergeResolvers(loadFilesSync(path.join(__dirname, './gl/resolver')));
+
         this.server = new ApolloServer({
             typeDefs,
             resolvers,
-            logger: logger
+            logger: logger,
+            dataSources: () => {
+                return {
+                    data: new QLDataSource()
+                };
+            }
         });
 
         return super.init();

@@ -68,7 +68,7 @@
     "resolveJsonModule": true
   },
   "include": [
-    "**/*.ts", "src/gl/schema/book.gql"
+    "**/*.ts", "src/gl/schema/*.graphql"
   ],
   "exclude": [
     "node_modules",
