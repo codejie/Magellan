@@ -2,7 +2,7 @@ export interface BaseInfo {
     id: number,
     type: number,
     code: string,
-    market: number,
+    market?: number,
     name: string
 }
 

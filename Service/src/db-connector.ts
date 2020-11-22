@@ -71,9 +71,9 @@ export default class DBConnector extends Module {
                 });
             }
         });
-    }    
+    }      
 
-    loadBaseInfo(): Promise<BaseInfo[]> {
+    loadBaseInfos(): Promise<BaseInfo[]> {
         const sql = 'SELECT id,type,code,market,name FROM m_base_info WHERE state=1';
         return new Promise<BaseInfo[]>((resolve, reject) => {
             this.query(sql, (err, results) => {
@@ -86,6 +86,16 @@ export default class DBConnector extends Module {
                 }
                 resolve(ret);
             });    
+        });
+    }
+
+    insertBaseInfo(data: BaseInfo): Promise<number> {
+        const opts = this.assembleInsertSqlOpts('m_base_info', data);
+        return new Promise<number>((resolve, reject) => {
+            this.execute(opts, (err, result) => {
+                if (err) return reject(err);
+                resolve(result.insertId);
+            });
         });
     }
 

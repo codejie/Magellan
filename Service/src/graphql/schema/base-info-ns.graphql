@@ -1,0 +1,16 @@
+type Test {
+    a: String,
+    b: Int
+}
+type TestQuery {
+    single: Test,
+    array: [Test]
+}
+
+type TestQuery {
+    all: String
+}
+
+type Query {
+    test: TestQuery
+}

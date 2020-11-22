@@ -10,19 +10,40 @@
 			"group": "build",
 			"label": "tsc: build - tsconfig.json",
 			"dependsOn":[
-				"copy graphql"
+				"mkdir graphql schema",
+				"mac copy graphql schema"
 			]
 		},
 		{
 			"type": "shell",
-			"label": "copy graphql",
+			"label": "mkdir graphql schema",
+			"command": "mkdir",
+			"args":[
+				"-p",
+				"./dist/src/graphql"
+			]
+		},		
+		{
+			"type": "shell",
+			"label": "win copy graphql schema",
 			"command": "cp",
 			"args":[
 				"-Force",
 				"-r",
-				"./src/gl/schema",
-				"./dist/src/gl/schema"
+				"./src/graphql/schema",
+				"./dist/src/graphql"
 			]
-		}
+		},
+		{
+			"type": "shell",
+			"label": "mac copy graphql schema",
+			"command": "cp",
+			"args":[
+				"-f",
+				"-r",
+				"./src/graphql/schema",
+				"./dist/src/graphql"
+			]
+		}		
 	]
 }

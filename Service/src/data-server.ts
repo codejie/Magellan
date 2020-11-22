@@ -1,13 +1,10 @@
 import { ApolloServer, gql } from "apollo-server-fastify";
-import { loadFilesSync } from "@graphql-tools/load-files";
-import { mergeTypeDefs, mergeResolvers } from "@graphql-tools/merge";
 import fastify from "fastify";
 import { App } from "./app";
 import logger from "./logger";
 import Module from "./module";
-import path from "path";
-import QLDataSource from "./gl/ql-datasource";
 
+import { typeDefs, resolvers, QLDataSource } from "./graphql"
 
 export default class DataServer extends Module {
 
@@ -66,8 +63,12 @@ export default class DataServer extends Module {
         //     }
         // };
 
-        const typeDefs = mergeTypeDefs(loadFilesSync(path.join(__dirname, './gl/schema'), { extensions:['graphql']}));
-        const resolvers = mergeResolvers(loadFilesSync(path.join(__dirname, './gl/resolver')));
+        // const typeDefs = mergeTypeDefs(loadFilesSync(path.join(__dirname, './gl/schema'), { extensions:['graphql']}));
+        // const resolvers = mergeResolvers(loadFilesSync(path.join(__dirname, './gl/resolver')));
+
+        const qlDataSource = new QLDataSource({
+            connector: this.app.dbConn
+        });
 
         this.server = new ApolloServer({
             typeDefs,
@@ -75,7 +76,7 @@ export default class DataServer extends Module {
             logger: logger,
             dataSources: () => {
                 return {
-                    data: new QLDataSource()
+                    dbConn: qlDataSource//new QLDataSource(this.app.dbConn)
                 };
             }
         });
