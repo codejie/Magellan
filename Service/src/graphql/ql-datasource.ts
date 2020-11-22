@@ -19,11 +19,18 @@ export default class QLDataSource extends DataSource {
     }
 
     findBaseInfos(): Promise<BaseInfo[]> {
-        return this.conn.loadBaseInfos();
+        return this.conn.findBaseInfos();
     }
 
-    addBaseInfo(data: BaseInfo): Promise<number> {
+    findBaseInfoById(id: number): Promise<BaseInfo | null> {
+        return this.conn.findBaseInfoById(id);
+    }
+
+    insertBaseInfo(data: BaseInfo): Promise<number> {
         return this.conn.insertBaseInfo(data);
     }
 
+    removeBaseInfo(id: number): Promise<number> {
+        return this.conn.removeBaseInfo(id);
+    }
 }

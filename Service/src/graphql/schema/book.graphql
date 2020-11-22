@@ -1,7 +1,0 @@
-type Book {
-    name: String!
-}
-
-type Query {
-    hello: String
-}

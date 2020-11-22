@@ -5,11 +5,30 @@ type BaseInfo {
     market: Int
 }
 
+type BaseInfoQuery {
+    oneById(id: Int!): BaseInfo,
+    many: [BaseInfo]
+}
+
+type BaseInfoMutation {
+    add(type: Int!, code: String!, market: Int, name: String): Int
+    remove(id: Int!): Int
+}
+
 type Query {
-    # fetchBaseInfo(id: Int): BaseInfo,
-    baseInfos: [BaseInfo]
+    BaseInfo: BaseInfoQuery
 }
 
 type Mutation {
-    addBaseInfo(type: Int!, code: String!, market: Int, name: String): Int
+    BaseInfo: BaseInfoMutation
 }
+
+# type Query {
+#     # fetchBaseInfo(id: Int): BaseInfo,
+#     BaseInfo:
+#     baseInfos: [BaseInfo]
+# }
+
+# type Mutation {
+#     addBaseInfo(type: Int!, code: String!, market: Int, name: String): Int
+# }

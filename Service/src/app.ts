@@ -80,7 +80,7 @@ export class App extends EventEmitter {
     }
 
     private async loadBaseInfo(): Promise<void> {
-        const infos: BaseInfo[] = await this.dbConn.loadBaseInfos();
+        const infos: BaseInfo[] = await this.dbConn.findBaseInfos();
         infos.forEach(item => {
             this.stockInfos.push({
                 info: item

@@ -73,7 +73,7 @@ export default class DBConnector extends Module {
         });
     }      
 
-    loadBaseInfos(): Promise<BaseInfo[]> {
+    findBaseInfos(): Promise<BaseInfo[]> {
         const sql = 'SELECT id,type,code,market,name FROM m_base_info WHERE state=1';
         return new Promise<BaseInfo[]>((resolve, reject) => {
             this.query(sql, (err, results) => {
@@ -89,6 +89,22 @@ export default class DBConnector extends Module {
         });
     }
 
+    findBaseInfoById(id: number): Promise<BaseInfo | null> {
+        const opts = {
+            sql: 'SELECT id,type,code,market,name FROM m_base_info \
+                    WHERE state=1 AND id=?',
+            values: [id]
+        };
+        return new Promise<BaseInfo | null>((resolve, reject) => {
+            this.query(opts, (err, results) => {
+                if (err) return reject(err);
+                if (results && results.length > 0) {
+                    resolve(results[0] as BaseInfo);
+                }
+            });
+        });
+    }
+
     insertBaseInfo(data: BaseInfo): Promise<number> {
         const opts = this.assembleInsertSqlOpts('m_base_info', data);
         return new Promise<number>((resolve, reject) => {
@@ -97,6 +113,19 @@ export default class DBConnector extends Module {
                 resolve(result.insertId);
             });
         });
+    }
+
+    removeBaseInfo(id: number): Promise<number> {
+        const opts = {
+            sql: 'DELETE FROM m_base_info WHERE id=?',
+            values: [id]
+        };
+        return new Promise<number>((resolve, reject) => {
+            this.execute(opts, (err, result) => {
+                if (err) return reject(err);
+                resolve(result.affectedRows);
+            });
+        });        
     }
 
     insertRuntimeData(data: RuntimeData): Promise<void> {
