@@ -1,0 +1,22 @@
+{
+    "Logger": {
+        "level": "debug",
+        "pretty": true,
+        "color": "level"
+    },
+    "Database": {
+        "type": "mysql",
+        "host": "47.94.151.96",
+        "user": "root",
+        "password": "Lydia_668",
+        "database": "news"   
+    },
+    "Tasks": {
+        "runtime_data": {
+            "interval": 6000
+        },
+        "day_data": {
+            "interval": 3600000
+        }
+    }
+}

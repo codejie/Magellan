@@ -1,4 +1,5 @@
 import { App } from "../app";
+import logger from "../logger";
 import Module from "../module";
 
 interface Tasks {
@@ -6,6 +7,8 @@ interface Tasks {
 }
 
 export default abstract class Task extends Module {
+
+    TASK_NAME: string = "base_task";
 
     interval!: number;
     timer!: ReturnType<typeof setTimeout>;
@@ -27,6 +30,8 @@ export default abstract class Task extends Module {
     setTimer(interval?: number, data?: any): void {
         interval = interval || this.interval;
         this.timer = setTimeout(this.onLoop.bind(this), interval, data);
+
+        logger.debug('task [' + this.TASK_NAME + '] set timer : ' + interval);
     }
 
     shutdown(): Promise<void> {

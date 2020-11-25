@@ -10,16 +10,16 @@ interface TaskConfig {
     interval: number
 }
 
-const TASK_NAME: any = "day_data";
-
 export default class DayDataTask extends Task {
+
+    TASK_NAME: string = "day_data";
 
     fetcher: NetEaseFetcher;
     taskConfig: TaskConfig;
     
     constructor(app: App) {
         super(app);
-        this.taskConfig = this.baseConfig[TASK_NAME] as TaskConfig;
+        this.taskConfig = this.baseConfig[this.TASK_NAME] as TaskConfig;
         this.fetcher = new NetEaseFetcher();
 
         this.interval = this.taskConfig.interval;
@@ -49,6 +49,8 @@ export default class DayDataTask extends Task {
                 await insertTodayDayData(dbConn, data);
                 await updateYesterdayDayData(dbConn, data);
             }
+        } else {
+            logger.debug('[' + this.TASK_NAME + '] skip.');
         }
         super.setTimer();
     }

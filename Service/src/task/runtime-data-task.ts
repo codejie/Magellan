@@ -10,16 +10,16 @@ interface TaskConfig {
     interval: number
 }
 
-const TASK_NAME: any = "runtime_data";
-
 export default class RuntimeDataTask extends Task {
+
+    TASK_NAME: string = "runtime_data";
 
     fetcher: NetEaseFetcher;
     taskConfig: TaskConfig;
     
     constructor(app: App) {
         super(app);
-        this.taskConfig = this.baseConfig[TASK_NAME] as TaskConfig;
+        this.taskConfig = this.baseConfig[this.TASK_NAME] as TaskConfig;
         this.fetcher = new NetEaseFetcher();
 
         this.interval = this.taskConfig.interval;
@@ -31,8 +31,7 @@ export default class RuntimeDataTask extends Task {
     }
 
     async onLoop(data: any): Promise<void>
-     {
-        logger.debug('timeout');
+    {
         if (this.isValid()) {
             const stockInfos = this.app.stockInfos;
             const dbConn = this.app.dbConn;
@@ -42,6 +41,8 @@ export default class RuntimeDataTask extends Task {
                 const data = await this.fetchRuntimeData(req);
                 await insertRuntimeData(dbConn, data);
             }
+        } else {
+            logger.debug('[' + this.TASK_NAME + '] skip.');
         }
         super.setTimer();
     }
