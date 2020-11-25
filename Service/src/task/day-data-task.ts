@@ -6,15 +6,23 @@ import NetEaseFetcher from "../fetcher/netease-fetcher";
 import logger from "../logger";
 import Task from "./task";
 
+interface TaskConfig {
+    interval: number
+}
+
+const TASK_NAME: any = "day_data";
+
 export default class DayDataTask extends Task {
 
     fetcher: NetEaseFetcher;
+    taskConfig: TaskConfig;
     
     constructor(app: App) {
         super(app);
-
-        this.delay = 59 * 60000;
+        this.taskConfig = this.baseConfig[TASK_NAME] as TaskConfig;
         this.fetcher = new NetEaseFetcher();
+
+        this.interval = this.taskConfig.interval;
     }
 
     start(): Promise<void> {

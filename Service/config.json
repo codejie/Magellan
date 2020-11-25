@@ -11,7 +11,12 @@
         "password": "Lydia_668",
         "database": "news"   
     },
-    "Loop": {
-        "checkInterval": 150000
+    "Tasks": {
+        "runtime_data": {
+            "interval": 6000
+        },
+        "day_data": {
+            "interval": 3600000
+        }
     }
 }

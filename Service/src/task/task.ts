@@ -1,9 +1,20 @@
+import { App } from "../app";
 import Module from "../module";
+
+interface Tasks {
+    [name: string]: any
+}
 
 export default abstract class Task extends Module {
 
-    delay!: number;
+    interval!: number;
     timer!: ReturnType<typeof setTimeout>;
+    baseConfig!: Tasks;
+
+    constructor(app: App) {
+        super(app);
+        this.baseConfig = this.config.Tasks as Tasks;
+    }
 
     start(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -13,9 +24,9 @@ export default abstract class Task extends Module {
 
     abstract onLoop(data: any): void;
 
-    setTimer(delay?: number, data?: any): void {
-        delay = delay || this.delay;
-        this.timer = setTimeout(this.onLoop.bind(this), delay, data);
+    setTimer(interval?: number, data?: any): void {
+        interval = interval || this.interval;
+        this.timer = setTimeout(this.onLoop.bind(this), interval, data);
     }
 
     shutdown(): Promise<void> {
