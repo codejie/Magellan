@@ -38,6 +38,10 @@ export interface RuntimeData {
 }
 
 export interface DayData {
-    
+    id: number,
+    todayopen: number,
+    yestclose: number,
+    todayclose?: number,
+    todaydate: Date      
 }
 

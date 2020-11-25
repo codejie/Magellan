@@ -5,6 +5,12 @@ export default abstract class Task extends Module {
     delay!: number;
     timer!: ReturnType<typeof setTimeout>;
 
+    start(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            resolve();
+        });
+    }
+
     abstract onLoop(data: any): void;
 
     setTimer(delay?: number, data?: any): void {

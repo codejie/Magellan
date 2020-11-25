@@ -73,89 +73,89 @@ export default class DBConnector extends Module {
         });
     }      
 
-    findBaseInfos(): Promise<BaseInfo[]> {
-        const sql = 'SELECT id,type,code,market,name FROM m_base_info WHERE state=1';
-        return new Promise<BaseInfo[]>((resolve, reject) => {
-            this.query(sql, (err, results) => {
-                if (err) return reject(err);
-                const ret:BaseInfo[] = [];
-                if (results && results.length > 0) {
-                    results.forEach((r: any) => {
-                        ret.push(r as BaseInfo);
-                    });
-                }
-                resolve(ret);
-            });    
-        });
-    }
+    // findBaseInfos(): Promise<BaseInfo[]> {
+    //     const sql = 'SELECT id,type,code,market,name FROM m_base_info WHERE state=1';
+    //     return new Promise<BaseInfo[]>((resolve, reject) => {
+    //         this.query(sql, (err, results) => {
+    //             if (err) return reject(err);
+    //             const ret:BaseInfo[] = [];
+    //             if (results && results.length > 0) {
+    //                 results.forEach((r: any) => {
+    //                     ret.push(r as BaseInfo);
+    //                 });
+    //             }
+    //             resolve(ret);
+    //         });    
+    //     });
+    // }
 
-    findBaseInfoById(id: number): Promise<BaseInfo | null> {
-        const opts = {
-            sql: 'SELECT id,type,code,market,name FROM m_base_info \
-                    WHERE state=1 AND id=?',
-            values: [id]
-        };
-        return new Promise<BaseInfo | null>((resolve, reject) => {
-            this.query(opts, (err, results) => {
-                if (err) return reject(err);
-                if (results && results.length > 0) {
-                    resolve(results[0] as BaseInfo);
-                }
-            });
-        });
-    }
+    // findBaseInfoById(id: number): Promise<BaseInfo | null> {
+    //     const opts = {
+    //         sql: 'SELECT id,type,code,market,name FROM m_base_info \
+    //                 WHERE state=1 AND id=?',
+    //         values: [id]
+    //     };
+    //     return new Promise<BaseInfo | null>((resolve, reject) => {
+    //         this.query(opts, (err, results) => {
+    //             if (err) return reject(err);
+    //             if (results && results.length > 0) {
+    //                 resolve(results[0] as BaseInfo);
+    //             }
+    //         });
+    //     });
+    // }
 
-    insertBaseInfo(data: BaseInfo): Promise<number> {
-        const opts = this.assembleInsertSqlOpts('m_base_info', data);
-        return new Promise<number>((resolve, reject) => {
-            this.execute(opts, (err, result) => {
-                if (err) return reject(err);
-                resolve(result.insertId);
-            });
-        });
-    }
+    // insertBaseInfo(data: BaseInfo): Promise<number> {
+    //     const opts = this.assembleInsertSqlOpts('m_base_info', data);
+    //     return new Promise<number>((resolve, reject) => {
+    //         this.execute(opts, (err, result) => {
+    //             if (err) return reject(err);
+    //             resolve(result.insertId);
+    //         });
+    //     });
+    // }
 
-    removeBaseInfo(id: number): Promise<number> {
-        const opts = {
-            sql: 'DELETE FROM m_base_info WHERE id=?',
-            values: [id]
-        };
-        return new Promise<number>((resolve, reject) => {
-            this.execute(opts, (err, result) => {
-                if (err) return reject(err);
-                resolve(result.affectedRows);
-            });
-        });        
-    }
+    // removeBaseInfo(id: number): Promise<number> {
+    //     const opts = {
+    //         sql: 'DELETE FROM m_base_info WHERE id=?',
+    //         values: [id]
+    //     };
+    //     return new Promise<number>((resolve, reject) => {
+    //         this.execute(opts, (err, result) => {
+    //             if (err) return reject(err);
+    //             resolve(result.affectedRows);
+    //         });
+    //     });        
+    // }
 
-    insertRuntimeData(data: RuntimeData): Promise<void> {
-        const opts = this.assembleInsertSqlOpts('m_runtime_data', data);
+    // insertRuntimeData(data: RuntimeData): Promise<void> {
+    //     const opts = this.assembleInsertSqlOpts('m_runtime_data', data);
 
-        logger.debug('sql = ' + opts.sql);
+    //     logger.debug('sql = ' + opts.sql);
 
-        return new Promise<void>((resolve, reject) => {
-            this.execute(opts, (err, result) => {
-                if (err) return reject(err);
-                resolve();
-            });
-        });
-    }
+    //     return new Promise<void>((resolve, reject) => {
+    //         this.execute(opts, (err, result) => {
+    //             if (err) return reject(err);
+    //             resolve();
+    //         });
+    //     });
+    // }
 
-    private assembleInsertSqlOpts(table: string, data: any): MySQL.QueryOptions {
-        const cols = Object.keys(data).join(',');
-        let holders = '';
-        const values = [];
-        const items = Object.values(data);
-        for (let i = 0; i < items.length; ++ i) {
-            holders += '?';
-            values.push(items[i]);
-            if (i != items.length - 1) {
-                holders += ',';
-            }
-        }
-        return {
-            sql: 'INSERT INTO ' + table + ' (' + cols + ') VALUES (' + holders + ')',
-            values: values
-        };        
-    }
+    // private assembleInsertSqlOpts(table: string, data: any): MySQL.QueryOptions {
+    //     const cols = Object.keys(data).join(',');
+    //     let holders = '';
+    //     const values = [];
+    //     const items = Object.values(data);
+    //     for (let i = 0; i < items.length; ++ i) {
+    //         holders += '?';
+    //         values.push(items[i]);
+    //         if (i != items.length - 1) {
+    //             holders += ',';
+    //         }
+    //     }
+    //     return {
+    //         sql: 'INSERT INTO ' + table + ' (' + cols + ') VALUES (' + holders + ')',
+    //         values: values
+    //     };        
+    // }
 }

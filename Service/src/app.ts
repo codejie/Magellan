@@ -1,12 +1,9 @@
 import { EventEmitter } from "events";
-import DataFetcher from "./data-fetcher";
 import DataServer from "./data-server";
 import DBConnector from "./db-connector";
-import { EVENT_BASEINFO_UPDATE, EVENT_LOOP } from "./definition/const-define";
+import { findBaseInfos } from "./db/collection-helper";
 import { BaseInfo } from "./definition/data-define";
 import { StockInfo } from "./definition/struct-define";
-import logger from "./logger";
-import { Scheduler } from "./scheduler";
 import Tasks from "./task";
 
 export interface ConfigObject {
@@ -86,7 +83,7 @@ export class App extends EventEmitter {
     // }
 
     private async loadBaseInfo(): Promise<void> {
-        const infos: BaseInfo[] = await this.dbConn.findBaseInfos();
+        const infos: BaseInfo[] = await findBaseInfos(this.dbConn);// this.dbConn.findBaseInfos();
         infos.forEach(item => {
             this.stockInfos.push({
                 info: item

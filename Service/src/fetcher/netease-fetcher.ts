@@ -37,6 +37,7 @@ export default class NetEaseFetcher extends Fetcher {
             id: req.id,
             todayopen: data['open'],
             yestclose: data['yestclose'],
+            todayclose: data['yestclose'],
             todaydate: data['update']
         };
         return ret;

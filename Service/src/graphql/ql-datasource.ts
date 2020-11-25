@@ -1,6 +1,6 @@
 import { DataSource } from 'apollo-datasource'
-import { resolve } from 'path';
 import DBConnector from '../db-connector';
+import { findBaseInfoById, findBaseInfos, insertBaseInfo, removeBaseInfo } from '../db/collection-helper';
 import { BaseInfo } from '../definition/data-define';
 
 export default class QLDataSource extends DataSource {
@@ -19,18 +19,18 @@ export default class QLDataSource extends DataSource {
     }
 
     findBaseInfos(): Promise<BaseInfo[]> {
-        return this.conn.findBaseInfos();
+        return findBaseInfos(this.conn);
     }
 
     findBaseInfoById(id: number): Promise<BaseInfo | null> {
-        return this.conn.findBaseInfoById(id);
+        return findBaseInfoById(this.conn, id);
     }
 
     insertBaseInfo(data: BaseInfo): Promise<number> {
-        return this.conn.insertBaseInfo(data);
+        return insertBaseInfo(this.conn, data);
     }
 
     removeBaseInfo(id: number): Promise<number> {
-        return this.conn.removeBaseInfo(id);
+        return removeBaseInfo(this.conn, id);
     }
 }
