@@ -8,7 +8,7 @@ export default class NetEaseFetcher extends Fetcher {
     private readonly BASE_RUNTIME_DATA: string = 'http://api.money.126.net/data/feed/';
 
     fetchRuntime(req: Stock): Promise<any> {
-        const code: string = makeStockCode(req.type, req.code);
+        const code: string = makeStockCode(req.type, req.market, req.code);
         const url = this.BASE_RUNTIME_DATA + code + '?callback=_ntes_quote_callback' + makeRandomString();
 
         return new Promise<any>((resolve, reject) => {

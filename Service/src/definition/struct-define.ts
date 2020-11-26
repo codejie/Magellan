@@ -2,7 +2,7 @@
 export interface Stock {
     id: number,
     type: number,
-    market?: number,
+    market: number,
     code: string
 }
 

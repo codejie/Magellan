@@ -8,10 +8,11 @@ export const runtimeItems: string[] = [
     'volume', 'turnover'
 ];
 
-export function makeStockCode(type: number, code: string): string {
-    if (type === 1) {
-        return '0' + code;
-    }
+export function makeStockCode(type: number, market: number, code: string): string {
+    // if (type === 1) {
+    //     return '0' + code;
+    // }
+    return (market + code); 
     throw new Error('unknown stock type - ' + type);
 }
 

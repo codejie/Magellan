@@ -54,6 +54,7 @@ export default class RuntimeDataTask extends Task {
                     resolve(this.fetcher.makeRuntimeData(req, data));
                 })
                 .catch(err => {
+                    logger.error('fetch runtime data failed - ' + req.code);
                     reject(err);
                 });
         });
