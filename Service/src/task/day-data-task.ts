@@ -33,7 +33,7 @@ export default class DayDataTask extends Task {
     async onLoop(data: any): Promise<void>
      {
         logger.debug('day timeout');
-        if (this.isValid()) {
+        if (this.isValid() === true) {
             const stockInfos = this.app.stockInfos;
             const dbConn = this.app.dbConn;
             const now = new Date();
@@ -72,7 +72,8 @@ export default class DayDataTask extends Task {
         if (now.getDay() == 0 || now.getDay() == 6)
             return false;
         // return true;
-        const time = now.getHours() * 60 + now.getMinutes();
+        const time: number = now.getHours() * 60 + now.getMinutes();
+        logger.debug('time = ' + time); 
         return (time >= 570 && time <= 600);
     }
 }
