@@ -74,11 +74,13 @@ export default class DataServer extends Module {
             typeDefs,
             resolvers,
             logger: logger,
+            subscriptions: '/subscriptions',
             dataSources: () => {
                 return {
                     dbConn: qlDataSource//new QLDataSource(this.app.dbConn)
                 };
-            }
+            },
+            uploads: false
         });
 
         return super.init();
@@ -87,6 +89,7 @@ export default class DataServer extends Module {
     start(): Promise<void> {
 
         const app = fastify();
+        this.server.installSubscriptionHandlers(app.server);
         app.register(this.server.createHandler());
         return new Promise<void>((resolve, reject) => {
             app.listen(3000)

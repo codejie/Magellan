@@ -13,7 +13,7 @@
     },
     "Tasks": {
         "runtime_data": {
-            "interval": 1000
+            "interval": 1000000
         },
         "day_data": {
             "interval": 3600000
