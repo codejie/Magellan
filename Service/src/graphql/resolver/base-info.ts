@@ -1,4 +1,5 @@
 import { isContext } from "vm";
+import { threadId } from "worker_threads";
 import { BaseInfo } from "../../definition/data-define";
 
 export default {
@@ -24,7 +25,9 @@ export default {
                 ret.push({
                     id: item.id,
                     type: item.type,
-                    code: item.code
+                    code: item.code,
+                    market: item.market,
+                    name: item.name
                 });
             });
             return ret;

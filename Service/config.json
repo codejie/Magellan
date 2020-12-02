@@ -13,9 +13,11 @@
     },
     "Tasks": {
         "runtime_data": {
+            "disabled": true,
             "interval": 1000000
         },
         "day_data": {
+            "disabled": true,
             "interval": 3600000
         }
     }

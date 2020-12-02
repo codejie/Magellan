@@ -1,6 +1,12 @@
-query {
+query ($id: Int!){
     BaseInfo {
         many {
+            info:id
+            code
+            name
+            market
+        }
+        oneById(id: $id) {
             id
         }
     }

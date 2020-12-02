@@ -34,6 +34,8 @@ export function findBaseInfoById(db: DBConnector, id: number): Promise<BaseInfo 
             if (err) return reject(err);
             if (results && results.length > 0) {
                 resolve(results[0] as BaseInfo);
+            } else {
+                resolve(null);
             }
         });
     });

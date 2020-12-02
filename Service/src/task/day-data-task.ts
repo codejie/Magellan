@@ -7,6 +7,7 @@ import logger from "../logger";
 import Task from "./task";
 
 interface TaskConfig {
+    disabled?: boolean,
     interval: number
 }
 
@@ -26,7 +27,8 @@ export default class DayDataTask extends Task {
     }
 
     start(): Promise<void> {
-        super.setTimer();
+        if (!this.taskConfig.disabled)
+            super.setTimer();
         return super.start();
     }
 
@@ -73,7 +75,7 @@ export default class DayDataTask extends Task {
             return false;
         // return true;
         const time: number = now.getHours() * 60 + now.getMinutes();
-        logger.debug('time = ' + time); 
+        // logger.debug('time = ' + time); 
         return (time >= 570 && time <= 600);
     }
 }

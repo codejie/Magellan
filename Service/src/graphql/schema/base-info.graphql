@@ -2,7 +2,8 @@ type BaseInfo {
     id: Int!,
     type: Int!,
     code: String!,
-    market: Int
+    market: Int!,
+    name: String
 }
 
 type BaseInfoQuery {
