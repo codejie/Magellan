@@ -2,19 +2,37 @@
   <div class="base">
     <div v-if="$apollo.loading">Loading...</div>
     BaseInfo Table
+    {{ info.one.id }}
     <div>
       {{ hello }}
     </div>
-    <!-- <BaseInfoTable :data="[1,2,3]" /> -->
-    <ApolloQuery :query=query
-      :variables={id}
-    >
+    <ApolloQuery :query="gql => gql`
+        query {
+          hello
+        }
+      `">
       <template v-slot="{ result: { loading, error, data } }">
         <div v-if="loading">Loading...</div>
         <div v-else-if="error"> An Error</div>
-        <div v-else-if="data">
-           <BaseInfoTable :data=data.BaseInfo.many />
-        </div>
+        <div v-else-if="data"> {{ data.hello }}</div>
+        <div v-else>No Result</div>
+      </template>
+    </ApolloQuery>
+    <ApolloQuery :query="gql => gql`
+        query ($id: Int!) {
+          BaseInfo {
+            oneById (id: $id) {
+              id
+            }
+          }
+        }
+      `"
+      :variables="{ id }"
+      >
+      <template v-slot="{ result: { loading, error, data } }">
+        <div v-if="loading">Loading...</div>
+        <div v-else-if="error"> An Error</div>
+        <div v-else-if="data"> {{ data.BaseInfo.oneById.id }}</div>
         <div v-else>No Result</div>
       </template>
     </ApolloQuery>
@@ -23,12 +41,8 @@
 
 <script>
 import gql from 'graphql-tag'
-import BaseInfoTable from './BaseInfoTable'
 
 export default {
-  components: {
-    BaseInfoTable
-  },
   apollo: {
     info: {
       query: gql`query a($id: Int!) {
@@ -55,8 +69,7 @@ export default {
     return {
       info: {},
       hello: '',
-      id: 19,
-      query: (gql) => gql`query { BaseInfo { many { id type market code name }}}`
+      id: 212
     }
   },
   methods: {}
