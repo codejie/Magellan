@@ -70,12 +70,13 @@ export default class DayDataTask extends Task {
     } 
     
     isValid(): boolean {
+        return true;
         const now = new Date();
         if (now.getDay() == 0 || now.getDay() == 6)
             return false;
         // return true;
         const time: number = now.getHours() * 60 + now.getMinutes();
         // logger.debug('time = ' + time); 
-        return (time >= 570 && time <= 600);
+        return (time > 570 && time <= (570 + this.interval / 1000 / 60));
     }
 }
