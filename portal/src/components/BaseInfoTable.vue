@@ -2,12 +2,12 @@
   <div>
     <h1>ddddd</h1>
     {{ tableData }}
-    <el-table :data="tableData" border>
-      <el-table-column prop="id" label="ID" width="100"/>
-      <el-table-column prop="type" label="TYPE" width="100"/>
-      <el-table-column prop="market" label="MARKET" width="100"/>
-      <el-table-column prop="code" label="CODE" width="100"/>
-      <el-table-column prop="name" label="NAME" width="100"/>
+    <el-table :data="tableData" style="border: 2px solid;">
+      <el-table-column prop="id" label="ID" width="50"/>
+      <el-table-column prop="type" label="TYPE"/>
+      <el-table-column prop="market" label="MARKET"/>
+      <el-table-column prop="code" label="CODE"/>
+      <el-table-column prop="name" label="NAME"/>
     </el-table>
   </div>
 </template>
@@ -28,3 +28,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.el-table::before {
+  background-color: blueviolet;
+}
+</style>
