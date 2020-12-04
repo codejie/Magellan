@@ -76,7 +76,10 @@ export default class DayDataTask extends Task {
             return false;
         // return true;
         const time: number = now.getHours() * 60 + now.getMinutes();
-        // logger.debug('time = ' + time); 
-        return (time > 570 && time <= (570 + this.interval / 1000 / 60));
+        const MaxSide = 570 + this.interval / 1000 / 60;
+        logger.debug('day_data time = ' + time); 
+        logger.debug('day_data maxSide = ' + MaxSide); 
+        logger.debug('day_data valid = ' + (time > 570 && time <= MaxSide)); 
+        return (time > 570 && time <= MaxSide);//(570 + this.interval / 1000 / 60));
     }
 }
