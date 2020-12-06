@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>ddddd</h1>
     {{ tableData }}
     <el-table :data="tableData" style="border: 2px solid;">
       <el-table-column prop="id" label="ID" width="50"/>
@@ -18,9 +17,7 @@ export default {
   computed: {
     tableData: function () {
       const ret = []
-      // console.debug('data = ' + this.data)
       for (let i = 0; i < this.data.length; ++i) {
-        // console.debug('i = ' + JSON.stringify(this.data[i]))
         ret.push(this.data[i])
       }
       return ret
