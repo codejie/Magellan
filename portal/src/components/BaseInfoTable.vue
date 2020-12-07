@@ -1,7 +1,7 @@
 <template>
   <div>
     {{ tableData }}
-    <el-table :data="tableData" style="border: 2px solid;">
+    <el-table :data="tableData" class="table" border>
       <el-table-column prop="id" label="ID" width="50"/>
       <el-table-column prop="type" label="TYPE"/>
       <el-table-column prop="market" label="MARKET"/>
@@ -27,7 +27,9 @@ export default {
 </script>
 
 <style scoped>
-.el-table::before {
-  background-color: blueviolet;
+.table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
 }
 </style>

@@ -140,9 +140,8 @@ export default {
   }
 }
 </script>
-
-<style scoped>
+<style>
 .btn {
-  background-color: black;
+  background-color: red;
 }
 </style>
