@@ -7,13 +7,18 @@
       <el-table-column prop="market" label="MARKET"/>
       <el-table-column prop="code" label="CODE"/>
       <el-table-column prop="name" label="NAME"/>
+      <el-table-column label="Operation" width="100">
+        <template slot-scope="scope">
+          <el-button @click="removeInfo(scope.row.id)" type="text" size="small">Remove</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['data'],
+  props: ['data', 'removeMethod'],
   computed: {
     tableData: function () {
       const ret = []
@@ -21,6 +26,13 @@ export default {
         ret.push(this.data[i])
       }
       return ret
+    }
+  },
+  methods: {
+    removeInfo (id) {
+      console.log(id)
+      this.removeMethod(id)
+      // this.$parent.methods.click()
     }
   }
 }

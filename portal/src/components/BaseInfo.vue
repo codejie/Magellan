@@ -5,14 +5,16 @@
       {{ hello }}
     </div>
     <!-- <BaseInfoTable :data="[1,2,3]" /> -->
-    <ApolloQuery :query=query
+    <ApolloQuery
+      ref="tableQuery"
+      :query=query
       :variables={id}
     >
-      <template v-slot="{ result: { loading, error, data } }">
+      <template v-slot="{ result: { loading, error, data }}">
         <div v-if="loading">Loading...</div>
         <div v-else-if="error"> An Error</div>
         <div v-else-if="data">
-           <BaseInfoTable :data=data.BaseInfo.many />
+           <BaseInfoTable :data=data.BaseInfo.many :removeMethod=removeBaseInfo />
         </div>
         <div v-else>No Result</div>
       </template>
@@ -27,17 +29,17 @@
           <el-form-item label="TYPE" label-width="50px">
             <el-input v-model="form.type"/>
           </el-form-item>
-          <el-form-item label="TYPE" label-width="50px">
+          <el-form-item label="MARKET" label-width="50px">
             <el-input v-model="form.market"/>
           </el-form-item>
-          <el-form-item label="TYPE" label-width="50px">
+          <el-form-item label="CODE" label-width="50px">
             <el-input v-model="form.code"/>
           </el-form-item>
-          <el-form-item label="TYPE" label-width="50px">
+          <el-form-item label="NAME" label-width="50px">
             <el-input v-model="form.name"/>
           </el-form-item>
         </el-form>
-        <el-button type="primary" @click=submit>Close</el-button>
+        <el-button type="primary" @click=addBaseInfo>Close</el-button>
       </el-dialog>
     </div>
   </div>
@@ -81,22 +83,6 @@ export default {
           hello
         }`
       }
-    },
-    addBaseInfo: {
-      mutation: gql`mutation addBaseInfo ($type: Int!, $code: String!, $market: Int, $name: String) {
-        BaseInfo {
-          add (type: $type, code: $code, market: $market, name: $name)
-        }
-      }`,
-      // variables: {
-      //   type: this.data.form.type,
-      //   market: this.data.form.market,
-      //   code: this.data.form.code,
-      //   name: this.data.form.name
-      // },
-      update: (data) => {
-        console.log('mutation ret = ' + data)
-      }
     }
   },
   data () {
@@ -118,7 +104,7 @@ export default {
     click () {
       console.log('click')
     },
-    submit () {
+    addBaseInfo () {
       this.$apollo.mutate({
         mutation: gql`mutation addBaseInfo ($type: Int!, $code: String!, $market: Int, $name: String) {
           BaseInfo {
@@ -133,9 +119,25 @@ export default {
         },
         update: (cache, { data }) => {
           console.log('mutation ret = ' + data.BaseInfo.add)
+          this.$refs.tableQuery.getApolloQuery().refetch()
         }
       })
       this.showDialog = false
+    },
+    removeBaseInfo (id) {
+      this.$apollo.mutate({
+        mutation: gql`mutation removeBaseInfo ($id: Int!) {
+          BaseInfo {
+            remove (id: $id)
+          }
+        }`,
+        variables: {
+          id: id
+        },
+        update: (cache, { data }) => {
+          this.$refs.tableQuery.getApolloQuery().refetch()
+        }
+      })
     }
   }
 }
