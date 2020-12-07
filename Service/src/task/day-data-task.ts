@@ -70,7 +70,6 @@ export default class DayDataTask extends Task {
     } 
     
     isValid(): boolean {
-        return true;
         const now = new Date();
         if (now.getDay() == 0 || now.getDay() == 6)
             return false;
