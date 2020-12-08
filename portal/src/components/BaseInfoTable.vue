@@ -31,7 +31,13 @@ export default {
   methods: {
     removeInfo (id) {
       console.log(id)
-      this.removeMethod(id)
+      this.$confirm('Remove this record ?', 'Warning', {
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        type: 'warning'
+      }).then(() => {
+        this.removeMethod(id)
+      })
       // this.$parent.methods.click()
     }
   }
