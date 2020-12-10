@@ -1,5 +1,3 @@
-import { isContext } from "vm";
-import { threadId } from "worker_threads";
 import { BaseInfo } from "../../definition/data-define";
 
 export default {
@@ -15,7 +13,7 @@ export default {
     },
 
     BaseInfoQuery: {
-        oneById: (parent: any, args: any, context: any, info: any): Promise<BaseInfo> => {
+        oneById: (parent: any, args: any, context: any): Promise<BaseInfo> => {
             return context.dataSources.dbConn.findBaseInfoById(args['id']);            
         },
         // many: async (parent: any, args: any, context: any, info: any) => {
@@ -33,16 +31,16 @@ export default {
         //     });
         //     return ret;
         // }
-        many: (parent: any, args: any, context: any, info: any): Promise<BaseInfo[]> => {
+        many: (parent: any, args: any, context: any): Promise<BaseInfo[]> => {
             return context.dataSources.dbConn.findBaseInfos();
         }        
     },
 
     BaseInfoMutation: {
-        add: (parent: any, args: any, context: any, info: any): Promise<number> => {
+        add: (parent: any, args: any, context: any): Promise<number> => {
             return context.dataSources.dbConn.insertBaseInfo(args);
         },
-        remove: (parent: any, args: any, context: any, info: any): Promise<number> => {
+        remove: (parent: any, args: any, context: any): Promise<number> => {
             return context.dataSources.dbConn.removeBaseInfo(args['id']);
         }
     }

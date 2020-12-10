@@ -27,6 +27,10 @@ type RuntimeData {
     askvol5: Int,
     volume: Int,
     turnover: Int,
-    updated: String,
-    created: String            
+    updated: Date,
+    created: Date            
+}
+
+type RuntimeDataQuery {
+    data(id: [Int], start: Date, end: Date): [RuntimeData]
 }

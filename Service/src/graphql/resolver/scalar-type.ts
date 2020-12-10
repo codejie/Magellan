@@ -4,6 +4,10 @@ function toDateString(date: Date): string {
     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 }
 
+function toTimeString(date: Date): string {
+    return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':'+ ('0' + date.getSeconds()).slice(-2);
+}
+
 function toDateTimeString(date: Date): string {
     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
         + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':'+ ('0' + date.getSeconds()).slice(-2);
@@ -11,7 +15,7 @@ function toDateTimeString(date: Date): string {
 
 export default {
     Date: new GraphQLScalarType({
-        name: 'DateTime',
+        name: 'Date',
         serialize: (value) => toDateString(value),
         parseValue: (value) => new Date(value),
         parseLiteral: (ast: any) => new Date(ast.value)
@@ -21,5 +25,11 @@ export default {
         serialize: (value) => toDateTimeString(value),
         parseValue: (value) => new Date(value),
         parseLiteral: (ast: any) => new Date(ast.value)
-    }),    
+    }),
+    Time: new GraphQLScalarType({
+        name: 'Time',
+        serialize: (value) => toDateString(value),
+        parseValue: (value) => new Date(value),
+        parseLiteral: (ast: any) => new Date(ast.value)
+    })
 }

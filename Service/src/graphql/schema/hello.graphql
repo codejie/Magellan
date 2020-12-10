@@ -1,6 +1,7 @@
-scalar DateTime
 
 type Query {
     hello: String
     time: DateTime
+    datetime: DateTime
+    date: DateTime
 }

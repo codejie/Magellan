@@ -1,5 +1,3 @@
-scalar DateTime
-
 type BaseInfo {
     id: Int!,
     type: Int!,
