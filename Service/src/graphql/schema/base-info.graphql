@@ -1,9 +1,12 @@
+scalar DateTime
+
 type BaseInfo {
     id: Int!,
     type: Int!,
     code: String!,
     market: Int!,
-    name: String
+    name: String,
+    created: DateTime
 }
 
 type BaseInfoQuery {

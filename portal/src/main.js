@@ -4,11 +4,13 @@ import router from './router'
 import store from './store'
 import { createProvider } from './vue-apollo'
 import ElementUI from 'element-ui'
+// import VCharts from 'v-charts'
 
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+// Vue.use(VCharts)
 
 new Vue({
   router,

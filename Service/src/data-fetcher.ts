@@ -1,6 +1,5 @@
 import { threadId } from "worker_threads";
 import { App } from "./app";
-import { EVENT_BASEINFO_UPDATE, EVENT_LOOP } from "./definition/const-define";
 import { BaseInfo, DayData, RuntimeData } from "./definition/data-define";
 import { Stock } from "./definition/struct-define";
 import NetEaseFetcher from "./fetcher/netease-fetcher";

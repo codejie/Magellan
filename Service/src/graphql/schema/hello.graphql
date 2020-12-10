@@ -1,3 +1,6 @@
+scalar DateTime
+
 type Query {
     hello: String
+    time: DateTime
 }

@@ -3,10 +3,12 @@ export interface BaseInfo {
     type: number,
     code: string,
     market: number,
-    name: string
+    name: string,
+    created: Date
 }
 
 export interface RuntimeData {
+    id: number,
     price: number,
     high: number,
     low: number,
@@ -34,7 +36,8 @@ export interface RuntimeData {
     askvol5: number,
     volume: number,
     turnover: number,
-    updated: Date
+    updated: Date,
+    created: Date
 }
 
 export interface DayData {
@@ -42,6 +45,7 @@ export interface DayData {
     todayopen: number,
     yestclose: number,
     todayclose?: number,
-    todaydate: Date      
+    todaydate: Date,
+    created: Date  
 }
 

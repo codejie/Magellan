@@ -8,7 +8,7 @@ function getDateString(date: Date): string {
 }
 
 export function findBaseInfos(db: DBConnector): Promise<BaseInfo[]> {
-    const sql = 'SELECT id,type,code,market,name FROM m_base_info WHERE state=1';
+    const sql = 'SELECT id,type,code,market,name,created FROM m_base_info WHERE state=1';
     return new Promise<BaseInfo[]>((resolve, reject) => {
         db.query(sql, (err, results) => {
             if (err) return reject(err);
@@ -25,7 +25,7 @@ export function findBaseInfos(db: DBConnector): Promise<BaseInfo[]> {
 
 export function findBaseInfoById(db: DBConnector, id: number): Promise<BaseInfo | null> {
     const opts = {
-        sql: 'SELECT id,type,code,market,name FROM m_base_info \
+        sql: 'SELECT id,type,code,market,name,created FROM m_base_info \
                 WHERE state=1 AND id=?',
         values: [id]
     };

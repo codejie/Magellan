@@ -1,86 +1,43 @@
 <template>
-  <v-chart :options="line"/>
+  <div>
+    <ve-line :data="chartData"></ve-line>
+    <ve-line :data="chartData"></ve-line>
+    <p/>
+    <p/>
+  </div>
 </template>
 
 <script>
-import ECharts from 'vue-echarts'
-import 'echarts/lib/chart/lines'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/polar'
+import VeLine from 'v-charts/lib/line.common'
 
 export default {
   components: {
-    'v-chart': ECharts
+    've-line': VeLine
   },
-  data () {
-    const data = []
-
-    for (let i = 0; i <= 360; i++) {
-      const t = i / 180 * Math.PI
-      const r = Math.sin(2 * t) * Math.cos(2 * t)
-      data.push([r, i])
-    }
-
+  data: function () {
     return {
-      polar: {
-        title: {
-          text: '极坐标双数值轴'
-        },
-        legend: {
-          data: ['line']
-        },
-        polar: {
-          center: ['50%', '54%']
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
-          }
-        },
-        angleAxis: {
-          type: 'value',
-          startAngle: 0
-        },
-        radiusAxis: {
-          min: 0
-        },
-        series: [
-          {
-            coordinateSystem: 'polar',
-            name: 'line',
-            type: 'line',
-            showSymbol: false,
-            data: data
-          }
+      chartData: {
+        columns: [
+          '日期',
+          '访问用户',
+          '下单用户',
+          '下单率'
         ],
-        animationDuration: 2000
-      },
-      line: {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [{
-          data: [120, 200, 150, 80, 70, 110, 130],
-          type: 'line',
-          showBackground: true,
-          backgroundStyle: {
-            color: 'rgba(220, 220, 220, 0.8)'
-          }
-        }]
+        rows: [
+          {
+            日期: '1/1',
+            访问用户: 1393,
+            下单用户: 1093,
+            下单率: 0.32
+          },
+          { 日期: '1/2', 访问用户: 3530, 下单用户: 3230, 下单率: 0.26 },
+          { 日期: '1/3', 访问用户: 2923, 下单用户: 2623, 下单率: 0.76 },
+          { 日期: '1/4', 访问用户: 1723, 下单用户: 1423, 下单率: 0.49 },
+          { 日期: '1/5', 访问用户: 3792, 下单用户: 3492, 下单率: 0.323 },
+          { 日期: '1/6', 访问用户: 4593, 下单用户: 4293, 下单率: 0.78 }
+        ]
       }
     }
   }
 }
 </script>
-
-<style>
-.echarts {
-  width: 100%;
-  height: 100%;
-}
-</style>
