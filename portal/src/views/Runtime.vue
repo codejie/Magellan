@@ -2,17 +2,17 @@
   <div class="runtime">
     <h1><b>Runtime</b></h1>
     <div>
-      <RuntimeGraph/>
+      <RuntimeData/>
     </div>
   </div>
 </template>
 
 <script>
-import RuntimeGraph from '@/components/RuntimeGraph.vue'
+import RuntimeData from '@/components/RuntimeData.vue'
 export default {
   name: 'Runtime',
   components: {
-    RuntimeGraph
+    RuntimeData
   }
 }
 </script>

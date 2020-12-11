@@ -1,7 +1,7 @@
 import { App } from "../app";
 import { insertRuntimeData } from "../db/collection-helper";
 import { RuntimeData } from "../definition/data-define";
-import { Stock, StockInfo } from "../definition/struct-define";
+import { Stock } from "../definition/struct-define";
 import NetEaseFetcher from "../fetcher/netease-fetcher";
 import logger from "../logger";
 import Task from "./task";

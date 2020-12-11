@@ -16,21 +16,6 @@ export default {
         oneById: (parent: any, args: any, context: any): Promise<BaseInfo> => {
             return context.dataSources.dbConn.findBaseInfoById(args['id']);            
         },
-        // many: async (parent: any, args: any, context: any, info: any) => {
-        //     const data: BaseInfo[] = await context.dataSources.dbConn.findBaseInfos();
-        //     const ret: any[] = [];
-        //     data.forEach(item => {
-        //         ret.push({
-        //             id: item.id,
-        //             type: item.type,
-        //             code: item.code,
-        //             market: item.market,
-        //             name: item.name,
-        //             created: item.created.toIOS
-        //         });
-        //     });
-        //     return ret;
-        // }
         many: (parent: any, args: any, context: any): Promise<BaseInfo[]> => {
             return context.dataSources.dbConn.findBaseInfos();
         }        

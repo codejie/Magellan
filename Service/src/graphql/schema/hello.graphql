@@ -1,7 +1,7 @@
 
 type Query {
     hello: String
-    time: DateTime
+    time: Time
     datetime: DateTime
-    date: DateTime
+    date: Date
 }

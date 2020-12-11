@@ -28,7 +28,7 @@ export default {
     }),
     Time: new GraphQLScalarType({
         name: 'Time',
-        serialize: (value) => toDateString(value),
+        serialize: (value) => toTimeString(value),
         parseValue: (value) => new Date(value),
         parseLiteral: (ast: any) => new Date(ast.value)
     })

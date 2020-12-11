@@ -1,5 +1,5 @@
 import DBConnector from "../db-connector";
-import { BaseInfo, DayData, RuntimeData } from "../definition/data-define";
+import { BaseInfo, DayData, DayDataSelectCondition, RuntimeData, RuntimeDataSelectCondtion } from "../definition/data-define";
 import logger from "../logger";
 import { assembleInsertSqlOpts } from "./helper";
 
@@ -117,4 +117,39 @@ export function updateYesterdayDayData(db: DBConnector, data: DayData): Promise<
             resolve();
         });
     });     
+}
+
+export function findRuntimeData(db: DBConnector, condition: RuntimeDataSelectCondtion): Promise<RuntimeData[]> {
+    const opts = {
+        sql: 'SELECT id,price,high,low,percent,updown,bid1,bidvol1,bid2,bidvol2,bid3,bidvol3,bid4,bidvol4,bid5,bidvol5, \
+                ask1,askvol1,ask2,askvol2,ask3,askvol3,ask4,askvol4,ask5,askvol5,volume,turnover,updated,created \
+            FROM m_runtime_data \
+                WHERE id=? AND updated >=? AND updated <?',
+        values: [condition.id, condition.start, condition.end]
+    };
+    return new Promise<RuntimeData[]>((resolve, reject) => {
+        db.query(opts, (err, results) => {
+            if (err) return reject(err);
+            if (results && results.length > 0) {
+                resolve(results as RuntimeData[]);
+            }
+            resolve([]);
+        });
+    });    
+}
+
+export function findDayData(db: DBConnector, condition: DayDataSelectCondition): Promise<DayData[]> {
+    const opts = {
+        sql: 'SELECT id,todayopen,yestclose,todayclose,todaydate,created FROM m_day_data WHERE id=? AND todaydate >=? AND todaydate <?',
+        values: [condition.id, condition.start, condition.end]
+    };
+    return new Promise<DayData[]>((resolve, reject) => {
+        db.query(opts, (err, results) => {
+            if (err) return reject(err);
+            if (results && results.length > 0) {
+                resolve(results as DayData[]);
+            }
+            resolve([]);
+        });
+    }); 
 }

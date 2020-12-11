@@ -49,3 +49,17 @@ export interface DayData {
     created: Date  
 }
 
+//////////////
+// query condition
+
+export interface RuntimeDataSelectCondtion {
+    id?: number,
+    start?: Date,
+    end?: Date
+}
+
+export interface DayDataSelectCondition {
+    id?: number,
+    start: Date,
+    end?: Date
+}
