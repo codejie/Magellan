@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ rundata }}
   <ApolloQuery
     :query=queryRuntime
     :variables=queryRuntimeCondition
@@ -9,7 +10,7 @@
         <div v-else-if="error">An Error</div>
         <div v-else-if="data">
           {{data.RuntimeData}}
-          <RuntimeDataGraph :data=data.RuntimeData style="width: 300px; height: 300px" />
+          <RuntimeDataGraph :qlData=data.RuntimeData.data />
            <!-- <BaseInfoTable :data=data.BaseInfo.many :removeMethod=removeBaseInfo /> -->
         </div>
         <div v-else>No Result</div>
@@ -29,12 +30,32 @@ const queryRuntimeQL = gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
                             RuntimeData {
                               data (id: $id, start: $start, end: $end) {
                                 id
+                                updated
                                 price
                               }
                             }
                           }`
 
 export default {
+  apollo: {
+    rundata: {
+      query: gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
+                            RuntimeData {
+                              data (id: $id, start: $start, end: $end) {
+                                id
+                                updated
+                                price
+                              }
+                            }
+                          }`,
+      update: data => data.RuntimeData.data,
+      variables: {
+        id: 19,
+        start: '2020-12-10 00:00:00',
+        end: '2020-12-11 00:00:00'
+      }
+    }
+  },
   components: {
     've-line': VeLine,
     RuntimeDataGraph

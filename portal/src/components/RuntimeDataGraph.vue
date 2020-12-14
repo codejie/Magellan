@@ -29,16 +29,17 @@ export default {
   },
   methods: {
     calcRows (data) {
-      return [
-        {
-          time: '0',
-          price: 3.1
-        },
-        {
-          time: '2',
-          price: 2.1
-        }
-      ]
+      console.log('data = ' + data.toString())
+      const ret = []
+      for (let i = 0; i < data.length; ++i) {
+        const item = data[i]
+        ret.push({
+          time: item.updated,
+          price: item.price
+        })
+      }
+      console.log(ret)
+      return ret
     }
   }
 }

@@ -131,9 +131,9 @@ export function findRuntimeData(db: DBConnector, condition: RuntimeDataSelectCon
         db.query(opts, (err, results) => {
             if (err) return reject(err);
             if (results && results.length > 0) {
-                resolve(results as RuntimeData[]);
+                return resolve(results as RuntimeData[]);
             }
-            resolve([]);
+            return resolve([]);
         });
     });    
 }
