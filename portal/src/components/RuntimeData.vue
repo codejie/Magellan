@@ -6,9 +6,11 @@
   >
     <template v-slot="{ result: { loading, error, data }}">
         <div v-if="loading">Loading...</div>
-        <div v-else-if="error"> An Error</div>
+        <div v-else-if="error">An Error</div>
         <div v-else-if="data">
-           <BaseInfoTable :data=data.BaseInfo.many :removeMethod=removeBaseInfo />
+          {{data.RuntimeData}}
+          <RuntimeDataGraph :data=data.RuntimeData style="width: 300px; height: 300px" />
+           <!-- <BaseInfoTable :data=data.BaseInfo.many :removeMethod=removeBaseInfo /> -->
         </div>
         <div v-else>No Result</div>
     </template>
@@ -21,14 +23,25 @@
 <script>
 import gql from 'graphql-tag'
 import VeLine from 'v-charts/lib/line.common'
+import RuntimeDataGraph from './RuntimeDataGraph'
+
+const queryRuntimeQL = gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
+                            RuntimeData {
+                              data (id: $id, start: $start, end: $end) {
+                                id
+                                price
+                              }
+                            }
+                          }`
 
 export default {
   components: {
-    've-line': VeLine
+    've-line': VeLine,
+    RuntimeDataGraph
   },
   data: function () {
     return {
-      queryRuntime: (gql) => gql`query ($id: Int!, $start: DateTime, $end: DateTime){RuntimeData {data (id: $id, start: $start, end: $end) {id}}}`,
+      queryRuntime: (gql) => queryRuntimeQL,
       queryRuntimeCondition: {
         id: 19,
         start: '2020-12-10 00:00:00',
