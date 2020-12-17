@@ -74,8 +74,8 @@ export default {
       },
       queryRuntimeCondition: {
         id: 19,
-        start: '2020-12-10 00:00:00',
-        end: '2020-12-11 00:00:00'
+        start: '2020-12-14 09:50:00',
+        end: '2020-12-14 09:55:00'
       },
       chartData: {
         columns: [

@@ -1,5 +1,11 @@
 <template>
-  <ve-line :data="runtime"/>
+  <ve-line
+    :data="runtime"
+    :settings="settings"
+    :extend="extend"
+    :mark-point="markPoint"
+    :mark-line="markLine"
+  />
 </template>
 
 <script>
@@ -13,16 +19,37 @@ export default {
     'qlData'
   ],
   data: function () {
+    this.markLine = {
+      data: [
+        {
+          name: '平均线',
+          type: 'average'
+        }
+      ]
+    }
     return {
+      settings: {
+        min: [10],
+        area: true
+      },
+      extend: {
+        'xAxis.0.axisLabel.rotate': 45,
+        'series.0.markPoint.data.type': 'max',
+        'series.0.markPoint.data.name': 'max'
+      },
+      markPoint: {
+        data: [
+          {
+            type: 'min',
+            name: 'MAX'
+          }
+        ]
+      }
     }
   },
   computed: {
     runtime: function () {
       return {
-        xAxis: {
-          min: 10,
-          max: 30
-        },
         columns: [
           'time',
           'price'
