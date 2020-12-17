@@ -1,15 +1,16 @@
 <template>
   <div>
-    {{ rundata }}
+    <!-- {{ rundata }} -->
   <ApolloQuery
     :query=queryRuntime
+    :options=queryOptions
     :variables=queryRuntimeCondition
   >
     <template v-slot="{ result: { loading, error, data }}">
         <div v-if="loading">Loading...</div>
         <div v-else-if="error">An Error</div>
         <div v-else-if="data">
-          {{data.RuntimeData}}
+          <!-- {{data.RuntimeData}} -->
           <RuntimeDataGraph :qlData=data.RuntimeData.data />
            <!-- <BaseInfoTable :data=data.BaseInfo.many :removeMethod=removeBaseInfo /> -->
         </div>
@@ -51,9 +52,14 @@ export default {
       update: data => data.RuntimeData.data,
       variables: {
         id: 19,
-        start: '2020-12-10 00:00:00',
-        end: '2020-12-11 00:00:00'
-      }
+        start: '2020-12-14 00:00:00',
+        end: '2020-12-15 00:00:00'
+      },
+      result ({ data, loading, networkStatus }) {
+        console.log('We got some result!')
+        console.log('data = ' + data.RuntimeData.data[10].updated)
+      },
+      fetchPolicy: 'no-cache'
     }
   },
   components: {
@@ -63,6 +69,9 @@ export default {
   data: function () {
     return {
       queryRuntime: (gql) => queryRuntimeQL,
+      queryOptions: {
+        fetchPolicy: 'no-cache'
+      },
       queryRuntimeCondition: {
         id: 19,
         start: '2020-12-10 00:00:00',

@@ -19,6 +19,10 @@ export default {
   computed: {
     runtime: function () {
       return {
+        xAxis: {
+          min: 10,
+          max: 30
+        },
         columns: [
           'time',
           'price'
