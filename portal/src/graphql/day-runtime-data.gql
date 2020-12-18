@@ -1,0 +1,22 @@
+query ($id: Int!, $start: DateTime, $end: DateTime, $dstart: Date, $dend: Date){
+  BaseInfo {
+    oneById (id: $id) {
+      name
+      code
+    }
+  }
+  DayData {
+    data (id: $id, start: $dstart, end: $dend) {
+      id
+      todayopen
+      yestclose
+    }
+  }
+  RuntimeData {
+    data (id: $id, start: $start, end: $end) {
+      id
+      updated
+      price
+    }
+  }
+}

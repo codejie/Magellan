@@ -1,8 +1,7 @@
 <template>
   <div>
-    <!-- {{ rundata }} -->
   <ApolloQuery
-    :query=queryRuntime
+    :query="queryRuntime"
     :options=queryOptions
     :variables=queryRuntimeCondition
   >
@@ -10,22 +9,35 @@
         <div v-if="loading">Loading...</div>
         <div v-else-if="error">An Error</div>
         <div v-else-if="data">
-          <!-- {{data.RuntimeData}} -->
           <RuntimeDataGraph :qlData=data.RuntimeData.data />
-           <!-- <BaseInfoTable :data=data.BaseInfo.many :removeMethod=removeBaseInfo /> -->
         </div>
         <div v-else>No Result</div>
     </template>
   </ApolloQuery>
-    <ve-line :data="chartData"></ve-line>
-    <ve-line :data="chartData"></ve-line>
+  <ApolloQuery
+    :query="query.ql"
+    :options="query.options"
+    :variables="query.variables"
+    :update="query.update"
+  >
+    <template v-slot="{ result: { loading, error, data }}">
+        <div v-if="loading">Loading...</div>
+        <div v-else-if="error">An Error</div>
+        <div v-else-if="data">
+          <!-- {{ data }} -->
+          {{ data.info }}
+          <RuntimeDataGraph :qlData=data.runtime />
+        </div>
+        <div v-else>No Result</div>
+    </template>
+  </ApolloQuery>
   </div>
 </template>
 
 <script>
 import gql from 'graphql-tag'
-import VeLine from 'v-charts/lib/line.common'
 import RuntimeDataGraph from './RuntimeDataGraph'
+// import LineTest from './LineTest'
 
 const queryRuntimeQL = gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
                             RuntimeData {
@@ -38,65 +50,64 @@ const queryRuntimeQL = gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
                           }`
 
 export default {
-  apollo: {
-    rundata: {
-      query: gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
-                            RuntimeData {
-                              data (id: $id, start: $start, end: $end) {
-                                id
-                                updated
-                                price
-                              }
-                            }
-                          }`,
-      update: data => data.RuntimeData.data,
-      variables: {
-        id: 19,
-        start: '2020-12-14 00:00:00',
-        end: '2020-12-15 00:00:00'
-      },
-      result ({ data, loading, networkStatus }) {
-        console.log('We got some result!')
-        console.log('data = ' + data.RuntimeData.data[10].updated)
-      },
-      fetchPolicy: 'no-cache'
-    }
-  },
+  // apollo: {
+  //   rundata: {
+  //     query: gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
+  //                           RuntimeData {
+  //                             data (id: $id, start: $start, end: $end) {
+  //                               id
+  //                               updated
+  //                               price
+  //                             }
+  //                           }
+  //                         }`,
+  //     update: data => data.RuntimeData.data,
+  //     variables: {
+  //       id: 19,
+  //       start: '2020-12-17 00:00:00',
+  //       end: '2020-12-18 00:00:00'
+  //     },
+  //     result ({ data, loading, networkStatus }) {
+  //       console.log('We got some result!')
+  //       console.log('data = ' + data.RuntimeData.data[10].updated)
+  //     },
+  //     fetchPolicy: 'no-cache'
+  //   }
+  // },
   components: {
-    've-line': VeLine,
     RuntimeDataGraph
+    // LineTest
   },
   data: function () {
     return {
+      query: {
+        ql: require('../graphql/day-runtime-data.gql'),
+        options: {
+          fetchPolicy: 'no-cache'
+        },
+        variables: {
+          id: 19,
+          start: '2020-12-14 00:00:00',
+          end: '2020-12-15 00:00:00',
+          dstart: '2020-12-14',
+          dend: '2020-12-15'
+        },
+        update: (data) => {
+          return {
+            info: data.BaseInfo.oneById,
+            day: data.DayData.data.length > 0 ? data.DayData.data[0] : undefined,
+            runtime: data.RuntimeData.data
+          }
+        }
+      },
       queryRuntime: (gql) => queryRuntimeQL,
       queryOptions: {
         fetchPolicy: 'no-cache'
       },
       queryRuntimeCondition: {
         id: 19,
-        start: '2020-12-14 09:50:00',
-        end: '2020-12-14 09:55:00'
-      },
-      chartData: {
-        columns: [
-          '日期',
-          '访问用户',
-          '下单用户',
-          '下单率'
-        ],
-        rows: [
-          {
-            日期: '1/1',
-            访问用户: 1393,
-            下单用户: 1093,
-            下单率: 0.32
-          },
-          { 日期: '1/2', 访问用户: 3530, 下单用户: 3230, 下单率: 0.26 },
-          { 日期: '1/3', 访问用户: 2923, 下单用户: 2623, 下单率: 0.76 },
-          { 日期: '1/4', 访问用户: 1723, 下单用户: 1423, 下单率: 0.49 },
-          { 日期: '1/5', 访问用户: 3792, 下单用户: 3492, 下单率: 0.323 },
-          { 日期: '1/6', 访问用户: 4593, 下单用户: 4293, 下单率: 0.78 }
-        ]
+        start: '2020-12-17 00:00:00',
+        end: '2020-12-18 00:00:00'
       }
     }
   }

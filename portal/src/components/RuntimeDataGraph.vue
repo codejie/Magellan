@@ -5,46 +5,63 @@
     :extend="extend"
     :mark-point="markPoint"
     :mark-line="markLine"
+    :data-zoom="dataZoom"
   />
 </template>
 
 <script>
 import VeLine from 'v-charts/lib/line.common'
+import 'echarts/lib/component/markLine'
+import 'echarts/lib/component/markPoint'
+import 'echarts/lib/component/dataZoom'
 
 export default {
   components: {
     've-line': VeLine
   },
   props: [
-    'qlData'
+    // 'qlData',
+    'day',
+    'rumtime'
   ],
   data: function () {
-    this.markLine = {
-      data: [
-        {
-          name: '平均线',
-          type: 'average'
-        }
-      ]
-    }
     return {
       settings: {
-        min: [10],
-        area: true
+        // min: [0],
+        // max: [30]
+        // area: true
       },
       extend: {
-        'xAxis.0.axisLabel.rotate': 45,
-        'series.0.markPoint.data.type': 'max',
-        'series.0.markPoint.data.name': 'max'
+        'xAxis.0.axisLabel.rotate': 45
       },
       markPoint: {
         data: [
           {
-            type: 'min',
+            type: 'max',
             name: 'MAX'
           }
         ]
-      }
+      },
+      markLine: {
+        data: [
+          {
+            name: '平均线',
+            type: 'average',
+            lineStyle: {
+              color: 'red'
+            }
+          },
+          {
+            name: 'open',
+            yAxis: 20
+          }
+        ]
+      },
+      dataZoom: [
+        {
+          type: 'slider'
+        }
+      ]
     }
   },
   computed: {
@@ -60,7 +77,7 @@ export default {
   },
   methods: {
     calcRows (data) {
-      console.log('data = ' + data.toString())
+      // console.log('data = ' + data.toString())
       const ret = []
       for (let i = 0; i < data.length; ++i) {
         const item = data[i]
@@ -69,7 +86,7 @@ export default {
           price: item.price
         })
       }
-      console.log(ret)
+      // console.log(ret)
       return ret
     }
   }
