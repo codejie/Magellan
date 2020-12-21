@@ -1,7 +1,7 @@
 <template>
   <div>
-  <ApolloQuery
-    :query="queryRuntime"
+  <!-- <ApolloQuery
+    :query=queryRuntime
     :options=queryOptions
     :variables=queryRuntimeCondition
   >
@@ -13,8 +13,9 @@
         </div>
         <div v-else>No Result</div>
     </template>
-  </ApolloQuery>
+  </ApolloQuery> -->
   <ApolloQuery
+    class="query"
     :query="query.ql"
     :options="query.options"
     :variables="query.variables"
@@ -25,8 +26,10 @@
         <div v-else-if="error">An Error</div>
         <div v-else-if="data">
           <!-- {{ data }} -->
-          {{ data.info }}
-          <RuntimeDataGraph :qlData=data.runtime />
+          <p>{{ data.info }}</p>
+          <p>{{ data.day }}</p>
+          <!-- <p>{{ data.runtime }}</p> -->
+          <RuntimeDataGraph :qlData=data />
         </div>
         <div v-else>No Result</div>
     </template>
@@ -35,19 +38,18 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
+// import gql from 'graphql-tag'
 import RuntimeDataGraph from './RuntimeDataGraph'
-// import LineTest from './LineTest'
 
-const queryRuntimeQL = gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
-                            RuntimeData {
-                              data (id: $id, start: $start, end: $end) {
-                                id
-                                updated
-                                price
-                              }
-                            }
-                          }`
+// const queryRuntimeQL = gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
+//                             RuntimeData {
+//                               data (id: $id, start: $start, end: $end) {
+//                                 id
+//                                 updated
+//                                 price
+//                               }
+//                             }
+//                           }`
 
 export default {
   // apollo: {
@@ -99,17 +101,26 @@ export default {
             runtime: data.RuntimeData.data
           }
         }
-      },
-      queryRuntime: (gql) => queryRuntimeQL,
-      queryOptions: {
-        fetchPolicy: 'no-cache'
-      },
-      queryRuntimeCondition: {
-        id: 19,
-        start: '2020-12-17 00:00:00',
-        end: '2020-12-18 00:00:00'
-      }
+      }//,
+      // queryRuntime: (gql) => queryRuntimeQL,
+      // queryOptions: {
+      //   fetchPolicy: 'no-cache'
+      // },
+      // queryRuntimeCondition: {
+      //   id: 19,
+      //   start: '2020-12-17 00:00:00',
+      //   end: '2020-12-18 00:00:00'
+      // }
     }
   }
 }
 </script>
+
+<style scoped>
+.query {
+  margin: auto;
+  width: 75%;
+  border: 1px solid gray;
+  padding: 40px;
+}
+</style>
