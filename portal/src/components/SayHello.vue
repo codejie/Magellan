@@ -17,12 +17,11 @@
     <p> Mutation </p>
     <ApolloMutation
       :mutation="mutation.ql"
-      :variables="mutation.variables"
       :update="mutationUpdated"
       @done="onMutationDone"
     >
-      <template v-slot="{ mutation, loading, error }">
-        <button :disabled="loading" @click="mutation()">Click</button>
+      <template v-slot="{ mutate, loading, error }">
+        <button :disabled="loading" @click="mutate({variables})">Click</button>
         <p v-if="error">An Error: {{ error }}</p>
       </template>
     </ApolloMutation>
@@ -37,21 +36,19 @@ export default {
         ql: require('../graphql/say-hello-query.gql')
       },
       mutation: {
-        ql: require('../graphql/say-hello-mutation.gql'),
-        variables: {
-          msg: 'WHAT'
-        }
+        ql: require('../graphql/say-hello-mutation.gql')
+      },
+      variables: {
+        msg: 'aaaaa'
       }
     }
   },
   methods: {
     mutationUpdated (store, { data }) {
-      console.log(data)
+      console.log('updated = ' + JSON.stringify(data))
     },
     onMutationDone: (data) => {
-      console.log(data)
-    },
-    mutate: () => {
+      console.log('done = ' + JSON.stringify(data))
     }
   }
 }
