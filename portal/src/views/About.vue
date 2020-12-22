@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Apollo from '@/components/ApolloExample.vue'
+import Apollo from '@/components/SayHello.vue'
 export default {
   name: 'About',
   components: {

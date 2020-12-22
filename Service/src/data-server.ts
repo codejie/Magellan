@@ -23,7 +23,17 @@ export default class DataServer extends Module {
             typeDefs,
             resolvers,
             logger: logger,
-            subscriptions: '/subscriptions',
+            // subscriptions: '/subscriptions',
+            subscriptions: {
+                path: '/subscriptions',
+                // keepAlive: 
+                onConnect: (connectionParams, websocket, context): any => {
+                    logger.debug('subscriptions connected.');
+                },
+                onDisconnect: (webSocket, context): any => {
+                    logger.debug('subscriptions disconnected.');
+                }
+            },
             dataSources: () => {
                 return {
                     dbConn: qlDataSource//new QLDataSource(this.app.dbConn)

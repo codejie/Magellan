@@ -5,3 +5,11 @@ type Query {
     datetime: DateTime
     date: Date
 }
+
+type Subscription {
+    helloSaid: String
+}
+
+type Mutation {
+    sayHello(msg: String): String
+}
