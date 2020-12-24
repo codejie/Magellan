@@ -1,4 +1,5 @@
 // import { PubSub } from "apollo-server-fastify";
+import { withFilter } from 'apollo-server-fastify';
 import { pubsub } from './'
 const SAY_HELLO = 'SAY_HELLO';
 
@@ -13,7 +14,21 @@ export default {
     },
     Subscription: {
         helloSaid: {
-            subscribe: () => pubsub.asyncIterator([SAY_HELLO])
+            // subscribe: (data: any) => {
+            //     console.log(data);
+            //     pubsub.asyncIterator([SAY_HELLO]);
+            // },
+            // resolve: (payload: any, args: any, context: any, info: any) => {
+            //     return payload.data;
+            // }
+            // subscribe: withFilter(() => pubsub.asyncIterator(SAY_HELLO), (payload, variables) => {
+            //     return true;
+            // })
+            resolve: (payload: { somethingChanged: any; }, args: any, context: any, info: any) => {
+                // Manipulate and return the new value
+                return payload.somethingChanged;
+              },
+            subscribe: () => pubsub.asyncIterator(SAY_HELLO)
         }
     },
     Mutation: {
