@@ -25,11 +25,28 @@
         <p v-if="error">An Error: {{ error }}</p>
       </template>
     </ApolloMutation>
+    <button @click="onsub">Sub</button>
+    <!-- <ApolloSubscribeToMore
+      :document="subscription.ql"
+      :updateQuery="onSubscriptionUpdated"
+    >
+    </ApolloSubscribeToMore> -->
   </div>
 </template>
 <script>
 
 export default {
+  apollo: {
+    $subscribe: {
+      hello: {
+        query: require('../graphql/say-hello-subscription.gql'),
+        result: (data, key) => {
+          console.log('sub = ' + key)
+          console.log('sub = ' + data)
+        }
+      }
+    }
+  },
   data () {
     return {
       query: {
@@ -37,6 +54,9 @@ export default {
       },
       mutation: {
         ql: require('../graphql/say-hello-mutation.gql')
+      },
+      subscription: {
+        ql: require('../graphql/say-hello-subscription.gql')
       },
       variables: {
         msg: 'aaaaa'
@@ -49,6 +69,9 @@ export default {
     },
     onMutationDone: (data) => {
       console.log('done = ' + JSON.stringify(data))
+    },
+    onSubscriptionUpdated: (data) => {
+      console.log('sub = ' + JSON.stringify(data))
     }
   }
 }
