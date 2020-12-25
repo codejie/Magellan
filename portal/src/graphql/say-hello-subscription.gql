@@ -1,3 +1,3 @@
-subscription {
-  helloSaid
+subscription ($msg: String) {
+  helloSaid(msg: $msg)
 }

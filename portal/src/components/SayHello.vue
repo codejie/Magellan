@@ -25,7 +25,7 @@
         <p v-if="error">An Error: {{ error }}</p>
       </template>
     </ApolloMutation>
-    <button @click="onsub">Sub</button>
+    <!-- <button @click="onsub">Sub</button> -->
     <!-- <ApolloSubscribeToMore
       :document="subscription.ql"
       :updateQuery="onSubscriptionUpdated"

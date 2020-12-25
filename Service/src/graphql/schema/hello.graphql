@@ -7,7 +7,7 @@ type Query {
 }
 
 type Subscription {
-    helloSaid: String
+    helloSaid(msg: String): String
 }
 
 type Mutation {

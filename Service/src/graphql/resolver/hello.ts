@@ -15,8 +15,8 @@ export default {
     Subscription: {
         helloSaid: {
             // subscribe: (data: any) => {
-            //     console.log(data);
-            //     pubsub.asyncIterator([SAY_HELLO]);
+            //     console.log('subscribe:' + data);
+            //     return pubsub.asyncIterator([SAY_HELLO]);
             // },
             // resolve: (payload: any, args: any, context: any, info: any) => {
             //     return payload.data;
@@ -24,11 +24,14 @@ export default {
             // subscribe: withFilter(() => pubsub.asyncIterator(SAY_HELLO), (payload, variables) => {
             //     return true;
             // })
-            resolve: (payload: { somethingChanged: any; }, args: any, context: any, info: any) => {
-                // Manipulate and return the new value
-                return payload.somethingChanged;
-              },
-            subscribe: () => pubsub.asyncIterator(SAY_HELLO)
+            // resolve: (payload: any, args: any, context: any, info: any) => {
+            //     // Manipulate and return the new value
+            //     return payload;
+            // },
+            // // subscribe: () => pubsub.asyncIterator(SAY_HELLO)
+            subscribe: withFilter(() => pubsub.asyncIterator(SAY_HELLO), (data, variables) => {
+                return true;//variables.msg === data.msg;
+            })
         }
     },
     Mutation: {

@@ -17,7 +17,9 @@ new Vue({
   store,
   apolloProvider: createProvider({
     httpEndpoint: 'http://localhost:3000/graphql',
-    wsEndpoint: 'ws://localhost:3000/subscriptions'
+    wsEndpoint: 'ws://localhost:3000/subscriptions',
+    tokenName: '1111',
+    getAuth: (data) => data
   }),
   render: h => h(App)
 }).$mount('#app')
