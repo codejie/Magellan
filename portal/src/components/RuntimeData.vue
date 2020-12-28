@@ -26,9 +26,15 @@
         <div v-else-if="error">An Error</div>
         <div v-else-if="data">
           <!-- {{ data }} -->
-          <p>{{ data.info }}</p>
-          <p>{{ data.day }}</p>
-          <!-- <p>{{ data.runtime }}</p> -->
+          <div>
+            <span style="font-size: 36px">{{ data.info.name }}</span>&nbsp;&nbsp;<span style="font-size: 24px">({{ data.info.code }})</span>
+          </div>
+          <div>
+            <el-date-picker
+              v-model="value1"
+              type="date"
+              placeholder="select date" />
+          </div>
           <RuntimeDataGraph :qlData=data />
         </div>
         <div v-else>No Result</div>
@@ -101,16 +107,14 @@ export default {
             runtime: data.RuntimeData.data
           }
         }
-      }//,
-      // queryRuntime: (gql) => queryRuntimeQL,
-      // queryOptions: {
-      //   fetchPolicy: 'no-cache'
-      // },
-      // queryRuntimeCondition: {
-      //   id: 19,
-      //   start: '2020-12-17 00:00:00',
-      //   end: '2020-12-18 00:00:00'
-      // }
+      },
+      value1: ''
+    }
+  },
+  computed: {
+    calc: function () {
+      console.log(this.value1)
+      return this.value1
     }
   }
 }

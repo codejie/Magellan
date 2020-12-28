@@ -1,5 +1,6 @@
 <template>
   <ve-line
+    ref="veline"
     :data="runtime"
     :settings="settings"
     :extend="extend"
@@ -122,6 +123,11 @@ export default {
 
       return ret
     }
+  },
+  mounted: function () {
+    this.$nextTick(() => {
+      this.$refs.veline.resize()
+    })
   }
 }
 </script>

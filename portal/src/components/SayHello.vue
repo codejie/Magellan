@@ -40,6 +40,9 @@ export default {
     $subscribe: {
       hello: {
         query: require('../graphql/say-hello-subscription.gql'),
+        variables: {
+          msg: 'msg'
+        },
         result: (data, key) => {
           console.log('sub = ' + key)
           console.log('sub = ' + data)

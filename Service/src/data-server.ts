@@ -29,7 +29,7 @@ export default class DataServer extends Module {
                 // keepAlive: 
                 onConnect: (connectionParams: any, websocket: any, context: any): any => {
                     logger.debug('subscriptions connected.');
-                    context['connectionParams'] = connectionParams;
+                    // context['connectionParams'] = connectionParams;
                     return {};
                 },
                 onDisconnect: (webSocket, context): any => {
