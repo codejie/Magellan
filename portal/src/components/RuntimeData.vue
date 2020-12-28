@@ -16,6 +16,7 @@
   </ApolloQuery> -->
   <ApolloQuery
     class="query"
+    ref="dataQuery"
     :query="query.ql"
     :options="query.options"
     :variables="query.variables"
@@ -28,6 +29,7 @@
           <!-- {{ data }} -->
           <div>
             <span style="font-size: 36px">{{ data.info.name }}</span>&nbsp;&nbsp;<span style="font-size: 24px">({{ data.info.code }})</span>
+            {{ data.runtime }}
           </div>
           <div>
             <el-date-picker
@@ -46,6 +48,7 @@
 <script>
 // import gql from 'graphql-tag'
 import RuntimeDataGraph from './RuntimeDataGraph'
+import { toDateString, toDateTimeString } from '../utils'
 
 // const queryRuntimeQL = gql`query ($id: Int!, $start: DateTime, $end: DateTime) {
 //                             RuntimeData {
@@ -111,10 +114,20 @@ export default {
       value1: ''
     }
   },
-  computed: {
-    calc: function () {
-      console.log(this.value1)
-      return this.value1
+  watch: {
+    value1: function (value, oldValue) {
+      console.log(value, oldValue)
+      console.log(value.toString())
+      const tomorrow = new Date(value)
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      this.query.variables.id = 19
+      this.query.variables.start = toDateTimeString(value)
+      this.query.variables.end = toDateTimeString(tomorrow)
+      this.query.variables.dstart = toDateString(value)
+      this.query.variables.dend = toDateString(tomorrow)
+
+      this.$refs.dataQuery.getApolloQuery().setVariables(this.query.variables)
+      this.$refs.dataQuery.getApolloQuery().refetch()
     }
   }
 }
