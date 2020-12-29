@@ -1,7 +1,12 @@
 <template>
   <div>
     {{ tableData }}
-    <el-table :data="tableData" class="table" border>
+    <el-table
+      class="table"
+      border
+      :data="tableData"
+      @row-click="onRowClick"
+    >
       <el-table-column prop="id" label="ID" width="50"/>
       <el-table-column prop="type" label="TYPE"/>
       <el-table-column prop="market" label="MARKET"/>
@@ -38,7 +43,17 @@ export default {
       }).then(() => {
         this.removeMethod(id)
       })
-      // this.$parent.methods.click()
+    },
+    onRowClick (data) {
+      console.log(data)
+      this.$router.push({
+        name: 'Runtime',
+        params: {
+          id: 19,
+          today: new Date()
+        },
+        props: true
+      })
     }
   }
 }

@@ -19,7 +19,7 @@
     ref="dataQuery"
     :query="query.ql"
     :options="query.options"
-    :variables="query.variables"
+    :variables="queryVariables"
     :update="query.update"
   >
     <template v-slot="{ result: { loading, error, data }}">
@@ -29,6 +29,8 @@
           <!-- {{ data }} -->
           <div>
             <span style="font-size: 36px">{{ data.info.name }}</span>&nbsp;&nbsp;<span style="font-size: 24px">({{ data.info.code }})</span>
+            {{ data.info }}
+            {{ data.day }}
             {{ data.runtime }}
           </div>
           <div>
@@ -89,20 +91,22 @@ export default {
     RuntimeDataGraph
     // LineTest
   },
+  props: ['id', 'today'],
   data: function () {
     return {
+      date: this.today,
       query: {
         ql: require('../graphql/day-runtime-data.gql'),
         options: {
           fetchPolicy: 'no-cache'
         },
-        variables: {
-          id: 19,
-          start: '2020-12-14 00:00:00',
-          end: '2020-12-15 00:00:00',
-          dstart: '2020-12-14',
-          dend: '2020-12-15'
-        },
+        // variables: {
+        //   id: 19,
+        //   start: '2020-12-14 00:00:00',
+        //   end: '2020-12-15 00:00:00',
+        //   dstart: '2020-12-14',
+        //   dend: '2020-12-15'
+        // },
         update: (data) => {
           return {
             info: data.BaseInfo.oneById,
@@ -114,23 +118,38 @@ export default {
       value1: ''
     }
   },
+  computed: {
+    queryVariables () {
+      const ret = this.getQueryVariables(this.id, this.date)
+      return ret
+    }
+  },
   watch: {
     value1: function (value, oldValue) {
       console.log(value, oldValue)
-      console.log(value.toString())
-      const tomorrow = new Date(value)
-      tomorrow.setDate(tomorrow.getDate() + 1)
-      this.query.variables.id = 19
-      this.query.variables.start = toDateTimeString(value)
-      this.query.variables.end = toDateTimeString(tomorrow)
-      this.query.variables.dstart = toDateString(value)
-      this.query.variables.dend = toDateString(tomorrow)
-
-      this.$refs.dataQuery.getApolloQuery().setVariables(this.query.variables)
+      this.date = value
+      // this.$refs.dataQuery.getApolloQuery().setVariables(this.query.variables)
       this.$refs.dataQuery.getApolloQuery().refetch()
+    }
+  },
+  methods: {
+    getQueryVariables: function (id, today) {
+      today.setHours(0)
+      today.setMinutes(0)
+      today.setSeconds(0)
+      const tomorrow = new Date(today)
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      return {
+        id: id,
+        start: toDateTimeString(today),
+        end: toDateTimeString(tomorrow),
+        dstart: toDateString(today),
+        dend: toDateString(tomorrow)
+      }
     }
   }
 }
+
 </script>
 
 <style scoped>

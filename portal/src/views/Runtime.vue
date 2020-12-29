@@ -2,7 +2,7 @@
   <div class="runtime">
     <h1><b>Runtime</b></h1>
     <div>
-      <RuntimeData/>
+      <RuntimeData :id="id" :today="today" />
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@ export default {
   name: 'Runtime',
   components: {
     RuntimeData
-  }
+  },
+  props: ['id', 'today']
 }
 </script>
