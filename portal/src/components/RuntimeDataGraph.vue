@@ -7,6 +7,7 @@
     :mark-point="markPoint"
     :mark-line="markLine"
     :data-zoom="dataZoom"
+    @before-config="onBeforeConfig"
   />
 </template>
 
@@ -151,6 +152,9 @@ export default {
       this.yMin = this.yMin * 0.97
 
       return ret
+    },
+    onBeforeConfig: function (data) {
+      console.log('onBeforeConfig' + data)
     }
   }
   // mounted: function () {

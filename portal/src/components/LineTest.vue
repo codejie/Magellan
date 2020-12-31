@@ -1,45 +1,58 @@
 <template>
-  <ve-line
-    :data="chartData"
-    :mark-line="markLine"
-    :mark-point="markPoint">
-  </ve-line>
+  <div>
+    <ve-line
+      :data="chartData"
+      :toolbox="toolbox">
+    </ve-line>
+    <button @click="onClick">Click</button>
+  </div>
 </template>
 
 <script>
-import 'echarts/lib/component/markLine'
-import 'echarts/lib/component/markPoint'
-
+import VeLine from 'v-charts/lib/line.common'
+import 'echarts/lib/component/toolbox'
 export default {
+  components: {
+    've-line': VeLine
+  },
   data () {
-    this.markLine = {
-      data: [
-        {
-          name: '平均线',
-          type: 'average'
-        }
-      ]
-    }
-    this.markPoint = {
-      data: [
-        {
-          name: '最大值',
-          type: 'max'
-        }
-      ]
-    }
+    // this.toolbox = {
+    //   feature: {
+    //     magicType: { type: ['line', 'bar'] },
+    //     saveAsImage: {}
+    //   }
+    // }
     return {
+      toolbox: {
+        feature: {
+          magicType: { type: ['line', 'bar'] },
+          saveAsImage: {}
+        }
+      },
       chartData: {
-        columns: ['A', 'B', 'C'],
+        columns: ['b', 'c'],
         rows: [
-          { A: '1月1日', B: 1523, C: 1231 },
-          { A: '1月2日', B: 1223, C: 2523 },
-          { A: '1月3日', B: 2123, C: 1000 },
-          { A: '1月4日', B: 4123, C: 3223 },
-          { A: '1月5日', B: 3123, C: 3023 },
-          { A: '1月6日', B: 7123, C: 5523 }
+          { b: 1, c: 1 },
+          { b: 2, c: 2 },
+          { b: 3, c: 3 },
+          { b: 4, c: 4 },
+          { b: 5, c: 5 },
+          { b: 6, c: 6 }
         ]
       }
+    }
+  },
+  methods: {
+    onClick: function () {
+      // console.log(vm)
+      this.chartData.rows = [
+        { b: 1, c: 2 },
+        { b: 2, c: 2 },
+        { b: 3, c: 2 },
+        { b: 4, c: 2 },
+        { b: 5, c: 2 },
+        { b: 6, c: 2 }
+      ]
     }
   }
 }

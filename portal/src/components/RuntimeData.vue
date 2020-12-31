@@ -39,7 +39,7 @@
               type="date"
               placeholder="select date" />
           </div>
-          <RuntimeDataGraph :qlData=data />
+          <RuntimeDataGraph :qlData=data @ready="onGraphReady" />
         </div>
         <div v-else>No Result</div>
     </template>
@@ -146,6 +146,9 @@ export default {
         dstart: toDateString(today),
         dend: toDateString(tomorrow)
       }
+    },
+    onGraphReady: function () {
+      console.log('ready')
     }
   }
 }
