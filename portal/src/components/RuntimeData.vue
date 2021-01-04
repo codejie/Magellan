@@ -31,7 +31,7 @@
             <span style="font-size: 36px">{{ data.info.name }}</span>&nbsp;&nbsp;<span style="font-size: 24px">({{ data.info.code }})</span>
             {{ data.info }}
             {{ data.day }}
-            {{ data.runtime }}
+            <!-- {{ data.runtime }} -->
           </div>
           <div>
             <el-date-picker
@@ -39,7 +39,7 @@
               type="date"
               placeholder="select date" />
           </div>
-          <RuntimeDataGraph :qlData=data @ready="onGraphReady" />
+          <RuntimeDataGraph :qlData=data />
         </div>
         <div v-else>No Result</div>
     </template>

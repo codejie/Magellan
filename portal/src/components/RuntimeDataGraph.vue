@@ -1,13 +1,12 @@
 <template>
   <ve-line
     ref="veline"
-    :data="runtime"
-    :settings="settings"
-    :extend="extend"
-    :mark-point="markPoint"
-    :mark-line="markLine"
-    :data-zoom="dataZoom"
-    @before-config="onBeforeConfig"
+    :data="dynamicPart.runtime"
+    :settings="dynamicPart.settings"
+    :extend="fixedPart.extend"
+    :mark-point="dynamicPart.markPoint"
+    :mark-line="dynamicPart.markLine"
+    :data-zoom="fixedPart.dataZoom"
   />
 </template>
 
@@ -26,72 +25,68 @@ export default {
     'qlData'
   ],
   data: function () {
-    this.yMax = 0
-    this.yMin = 2000
-    this.rows = this.calcRows(this.qlData.runtime)
     return {
-      settings: {
-        min: [this.yMin],
-        max: [this.yMax]
-        // area: true
-      },
-      extend: {
-        'xAxis.0.axisLabel.rotate': 45
-      },
-      markPoint: {
-        data: [
+      fixedPart: {
+        extend: {
+          'xAxis.0.axisLabel.rotate': 45
+        },
+        markPoint: {
+          data: [
+            {
+              type: 'max',
+              name: 'MAX'
+            },
+            {
+              type: 'min',
+              name: 'MIN'
+            }
+          ]
+        },
+        dataZoom: [
           {
-            type: 'max',
-            name: 'MAX'
-          },
-          {
-            type: 'min',
-            name: 'MIN'
+            type: 'slider'
           }
         ]
-      },
-      markLine: {
-        data: this.calcMarkLink(this.qlData)
-        // [
-        //   {
-        //     name: '平均线',
-        //     type: 'average',
-        //     lineStyle: {
-        //       color: 'blue'
-        //     }
-        //   },
-        //   {
-        //     name: 'close',
-        //     yAxis: this.qlData.day.yestclose,
-        //     lineStyle: {
-        //       color: 'black'
-        //     }
-        //   },
-        //   {
-        //     name: 'open',
-        //     yAxis: this.qlData.day.todayopen,
-        //     lineStyle: {
-        //       color: 'green'
-        //     }
-        //   }
-        // ]
-      },
-      dataZoom: [
-        {
-          type: 'slider'
+      }
+    }
+  },
+  computed: {
+    dynamicPart: function () {
+      const data = this.calcRows(this.qlData)
+      const line = this.calcMarkLink(this.qlData)
+      return {
+        runtime: {
+          columns: [
+            'time',
+            'price'
+          ],
+          rows: data.rows
+        },
+        settings: {
+          min: [data.yMin],
+          max: [data.yMax]
+          // area: true
+        },
+        markPoint: {
+          data: [
+            {
+              type: 'max',
+              name: 'MAX'
+            },
+            {
+              type: 'min',
+              name: 'MIN'
+            }
+          ]
+        },
+        markLine: {
+          data: line // this.calcMarkLink(this.qlData)
         }
-      ],
-      runtime: {
-        columns: [
-          'time',
-          'price'
-        ],
-        rows: this.rows // this.calcRows(this.qlData.runtime)
       }
     }
   },
   methods: {
-    calcMarkLink: function (data) {
+    calcMarkLink: function (qlData) {
       const ret = [
         {
           name: '平均线',
@@ -101,55 +96,60 @@ export default {
           }
         }
       ]
-      if (data.day) {
+      if (qlData.day) {
         ret.push({
           name: 'close',
-          yAxis: this.qlData.day.yestclose,
+          yAxis: qlData.day.yestclose,
           lineStyle: {
             color: 'black'
           }
         })
         ret.push({
           name: 'open',
-          yAxis: this.qlData.day.todayopen,
+          yAxis: qlData.day.todayopen,
           lineStyle: {
             color: 'green'
           }
         })
       }
+      return ret
     },
-    calcRows: function (data) {
-      const ret = []
-      // const data = this.qlData.runtime
+    calcRows: function (qlData) {
+      const ret = {
+        yMax: 0,
+        yMin: 10000,
+        rows: []
+      }
+      const data = qlData.runtime
       for (let i = 0; i < data.length; ++i) {
         const item = data[i]
-        if (item.price > this.yMax) {
-          this.yMax = item.price
+        if (item.price > ret.yMax) {
+          ret.yMax = item.price
         }
-        if (item.price < this.yMax) {
-          this.yMin = item.price
+        if (item.price < ret.yMax) {
+          ret.yMin = item.price
         }
-        ret.push({
+        ret.rows.push({
           time: item.updated.substring(11),
           price: item.price
         })
       }
-      if (this.qlData.day) {
-        if (this.qlData.day.yestclose > this.yMax) {
-          this.yMax = this.qlData.day.yestclose
+      if (qlData.day) {
+        if (qlData.day.yestclose > ret.yMax) {
+          ret.yMax = qlData.day.yestclose
         }
-        if (this.qlData.day.todayopen > this.yMax) {
-          this.yMax = this.qlData.day.todayopen
+        if (qlData.day.todayopen > ret.yMax) {
+          ret.yMax = qlData.day.todayopen
         }
-        if (this.qlData.day.yestclose < this.yMin) {
-          this.yMin = this.qlData.day.yestclose
+        if (qlData.day.yestclose < ret.yMin) {
+          ret.yMin = qlData.day.yestclose
         }
-        if (this.qlData.day.todayopen < this.yMin) {
-          this.yMin = this.qlData.day.todayopen
+        if (qlData.day.todayopen < ret.yMin) {
+          ret.yMin = qlData.day.todayopen
         }
       }
-      this.yMax = this.yMax * 1.03
-      this.yMin = this.yMin * 0.97
+      ret.yMax = ret.yMax * 1.03
+      ret.yMin = ret.yMin * 0.97
 
       return ret
     },
@@ -157,10 +157,5 @@ export default {
       console.log('onBeforeConfig' + data)
     }
   }
-  // mounted: function () {
-  //   this.$nextTick(() => {
-  //     this.$refs.veline.resize()
-  //   })
-  // }
 }
 </script>
