@@ -24,6 +24,7 @@
             <el-date-picker
               v-model="todayValue"
               type="date"
+              size="small"
               placeholder="select date" />
             <button @click="onPastDay">&nbsp;-&gt;&nbsp;</button>
           </div>
@@ -62,7 +63,7 @@ export default {
           }
         }
       },
-      todayValue: ''
+      todayValue: toDateString(this.today)
     }
   },
   computed: {
@@ -74,7 +75,7 @@ export default {
   watch: {
     todayValue: function (value, oldValue) {
       console.log(value, oldValue)
-      this.date = value
+      this.date = new Date(value)
       // this.$refs.dataQuery.getApolloQuery().setVariables(this.query.variables)
       this.$refs.dataQuery.getApolloQuery().refetch()
     }
@@ -94,8 +95,13 @@ export default {
         dend: toDateString(tomorrow)
       }
     },
-    onGraphReady: function () {
-      console.log('ready')
+    onPreDay: function () {
+      this.date.setDate(this.date.getDate() - 1)
+      this.todayValue = toDateString(this.date)
+    },
+    onPastDay: function () {
+      this.date.setDate(this.date.getDate() + 1)
+      this.todayValue = toDateString(this.date)      
     }
   }
 }
