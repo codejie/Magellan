@@ -7,25 +7,33 @@
     :mark-point="dynamicPart.markPoint"
     :mark-line="dynamicPart.markLine"
     :data-zoom="fixedPart.dataZoom"
+    :toolbox="toolbox"
   />
 </template>
 
 <script>
-import VeLine from 'v-charts/lib/line.common'
-import 'echarts/lib/component/markLine'
-import 'echarts/lib/component/markPoint'
-import 'echarts/lib/component/dataZoom'
+// import VeLine from 'v-charts/lib/line.common'
+// import 'echarts/lib/component/markLine'
+// import 'echarts/lib/component/markPoint'
+// import 'echarts/lib/component/dataZoom'
+// import 'echarts/lib/component/toolbox'
 
 export default {
-  yMin: 0,
-  components: {
-    've-line': VeLine
-  },
+  // yMin: 0,
+  // components: {
+  //   've-line': VeLine
+  // },
   props: [
     'qlData'
   ],
   data: function () {
     return {
+      toolbox: {
+        feature: {
+          magicType: { type: ['line', 'bar'] },
+          saveAsImage: {}
+        }
+      },
       fixedPart: {
         extend: {
           'xAxis.0.axisLabel.rotate': 45
@@ -64,7 +72,8 @@ export default {
         },
         settings: {
           min: [data.yMin],
-          max: [data.yMax]
+          max: [data.yMax],
+          type: 'line'
           // area: true
         },
         markPoint: {

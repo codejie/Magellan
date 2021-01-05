@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import VeLine from 'v-charts/lib/line.common'
+// import VeLine from 'v-charts/lib/line.common'
 import 'echarts/lib/component/toolbox'
 export default {
   components: {
-    've-line': VeLine
+    // 've-line': VCharts
   },
   data () {
     // this.toolbox = {

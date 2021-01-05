@@ -112,8 +112,8 @@ export default {
           }
         }`,
         variables: {
-          type: this.form.type,
-          market: this.form.market,
+          type: parseInt(this.form.type, 10),
+          market: parseInt(this.form.market, 10),
           code: this.form.code,
           name: this.form.name
         },
@@ -121,6 +121,7 @@ export default {
           console.log('mutation ret = ' + data.BaseInfo.add)
           this.$refs.tableQuery.getApolloQuery().refetch()
         }
+        // errorPolicy: 'all'
       })
       this.showDialog = false
     },

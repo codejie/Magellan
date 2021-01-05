@@ -27,10 +27,7 @@ const routes = [
     path: '/runtime',
     name: 'Runtime',
     component: () => import('../views/Runtime.vue'),
-    props: {
-      id: 19,
-      today: new Date()
-    }
+    props: true
   }
 ]
 

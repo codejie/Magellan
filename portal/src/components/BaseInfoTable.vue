@@ -49,7 +49,7 @@ export default {
       this.$router.push({
         name: 'Runtime',
         params: {
-          id: 19,
+          id: data.id,
           today: new Date()
         },
         props: true
