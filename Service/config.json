@@ -5,13 +5,13 @@
         "color": "level"
     },
     "Database": {
-        "type": "mysql",
-        "host": "47.94.151.96",
-        "user": "root",
-        "password": "Lydia_668",
-        "database": "news"   
+
     },
     "Tasks": {
+        "system_info": {
+            "disabled": false,
+            "refreshTime": "00:00"
+        },
         "runtime_data": {
             "disabled": true,
             "interval": 1000000

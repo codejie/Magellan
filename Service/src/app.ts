@@ -1,9 +1,6 @@
 import { EventEmitter } from "events";
 import DataServer from "./data-server";
 import DBConnector from "./db-connector";
-import { findBaseInfos } from "./db/collection-helper";
-import { BaseInfo } from "./definition/data-define";
-import { StockInfo } from "./definition/struct-define";
 import Tasks from "./task";
 
 export interface ConfigObject {
@@ -22,8 +19,7 @@ export class App extends EventEmitter {
     tasks: Tasks;
     dataServer: DataServer;
 
-    stockInfos: StockInfo[]= [];
-
+    // stockInfos: StockInfo[]= [];
     constructor(config: ConfigObject) {
         super();
         this.config = config;
@@ -38,7 +34,7 @@ export class App extends EventEmitter {
         await this.tasks.init();
         await this.dataServer.init();
 
-        await this.loadBaseInfo();
+        // await this.loadBaseInfo();
     }
 
     async start(): Promise<void> {
@@ -53,13 +49,13 @@ export class App extends EventEmitter {
         await this.dbConn.shutdown();
     }
 
-    private async loadBaseInfo(): Promise<void> {
-        const infos: BaseInfo[] = await findBaseInfos(this.dbConn);// this.dbConn.findBaseInfos();
-        infos.forEach(item => {
-            this.stockInfos.push({
-                info: item
-            });
-        });
-    }
+    // private async loadBaseInfo(): Promise<void> {
+    //     const infos: StockData[] = await findStockData(this.dbConn);// this.dbConn.findBaseInfos();
+    //     infos.forEach(item => {
+    //         this.stockInfos.push({
+    //             info: item
+    //         });
+    //     });
+    // }
 
 }

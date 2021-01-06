@@ -1,5 +1,5 @@
 import DBConnector from "../db-connector";
-import { BaseInfo, DayData, DayDataSelectCondition, RuntimeData, RuntimeDataSelectCondtion } from "../definition/data-define";
+import { StockData, DayData, DayDataSelectCondition, RuntimeData, RuntimeDataSelectCondtion } from "../definition/data-define";
 import logger from "../logger";
 import { assembleInsertSqlOpts } from "./helper";
 
@@ -7,15 +7,15 @@ function getDateString(date: Date): string {
     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 }
 
-export function findBaseInfos(db: DBConnector): Promise<BaseInfo[]> {
+export function findStockData(db: DBConnector): Promise<StockData[]> {
     const sql = 'SELECT id,type,code,market,name,created FROM m_base_info WHERE state=1';
-    return new Promise<BaseInfo[]>((resolve, reject) => {
+    return new Promise<StockData[]>((resolve, reject) => {
         db.query(sql, (err, results) => {
             if (err) return reject(err);
-            const ret:BaseInfo[] = [];
+            const ret:StockData[] = [];
             if (results && results.length > 0) {
                 results.forEach((r: any) => {
-                    ret.push(r as BaseInfo);
+                    ret.push(r as StockData);
                 });
             }
             resolve(ret);
@@ -23,17 +23,17 @@ export function findBaseInfos(db: DBConnector): Promise<BaseInfo[]> {
     });
 }
 
-export function findBaseInfoById(db: DBConnector, id: number): Promise<BaseInfo | null> {
+export function findStockDataById(db: DBConnector, id: number): Promise<StockData | null> {
     const opts = {
         sql: 'SELECT id,type,code,market,name,created FROM m_base_info \
                 WHERE state=1 AND id=?',
         values: [id]
     };
-    return new Promise<BaseInfo | null>((resolve, reject) => {
+    return new Promise<StockData | null>((resolve, reject) => {
         db.query(opts, (err, results) => {
             if (err) return reject(err);
             if (results && results.length > 0) {
-                resolve(results[0] as BaseInfo);
+                resolve(results[0] as StockData);
             } else {
                 resolve(null);
             }
@@ -41,7 +41,7 @@ export function findBaseInfoById(db: DBConnector, id: number): Promise<BaseInfo 
     });
 }
 
-export function insertBaseInfo(db: DBConnector, data: BaseInfo): Promise<number> {
+export function insertStockData(db: DBConnector, data: StockData): Promise<number> {
     const opts = assembleInsertSqlOpts('m_base_info', data);
     return new Promise<number>((resolve, reject) => {
         db.execute(opts, (err, result) => {
@@ -51,7 +51,7 @@ export function insertBaseInfo(db: DBConnector, data: BaseInfo): Promise<number>
     });
 }
 
-export function removeBaseInfo(db: DBConnector, id: number): Promise<number> {
+export function removeStockData(db: DBConnector, id: number): Promise<number> {
     const opts = {
         sql: 'DELETE FROM m_base_info WHERE id=?',
         values: [id]

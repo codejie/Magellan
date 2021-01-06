@@ -1,4 +1,4 @@
-export interface BaseInfo {
+export interface StockData {
     id: number,
     type: number,
     code: string,

@@ -5,9 +5,8 @@ export interface Stock {
     code: string
 }
 
-export interface StockInfo {
-    info: Stock,
-    data?: {
-    },
-    last?: Date
-}
+// export interface StockInfo {
+//     info: Stock,
+//     data?: {},
+//     last?: Date
+// }

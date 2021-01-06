@@ -1,6 +1,6 @@
 import { threadId } from "worker_threads";
 import { App } from "./app";
-import { BaseInfo, DayData, RuntimeData } from "./definition/data-define";
+import { StockData, DayData, RuntimeData } from "./definition/data-define";
 import { Stock } from "./definition/struct-define";
 import NetEaseFetcher from "./fetcher/netease-fetcher";
 import { makeStockCode } from "./fetcher/netease-util";

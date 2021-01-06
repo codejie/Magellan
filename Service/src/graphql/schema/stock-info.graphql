@@ -1,4 +1,4 @@
-type BaseInfo {
+type StockInfo {
     id: Int!,
     type: Int!,
     code: String!,
@@ -7,22 +7,22 @@ type BaseInfo {
     created: DateTime
 }
 
-type BaseInfoQuery {
+type StockInfoQuery {
     oneById(id: Int!): BaseInfo,
     many: [BaseInfo]
 }
 
-type BaseInfoMutation {
+type StockInfoMutation {
     add(type: Int!, code: String!, market: Int, name: String): Int
     remove(id: Int!): Int
 }
 
 type Query {
-    BaseInfo: BaseInfoQuery
+    StockInfo: StockInfoQuery
 }
 
 type Mutation {
-    BaseInfo: BaseInfoMutation
+    StockInfo: StockInfoMutation
 }
 
 # type Query {

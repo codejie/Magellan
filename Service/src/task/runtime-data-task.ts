@@ -4,6 +4,7 @@ import { RuntimeData } from "../definition/data-define";
 import { Stock } from "../definition/struct-define";
 import NetEaseFetcher from "../fetcher/netease-fetcher";
 import logger from "../logger";
+import systemInfo from "../system-info";
 import Task from "./task";
 
 interface TaskConfig {
@@ -33,11 +34,11 @@ export default class RuntimeDataTask extends Task {
     async onLoop(data: any): Promise<void>
     {
         if (this.isValid()) {
-            const stockInfos = this.app.stockInfos;
+            const stockInfos = systemInfo.stocks;
             const dbConn = this.app.dbConn;
 
             for (let i = 0; i < stockInfos.length; ++ i) {
-                const req = stockInfos[i].info;
+                const req = stockInfos[i];
                 const data = await this.fetchRuntimeData(req);
                 await insertRuntimeData(dbConn, data);
             }

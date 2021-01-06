@@ -4,6 +4,7 @@ import { DayData, RuntimeData } from "../definition/data-define";
 import { Stock } from "../definition/struct-define";
 import NetEaseFetcher from "../fetcher/netease-fetcher";
 import logger from "../logger";
+import systemInfo from "../system-info";
 import Task from "./task";
 
 interface TaskConfig {
@@ -36,12 +37,12 @@ export default class DayDataTask extends Task {
      {
         logger.debug('day timeout');
         if (this.isValid() === true) {
-            const stockInfos = this.app.stockInfos;
+            const stockInfos = systemInfo.stocks;
             const dbConn = this.app.dbConn;
             const now = new Date();
 
             for (let i = 0; i < stockInfos.length; ++ i) {
-                const req = stockInfos[i].info;
+                const req = stockInfos[i];
                 const has = await hasTodayDayData(dbConn, req.id, now);
                 if (has) {
                     continue;

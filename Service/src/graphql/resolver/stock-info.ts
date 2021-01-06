@@ -1,32 +1,32 @@
-import { BaseInfo } from "../../definition/data-define";
+import { StockData } from "../../definition/data-define";
 
 export default {
     Query: {
-        BaseInfo: () => {
+        StockInfo: () => {
             return {};
         }
     },
     Mutation: {
-        BaseInfo: () => {
+        StockInfo: () => {
             return {};
         }
     },
 
-    BaseInfoQuery: {
-        oneById: (parent: any, args: any, context: any): Promise<BaseInfo> => {
-            return context.dataSources.dbConn.findBaseInfoById(args['id']);            
+    StockInfoQuery: {
+        oneById: (parent: any, args: any, context: any): Promise<StockData> => {
+            return context.dataSources.dbConn.findStockInfoById(args['id']);            
         },
-        many: (parent: any, args: any, context: any): Promise<BaseInfo[]> => {
-            return context.dataSources.dbConn.findBaseInfos();
+        many: (parent: any, args: any, context: any): Promise<StockData[]> => {
+            return context.dataSources.dbConn.findStockInfos();
         }        
     },
 
-    BaseInfoMutation: {
+    StockInfoMutation: {
         add: (parent: any, args: any, context: any): Promise<number> => {
-            return context.dataSources.dbConn.insertBaseInfo(args);
+            return context.dataSources.dbConn.insertStockInfo(args);
         },
         remove: (parent: any, args: any, context: any): Promise<number> => {
-            return context.dataSources.dbConn.removeBaseInfo(args['id']);
+            return context.dataSources.dbConn.removeStockInfo(args['id']);
         }
     }
 

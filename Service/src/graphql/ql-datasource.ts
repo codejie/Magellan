@@ -1,7 +1,7 @@
 import { DataSource } from 'apollo-datasource'
 import DBConnector from '../db-connector';
-import { findBaseInfoById, findBaseInfos, insertBaseInfo, removeBaseInfo, findRuntimeData, findDayData } from '../db/collection-helper';
-import { BaseInfo, DayData, DayDataSelectCondition, RuntimeData, RuntimeDataSelectCondtion } from '../definition/data-define';
+import { findStockDataById, findStockData, insertStockData, removeStockData, findRuntimeData, findDayData } from '../db/collection-helper';
+import { StockData, DayData, DayDataSelectCondition, RuntimeData, RuntimeDataSelectCondtion } from '../definition/data-define';
 
 export default class QLDataSource extends DataSource {
     
@@ -18,20 +18,20 @@ export default class QLDataSource extends DataSource {
         this.context = config.context;
     }
 
-    findBaseInfos(): Promise<BaseInfo[]> {
-        return findBaseInfos(this.conn);
+    findStockInfos(): Promise<StockData[]> {
+        return findStockData(this.conn);
     }
 
-    findBaseInfoById(id: number): Promise<BaseInfo | null> {
-        return findBaseInfoById(this.conn, id);
+    findStockInfoById(id: number): Promise<StockData | null> {
+        return findStockDataById(this.conn, id);
     }
 
-    insertBaseInfo(data: BaseInfo): Promise<number> {
-        return insertBaseInfo(this.conn, data);
+    insertStockInfo(data: StockData): Promise<number> {
+        return insertStockData(this.conn, data);
     }
 
-    removeBaseInfo(id: number): Promise<number> {
-        return removeBaseInfo(this.conn, id);
+    removeStockInfo(id: number): Promise<number> {
+        return removeStockData(this.conn, id);
     }
 
     findRuntimeData(opts: RuntimeDataSelectCondtion): Promise<RuntimeData[]> {
