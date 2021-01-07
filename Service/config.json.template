@@ -1,0 +1,34 @@
+{
+    "Logger": {
+        "level": "debug",
+        "pretty": true,
+        "color": "level"
+    },
+    "Database": {
+
+    },
+    "Tasks": {
+        "system_info": {
+            "disabled": false,
+            "refreshTime": "00:00"
+        },
+        "runtime_data": {
+            "disabled": true,
+            "interval": 6000,//1000000,
+            "validRanges": [
+                {
+                    "open": "09:30",
+                    "close": "11:30"
+                },
+                {
+                    "open": "13:00",
+                    "close": "15:00"
+                }
+            ]
+        },
+        "day_data": {
+            "disabled": true,
+            "interval": 3600000
+        }
+    }
+}
