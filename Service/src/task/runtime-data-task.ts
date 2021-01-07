@@ -23,10 +23,12 @@ export default class RuntimeDataTask extends Task {
         this.taskConfig = this.baseConfig[this.TASK_NAME] as TaskConfig;
         this.fetcher = new NetEaseFetcher();
 
-        this.interval = this.taskConfig.interval;
+        this.interval = 1000;//this.taskConfig.interval;
     }
 
     start(): Promise<void> {
+        calcInterval();
+        
         super.setTimer();
         return super.start();
     }
@@ -34,6 +36,7 @@ export default class RuntimeDataTask extends Task {
     async onLoop(data: any): Promise<void>
     {
         if (this.isValid()) {
+
             const stockInfos = systemInfo.stocks;
             const dbConn = this.app.dbConn;
 
@@ -42,8 +45,12 @@ export default class RuntimeDataTask extends Task {
                 const data = await this.fetchRuntimeData(req);
                 await insertRuntimeData(dbConn, data);
             }
+
+            this.interval = calcInterval();
+
         } else {
             logger.debug('[' + this.TASK_NAME + '] skip.');
+            this.interval = this.taskConfig.interval;
         }
         super.setTimer();
     }
@@ -65,6 +72,7 @@ export default class RuntimeDataTask extends Task {
         const now = new Date();
         if (now.getDay() == 0 || now.getDay() == 6)
             return false;
+        
         const time = now.getHours() * 60 + now.getMinutes();
         return ((time >= 570 && time <= 690) || (time >= 780 && time <= 900));
     }

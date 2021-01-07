@@ -40,4 +40,11 @@ export default abstract class Task extends Module {
         return super.shutdown();
     }
 
+    // isValid(): boolean {
+    //     const now = new Date();
+    //     if (now.getDay() == 0 || now.getDay() == 6)
+    //         return false;
+    //     return true;
+    // }
+
 }

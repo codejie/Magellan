@@ -15,8 +15,8 @@
           <!-- {{ data }} -->
           <div>
             <span style="font-size: 36px">{{ data.info.name }}</span>&nbsp;&nbsp;<span style="font-size: 24px">({{ data.info.code }})</span>
-            {{ data.info }}
-            {{ data.day }}
+            <!-- {{ data.info }}
+            {{ data.day }} -->
             <!-- {{ data.runtime }} -->
           </div>
           <div>

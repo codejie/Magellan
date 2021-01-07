@@ -18,7 +18,17 @@
         },
         "runtime_data": {
             "disabled": true,
-            "interval": 1000000
+            "interval": 6000,//1000000,
+            "validRange": [
+                {
+                    "open": "09:30",
+                    "close": "11:30"
+                },
+                {
+                    "open": "13:00",
+                    "close": "15:00"
+                }
+            ]
         },
         "day_data": {
             "disabled": true,
