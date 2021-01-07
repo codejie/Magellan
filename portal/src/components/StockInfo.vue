@@ -1,10 +1,10 @@
 <template>
   <div class="base">
-    BaseInfo Table
+    StockInfo Table
     <div>
       {{ hello }}
     </div>
-    <!-- <BaseInfoTable :data="[1,2,3]" /> -->
+    <!-- <StockInfoTable :data="[1,2,3]" /> -->
     <ApolloQuery
       ref="tableQuery"
       :query=query
@@ -14,7 +14,7 @@
         <div v-if="loading">Loading...</div>
         <div v-else-if="error"> An Error</div>
         <div v-else-if="data">
-           <BaseInfoTable :data=data.BaseInfo.many :removeMethod=removeBaseInfo />
+           <StockInfoTable :data=data.StockInfo.many :removeMethod=removeStockInfo />
         </div>
         <div v-else>No Result</div>
       </template>
@@ -39,7 +39,7 @@
             <el-input v-model="form.name"/>
           </el-form-item>
         </el-form>
-        <el-button type="primary" @click=addBaseInfo>Close</el-button>
+        <el-button type="primary" @click=addStockInfo>Close</el-button>
       </el-dialog>
     </div>
   </div>
@@ -47,22 +47,22 @@
 
 <script>
 import gql from 'graphql-tag'
-import BaseInfoTable from './BaseInfoTable'
+import StockInfoTable from './StockInfoTable'
 
 export default {
   components: {
-    BaseInfoTable
+    StockInfoTable
   },
   apollo: {
     info: {
       query: gql`query a($id: Int!) {
-          BaseInfo {
+          StockInfo {
           one: oneById(id: $id) {
             id
           }
         }
       }`,
-      update: data => data.BaseInfo,
+      update: data => data.StockInfo,
       variables: {
         id: 20
       }
@@ -90,7 +90,7 @@ export default {
       info: {},
       hello: '',
       id: 19,
-      query: (gql) => gql`query { BaseInfo { many { id type market code name }}}`,
+      query: (gql) => gql`query { StockInfo { many { id type market code name }}}`,
       showDialog: false,
       form: {
         type: 0,
@@ -104,10 +104,10 @@ export default {
     click () {
       console.log('click')
     },
-    addBaseInfo () {
+    addStockInfo () {
       this.$apollo.mutate({
-        mutation: gql`mutation addBaseInfo ($type: Int!, $code: String!, $market: Int, $name: String) {
-          BaseInfo {
+        mutation: gql`mutation addStockInfo ($type: Int!, $code: String!, $market: Int, $name: String) {
+          StockInfo {
             add (type: $type, code: $code, market: $market, name: $name)
           }
         }`,
@@ -118,17 +118,17 @@ export default {
           name: this.form.name
         },
         update: (cache, { data }) => {
-          console.log('mutation ret = ' + data.BaseInfo.add)
+          console.log('mutation ret = ' + data.StockInfo.add)
           this.$refs.tableQuery.getApolloQuery().refetch()
         }
         // errorPolicy: 'all'
       })
       this.showDialog = false
     },
-    removeBaseInfo (id) {
+    removeStockInfo (id) {
       this.$apollo.mutate({
-        mutation: gql`mutation removeBaseInfo ($id: Int!) {
-          BaseInfo {
+        mutation: gql`mutation removeStockInfo ($id: Int!) {
+          StockInfo {
             remove (id: $id)
           }
         }`,

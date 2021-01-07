@@ -1,5 +1,5 @@
 query ($id: Int!){
-    BaseInfo {
+    StockInfo {
         many {
             info:id
             code

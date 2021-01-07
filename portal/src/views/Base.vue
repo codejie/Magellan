@@ -1,16 +1,16 @@
 <template>
   <div class="base">
-    <h1><b>BaseInfo</b></h1>
-    <BaseInfo/>
+    <h1><b>StockInfo</b></h1>
+    <StockInfo/>
   </div>
 </template>
 
 <script>
-import BaseInfo from '@/components/BaseInfo.vue'
+import StockInfo from '@/components/StockInfo.vue'
 export default {
   name: 'Base',
   components: {
-    BaseInfo
+    StockInfo
   }
 }
 </script>

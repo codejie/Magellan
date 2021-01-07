@@ -57,7 +57,7 @@ export default {
         },
         update: (data) => {
           return {
-            info: data.BaseInfo.oneById,
+            info: data.StockInfo.oneById,
             day: data.DayData.data.length > 0 ? data.DayData.data[0] : undefined,
             runtime: data.RuntimeData.data
           }

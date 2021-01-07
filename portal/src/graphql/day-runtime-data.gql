@@ -1,5 +1,5 @@
 query ($id: Int!, $start: DateTime, $end: DateTime, $dstart: Date, $dend: Date){
-  BaseInfo {
+  StockInfo {
     oneById (id: $id) {
       name
       code
