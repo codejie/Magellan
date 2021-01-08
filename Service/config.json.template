@@ -28,7 +28,8 @@
         },
         "day_data": {
             "disabled": true,
-            "interval": 3600000
+            "fetchTime": "9:35",
+            // "interval": 3600000
         }
     }
 }

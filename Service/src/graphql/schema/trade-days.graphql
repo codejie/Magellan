@@ -1,0 +1,23 @@
+type TradeDay {
+    id: Int!,
+    date: String!,
+    flag: Int
+}
+
+type TradeDayQuery {
+    exist(date: String!): Boolean,
+    many(begin: String!, end: String!): [TradeDay]
+}
+
+type TradeDayMutation {
+    add(date: String!, flag: Int): Int,
+    remove(id: Int!): Int
+}
+
+type Query {
+    TradeDay: TradeDayQuery
+}
+
+type Mutation {
+    TradeDay: TradeDayMutation
+}

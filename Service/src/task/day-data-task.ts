@@ -9,7 +9,8 @@ import Task from "./task";
 
 interface TaskConfig {
     disabled?: boolean,
-    interval: number
+    fetchTime: string
+    // interval: number
 }
 
 export default class DayDataTask extends Task {
@@ -18,25 +19,50 @@ export default class DayDataTask extends Task {
 
     fetcher: NetEaseFetcher;
     taskConfig: TaskConfig;
+
+    checkTime: number;
+    checked: boolean = false;
     
     constructor(app: App) {
         super(app);
         this.taskConfig = this.baseConfig[this.TASK_NAME] as TaskConfig;
         this.fetcher = new NetEaseFetcher();
 
-        this.interval = this.taskConfig.interval;
+        const setting: string[] = this.taskConfig.fetchTime.split(':');
+        this.checkTime = parseInt(setting[0]) * 60 + parseInt(setting[1]);
+
+        this.interval = -1;//this.taskConfig.interval;
+    }
+
+    calcInterval(): number {
+        const now: Date = new Date();
+        const time: number = now.getHours() * 60 + now.getMinutes();
+
+        if (!this.checked) {
+            if (this.checkTime < time)
+                return 1;
+        }
+
+        let diff: number = this.checkTime - time;
+        if (diff < 0) {
+            diff += (24 * 60);
+        }
+
+        return diff * 60 * 1000;
     }
 
     start(): Promise<void> {
-        if (!this.taskConfig.disabled)
+        if (!this.taskConfig.disabled) {
+            this.interval = this.calcInterval();
             super.setTimer();
+        }
         return super.start();
     }
 
     async onLoop(data: any): Promise<void>
      {
         logger.debug('day timeout');
-        if (this.isValid() === true) {
+        if (this.isValid()) {
             const stockInfos = systemInfo.stocks;
             const dbConn = this.app.dbConn;
             const now = new Date();
@@ -52,9 +78,13 @@ export default class DayDataTask extends Task {
                 await insertTodayDayData(dbConn, data);
                 await updateYesterdayDayData(dbConn, data);
             }
+
+            this.checked = true;
         } else {
             logger.debug('[' + this.TASK_NAME + '] skip.');
         }
+
+        this.interval = this.calcInterval();
         super.setTimer();
     }
     

@@ -8,7 +8,7 @@ import systemInfo from "../system-info";
 import Task from "./task";
 
 interface TaskConfig {
-    disabled: boolean,
+    disabled?: boolean,
     interval: number,
     validRanges: {
         open: string,
@@ -37,7 +37,7 @@ export default class RuntimeDataTask extends Task {
 
         this.initValidRanges();
 
-        this.interval = 1000;//this.taskConfig.interval;
+        this.interval = this.taskConfig.interval;
     }
 
     initValidRanges() {
@@ -59,7 +59,7 @@ export default class RuntimeDataTask extends Task {
         let inner = false;
         for (let i = 0; i < this.validRanges.length; ++ i) {
             const item = this.validRanges[i];
-            if (time >= item.open && time > item.close) {
+            if (time >= item.open && time < item.close) {
                 inner = true;
                 break;
             }
@@ -67,7 +67,8 @@ export default class RuntimeDataTask extends Task {
 
         if (inner) {
             // calc the diff to next minute
-            return (60 - now.getSeconds()) * 1000;
+            // return (60 - now.getSeconds()) * 1000;
+            return (this.taskConfig.interval * 60 - now.getSeconds()) * 1000;
         } else {
             let ret = -1;
             // let found = false;
@@ -87,15 +88,16 @@ export default class RuntimeDataTask extends Task {
     }
 
     start(): Promise<void> {
-        this.interval = this.calcInterval();
-        super.setTimer();
+        if (!this.taskConfig.disabled) {
+            this.interval = this.calcInterval();
+            super.setTimer();
+        }
         return super.start();
     }
 
     async onLoop(data: any): Promise<void>
     {
-        // if (this.isValid()) {
-
+        if (this.isValid()) {
             const stockInfos = systemInfo.stocks;
             const dbConn = this.app.dbConn;
 
@@ -104,13 +106,12 @@ export default class RuntimeDataTask extends Task {
                 const data = await this.fetchRuntimeData(req);
                 await insertRuntimeData(dbConn, data);
             }
+        } else {
+            logger.debug('[' + this.TASK_NAME + '] skip.');
+            // this.interval = this.taskConfig.interval;
+        }
 
-            this.interval = this.calcInterval();
-
-        // } else {
-        //     logger.debug('[' + this.TASK_NAME + '] skip.');
-        //     this.interval = this.taskConfig.interval;
-        // }
+        this.interval = this.calcInterval();
         super.setTimer();
     }
     
@@ -131,8 +132,8 @@ export default class RuntimeDataTask extends Task {
         const now = new Date();
         if (now.getDay() == 0 || now.getDay() == 6)
             return false;
-        
-        const time = now.getHours() * 60 + now.getMinutes();
-        return ((time >= 570 && time <= 690) || (time >= 780 && time <= 900));
+        return true;
+        // const time = now.getHours() * 60 + now.getMinutes();
+        // return ((time >= 570 && time <= 690) || (time >= 780 && time <= 900));
     }
 }

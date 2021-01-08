@@ -28,7 +28,7 @@ export default class SystemInfoTask extends Task {
 
         const time: Date = new Date();
         const now: number = time.getHours() * 60 + time.getMinutes();
-        let diff: number = now - setting;
+        let diff: number = setting - now;
 
         if (diff < 0) {
             diff += (24 * 60)
