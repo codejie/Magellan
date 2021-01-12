@@ -14,7 +14,7 @@ export default {
                 start: args['start'],
                 end: args['end']
             };
-            return context.dataSources.dbConn.findRuntimeData(opts);
+            return context.dataSources.dsCollection.findRuntimeData(opts);
         }
     }
 }

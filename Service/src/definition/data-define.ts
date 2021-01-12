@@ -49,6 +49,12 @@ export interface DayData {
     created: Date  
 }
 
+export interface TradeDay {
+    id: number,
+    date: string,
+    flag: number // 0: trade day, 1: weekend, 2: holiday, 3: other
+}
+
 //////////////
 // query condition
 

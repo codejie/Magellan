@@ -4,7 +4,7 @@ import { App } from "./app";
 import logger from "./logger";
 import Module from "./module";
 
-import { typeDefs, resolvers, QLDataSource } from "./graphql"
+import { typeDefs, resolvers, QLCollectionDataSource, QLSystemDataSource } from "./graphql"
 
 export default class DataServer extends Module {
 
@@ -15,9 +15,9 @@ export default class DataServer extends Module {
     }
 
     init(): Promise<void> {
-        const qlDataSource = new QLDataSource({
-            connector: this.app.dbConn
-        });
+        // const qlCollectionDataSource = new QLCollectionDataSource({
+        //     connector: this.app.dbConn
+        // });
 
         this.server = new ApolloServer({
             typeDefs,
@@ -38,7 +38,8 @@ export default class DataServer extends Module {
             },
             dataSources: () => {
                 return {
-                    dbConn: qlDataSource//new QLDataSource(this.app.dbConn)
+                    dsCollection: new QLCollectionDataSource(this.app.dbConn),
+                    dsSystem: new QLSystemDataSource(this.app.dbConn)
                 };
             },
             uploads: false

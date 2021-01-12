@@ -13,7 +13,7 @@ export default {
                 start: args['start'],
                 end: args['end']
             };
-            return context.dataSources.dbConn.findDayData(opts);
+            return context.dataSources.dsCollection.findDayData(opts);
         }
     }
 }

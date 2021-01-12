@@ -1,7 +1,8 @@
 import path from "path";
 import { mergeResolvers, mergeTypeDefs } from "graphql-tools";
 import { loadFilesSync } from "@graphql-tools/load-files";
-import QLDataSource from "./ql-datasource";
+import QLCollectionDataSource from "./collection-datasource";
+import QLSystemDataSource from "./system-datasource";
 
 const typeDefs: any = mergeTypeDefs(loadFilesSync(path.join(__dirname, './schema'), { extensions:['graphql'] }));
 const resolvers: any = mergeResolvers(loadFilesSync(path.join(__dirname, './resolver'), { ignoredExtensions: ['index.js'] }));
@@ -9,5 +10,6 @@ const resolvers: any = mergeResolvers(loadFilesSync(path.join(__dirname, './reso
 export {
     typeDefs,
     resolvers,
-    QLDataSource
+    QLCollectionDataSource,
+    QLSystemDataSource
 }

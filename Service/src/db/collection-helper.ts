@@ -1,5 +1,5 @@
 import DBConnector from "../db-connector";
-import { StockData, DayData, DayDataSelectCondition, RuntimeData, RuntimeDataSelectCondtion } from "../definition/data-define";
+import { StockData, DayData, DayDataSelectCondition, RuntimeData, RuntimeDataSelectCondtion, TradeDay } from "../definition/data-define";
 import logger from "../logger";
 import { assembleInsertSqlOpts } from "./helper";
 
@@ -147,9 +147,9 @@ export function findDayData(db: DBConnector, condition: DayDataSelectCondition):
         db.query(opts, (err, results) => {
             if (err) return reject(err);
             if (results && results.length > 0) {
-                resolve(results as DayData[]);
+                return resolve(results as DayData[]);
             }
-            resolve([]);
+            return resolve([]);
         });
     }); 
 }

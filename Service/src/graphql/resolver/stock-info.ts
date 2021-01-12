@@ -14,19 +14,19 @@ export default {
 
     StockInfoQuery: {
         oneById: (parent: any, args: any, context: any): Promise<StockData> => {
-            return context.dataSources.dbConn.findStockInfoById(args['id']);            
+            return context.dataSources.dsCollection.findStockInfoById(args['id']);            
         },
         many: (parent: any, args: any, context: any): Promise<StockData[]> => {
-            return context.dataSources.dbConn.findStockInfos();
+            return context.dataSources.dsCollection.findStockInfos();
         }        
     },
 
     StockInfoMutation: {
         add: (parent: any, args: any, context: any): Promise<number> => {
-            return context.dataSources.dbConn.insertStockInfo(args);
+            return context.dataSources.dsCollection.insertStockInfo(args);
         },
         remove: (parent: any, args: any, context: any): Promise<number> => {
-            return context.dataSources.dbConn.removeStockInfo(args['id']);
+            return context.dataSources.dsCollection.removeStockInfo(args['id']);
         }
     }
 
@@ -35,7 +35,7 @@ export default {
 // export  {
 //     Query: {
 //         baseInfos: async (parent: any, args: any, context: any, info: any) => {
-//             const data: any[] = await context.dataSources.dbConn.findBaseInfos();
+//             const data: any[] = await context.dataSources.dsCollection.findBaseInfos();
 //             const ret: any[] = [];
 //             data.forEach(item => {
 //                 ret.push({
@@ -49,7 +49,7 @@ export default {
 //     },
 //     Mutation: {
 //         addBaseInfo: (parent: any, args: any, context: any, info: any): Promise<number> => {
-//             return context.dataSources.dbConn.addBaseInfo(args);
+//             return context.dataSources.dsCollection.addBaseInfo(args);
 //         }
 //     },
 //     TestQuery: {

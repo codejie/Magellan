@@ -5,13 +5,13 @@ type TradeDay {
 }
 
 type TradeDayQuery {
-    exist(date: String!): Boolean,
+    flag(date: String!): Int,
     many(begin: String!, end: String!): [TradeDay]
 }
 
 type TradeDayMutation {
-    add(date: String!, flag: Int): Int,
-    remove(id: Int!): Int
+    reset(year: String): Boolean,
+    setFlag(date: String!, flag: Int): Int
 }
 
 type Query {
