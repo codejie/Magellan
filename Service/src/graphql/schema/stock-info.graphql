@@ -8,8 +8,8 @@ type StockInfo {
 }
 
 type StockInfoQuery {
-    oneById(id: Int!): BaseInfo,
-    many: [BaseInfo]
+    oneById(id: Int!): StockInfo,
+    many: [StockInfo]
 }
 
 type StockInfoMutation {
