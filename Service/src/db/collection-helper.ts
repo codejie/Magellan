@@ -1,11 +1,11 @@
 import DBConnector from "../db-connector";
 import { StockData, DayData, DayDataSelectCondition, RuntimeData, RuntimeDataSelectCondtion, TradeDay } from "../definition/data-define";
 import logger from "../logger";
-import { assembleInsertSqlOpts } from "./helper";
+import { assembleInsertSqlOpts, getDateString } from "./helper";
 
-function getDateString(date: Date): string {
-    return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-}
+// function getDateString(date: Date): string {
+//     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+// }
 
 export function findStockData(db: DBConnector): Promise<StockData[]> {
     const sql = 'SELECT id,type,code,market,name,created FROM m_base_info WHERE state=1';

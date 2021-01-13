@@ -10,7 +10,7 @@ type TradeDayQuery {
 }
 
 type TradeDayMutation {
-    reset(year: String): Boolean,
+    reset(year: String): Int,
     setFlag(date: String!, flag: Int): Int
 }
 

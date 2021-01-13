@@ -1,6 +1,6 @@
 import { DataSource } from "apollo-datasource";
 import DBConnector from "../db-connector";
-import { findTradeDays } from "../db/system-helper";
+import { findTradeDays, updateTradeDay } from "../db/system-helper";
 import { TradeDay } from "../definition/data-define";
 
 export default class QLSystemDataSource extends DataSource {
@@ -32,5 +32,9 @@ export default class QLSystemDataSource extends DataSource {
     
     findTradeDays(begin: string, end: string): Promise<TradeDay[]> {
         return findTradeDays(this.conn, begin, end);
-    }    
+    }
+    
+    resetTradeDay(year: string): Promise<number> {
+        return updateTradeDay(this.conn, year);
+    }
 }

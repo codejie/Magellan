@@ -34,7 +34,7 @@ export default {
     },
 
     TradeDayMutation: {
-        reset: (parent: any, args: any, context: any): Promise<boolean> => {
+        reset: (parent: any, args: any, context: any): Promise<number> => {
             return context.dataSources.dsSystem.resetTradeDay(args['year']);
         },
         setFlag: (parent: any, args: any, context: any): Promise<number> => {

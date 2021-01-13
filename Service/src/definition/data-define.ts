@@ -50,8 +50,8 @@ export interface DayData {
 }
 
 export interface TradeDay {
-    id: number,
-    date: string,
+    id?: number,
+    date: Date,
     flag: number // 0: trade day, 1: weekend, 2: holiday, 3: other
 }
 
