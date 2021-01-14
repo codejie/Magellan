@@ -1,9 +1,9 @@
 import { DataSource } from 'apollo-datasource'
-import DBConnector from '../db-connector';
+import DBConnector from '../../db-connector';
 import { findStockDataById, findStockData, insertStockData,
-        removeStockData, findRuntimeData, findDayData } from '../db/collection-helper';
+        removeStockData, findRuntimeData, findDayData } from '../../db/collection-helper';
 import { StockData, DayData, DayDataSelectCondition,
-        RuntimeData, RuntimeDataSelectCondtion  } from '../definition/data-define';
+        RuntimeData, RuntimeDataSelectCondtion  } from '../../definition/data-define';
 
 export default class QLCollectionDataSource extends DataSource {
     

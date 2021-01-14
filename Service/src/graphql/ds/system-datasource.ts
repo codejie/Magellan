@@ -1,7 +1,7 @@
 import { DataSource } from "apollo-datasource";
-import DBConnector from "../db-connector";
-import { findTradeDays, updateTradeDay } from "../db/system-helper";
-import { TradeDay } from "../definition/data-define";
+import DBConnector from "../../db-connector";
+import { findTradeDays, removeTradeDay, setTradeDayFlag, updateTradeDay } from "../../db/system-helper";
+import { TradeDay } from "../../definition/data-define";
 
 export default class QLSystemDataSource extends DataSource {
     context!: any;
@@ -16,7 +16,7 @@ export default class QLSystemDataSource extends DataSource {
         this.context = config.context;
     }
 
-    findTradeDay(date: string): Promise<TradeDay | null> {
+    findTradeDay(date: Date): Promise<TradeDay | null> {
         return new Promise<TradeDay | null>((resolve, reject) => {
             findTradeDays(this.conn, date).then(results => {
                 if (results && results.length > 0) {
@@ -30,11 +30,16 @@ export default class QLSystemDataSource extends DataSource {
         });
     }
     
-    findTradeDays(begin: string, end: string): Promise<TradeDay[]> {
+    findTradeDays(begin: Date, end: Date): Promise<TradeDay[]> {
         return findTradeDays(this.conn, begin, end);
     }
     
-    resetTradeDay(year: string): Promise<number> {
-        return updateTradeDay(this.conn, year);
+    async resetTradeDay(year: string): Promise<number> {
+        await removeTradeDay(this.conn, year);
+        return await updateTradeDay(this.conn, year);
+    }
+
+    setTradeDayFlag(date: Date, flag: number): Promise<number> {
+        return setTradeDayFlag(this.conn, date, flag);
     }
 }
