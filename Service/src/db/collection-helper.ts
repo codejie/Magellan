@@ -91,6 +91,32 @@ export function hasTodayDayData(db: DBConnector, id: number, date: Date): Promis
     });
 }
 
+export async function insertDayData(db: DBConnector, date: Date, id: number, open: number, close: number): Promise<void> {
+    const opts = {
+        sql: 'INSERT INTO m_day_data (id,todayopen,yestclose,todaydate) VALUES (?,?,?,?)',
+        values: [id, open, close, date]
+    };
+    return new Promise<void>((resolve, reject) => {
+        db.execute(opts, (err, result) => {
+            if (err) return reject(err);
+            resolve();
+        });
+    });
+}
+
+export function updateDayData(db: DBConnector, date: Date, id: number, close?: number): Promise<void> {
+    const opts = {
+        sql: 'UPDATE m_day_data SET todayclose=? WHERE id=? AND todaydate=?',
+        values: [close || -1, id, getDateString(date)]
+    };
+    return new Promise<void>((resolve, reject) => {
+        db.execute(opts, (err, result) => {
+            if (err) return reject(err);
+            resolve();
+        });
+    });     
+}
+
 export async function insertTodayDayData(db: DBConnector, data: DayData): Promise<void> {
     const opts = {
         sql: 'INSERT INTO m_day_data (id,todayopen,yestclose,todaydate) VALUES (?,?,?,?)',

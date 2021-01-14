@@ -1,8 +1,10 @@
 import { App } from "../app";
-import { hasTodayDayData, insertTodayDayData, updateYesterdayDayData } from "../db/collection-helper";
-import { DayData, RuntimeData } from "../definition/data-define";
+import { hasTodayDayData, insertDayData, insertTodayDayData, updateDayData, updateYesterdayDayData } from "../db/collection-helper";
+import { findTradeDays, getBeforeTradeDay } from "../db/system-helper";
+import { DayData, RuntimeData, TradeDay } from "../definition/data-define";
 import { Stock } from "../definition/struct-define";
 import NetEaseFetcher from "../fetcher/netease-fetcher";
+import tradeDay from "../graphql/resolver/trade-day";
 import logger from "../logger";
 import systemInfo from "../system-info";
 import Task from "./task";
@@ -22,6 +24,8 @@ export default class DayDataTask extends Task {
 
     checkTime: number;
     checked: boolean = false;
+
+    today!: Date;
     
     constructor(app: App) {
         super(app);
@@ -62,21 +66,27 @@ export default class DayDataTask extends Task {
     async onLoop(data: any): Promise<void>
      {
         logger.debug('day timeout');
-        if (this.isValid()) {
-            const stockInfos = systemInfo.stocks;
+        if (await this.isValid()) {
             const dbConn = this.app.dbConn;
-            const now = new Date();
+            const yesterday: Date | null = await getBeforeTradeDay(dbConn, this.today);
+            const stockInfos = systemInfo.stocks;
+            // const dbConn = this.app.dbConn;
+            // const now = new Date();
 
             for (let i = 0; i < stockInfos.length; ++ i) {
                 const req = stockInfos[i];
-                const has = await hasTodayDayData(dbConn, req.id, now);
+                const has = await hasTodayDayData(dbConn, req.id, this.today);
                 if (has) {
                     continue;
                 }
 
                 const data = await this.fetchDayData(req);
-                await insertTodayDayData(dbConn, data);
-                await updateYesterdayDayData(dbConn, data);
+                await insertDayData(dbConn, this.today, data.id, data.todayopen, data.yestclose);
+                if (yesterday) {
+                    await updateDayData(dbConn, yesterday, data.id, data.todayclose);
+                }
+                // await insertTodayDayData(dbConn, data);
+                // await updateYesterdayDayData(dbConn, data);
             }
 
             this.checked = true;
@@ -100,16 +110,38 @@ export default class DayDataTask extends Task {
         });
     } 
     
-    isValid(): boolean {
-        const now = new Date();
-        if (now.getDay() == 0 || now.getDay() == 6)
-            return false;
-        // return true;
-        const time: number = now.getHours() * 60 + now.getMinutes();
-        const MaxSide = 570 + this.interval / 1000 / 60;
-        logger.debug('day_data time = ' + time); 
-        logger.debug('day_data maxSide = ' + MaxSide); 
-        logger.debug('day_data valid = ' + (time > 570 && time <= MaxSide)); 
-        return (time > 570 && time <= MaxSide);//(570 + this.interval / 1000 / 60));
+    isValid(): Promise<boolean> {
+        this.today = new Date();
+        return this.isTradeDay(this.today);
+
+        // if (!this.isTradeDay(this.today)) {
+        //     return false;
+        // }
+
+        // const now = new Date();
+        // if (now.getDay() == 0 || now.getDay() == 6)
+        //     return false;
+        // // return true;
+        // const time: number = now.getHours() * 60 + now.getMinutes();
+        // const MaxSide = 570 + this.interval / 1000 / 60;
+        // logger.debug('day_data time = ' + time); 
+        // logger.debug('day_data maxSide = ' + MaxSide); 
+        // logger.debug('day_data valid = ' + (time > 570 && time <= MaxSide)); 
+        // return (time > 570 && time <= MaxSide);//(570 + this.interval / 1000 / 60));
+    }
+
+    isTradeDay(date: Date): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            findTradeDays(this.app.dbConn, date)
+                .then((ret: TradeDay[]) => {
+                    if (ret.length == 0) {
+                        resolve(false);
+                    } else {
+                        resolve(ret[0].flag === 0);
+                    }
+                }).catch(err => {
+                    reject(err);
+                });
+        });
     }
 }

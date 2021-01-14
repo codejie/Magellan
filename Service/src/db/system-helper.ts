@@ -77,3 +77,20 @@ export function setTradeDayFlag(db: DBConnector, date: Date, flag?: number): Pro
         });
     });    
 }
+
+export function getBeforeTradeDay(db: DBConnector, date: Date): Promise<Date | null> {
+    const opts = {
+        sql: 'SELECT date, flag FROM m_trade_day WHERE date < ? limit 1',
+        values: [getDateString(date)]
+    };
+    return new Promise<Date | null>((resolve, reject) => {
+        db.query(opts, (err, results) => {
+            if (err) return reject(err);
+            if (results.length === 1) {
+                resolve(results[0].date);
+            } else {
+                resolve(null);
+            }
+        });
+    });
+}
