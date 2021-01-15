@@ -1,0 +1,51 @@
+type PersonInfo {
+    id: Int!,
+    name: Stirng!
+    flag: Int,
+    created: DateTime
+}
+
+type PersonStockData {
+    id: Int! # personId
+    stockId: Int!
+    total: Int!,
+    price: Float!,
+    updated: DateTime
+}
+
+type PersonStockLog {
+    id: Int!
+    stockId: Int!
+    action: Int! # 0: buy, 1: sell, 2, share
+    total: Int!,
+    price: Float!,
+    updated: DateTime
+}
+
+type PersonFundData {
+    id: Int!
+    base: Float!,
+    valid: Float!
+    updated: DateTime
+}
+
+type PersonQuery {
+    one(id: Int!): PersonInfo
+    all: [PersonInfo]
+    stockData(id: Int!, stockId: Int): [PersonStockData]
+    stockLogs(id: Int!, stockId: Int): [PersonStockLog]
+    fundData(id: Int!): PersonFundData
+}
+
+type PersonMutation {
+    add(name: String!): Int!
+    updateStock(id: Int!, stockId: Int!, action: Int!, total: Int!, price: Float): Int! # return stock total
+}
+
+type Query {
+    Person: PersonQuery
+}
+
+type Mutation {
+    Person: PersonMutation
+}

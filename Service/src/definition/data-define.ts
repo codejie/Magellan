@@ -55,6 +55,37 @@ export interface TradeDay {
     flag: number // 0: trade day, 1: weekend, 2: holiday, 3: other
 }
 
+export interface PersonInfo {
+    id: number,
+    name: string,
+    flag: number,
+    created: Date
+}
+
+export interface PersonStockData {
+    id: number,
+    stockId: number,
+    total: number,
+    price: number,
+    updated: Date
+}
+
+export interface PersonStockLog {
+    id: number,
+    stockId: number,
+    action: number, //0: buy, 1: sell, 2, share
+    total: number,
+    price: number,
+    created: Date
+}
+
+export interface PersonFundData {
+    id: number,
+    base: number,
+    valid: number,
+    updated: Date
+}
+
 //////////////
 // query condition
 
