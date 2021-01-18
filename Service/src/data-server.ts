@@ -4,7 +4,7 @@ import { App } from "./app";
 import logger from "./logger";
 import Module from "./module";
 
-import { typeDefs, resolvers, QLCollectionDataSource, QLSystemDataSource } from "./graphql"
+import { typeDefs, resolvers, QLCollectionDataSource, QLSystemDataSource, QLPersonDataSource } from "./graphql"
 
 export default class DataServer extends Module {
 
@@ -39,7 +39,8 @@ export default class DataServer extends Module {
             dataSources: () => {
                 return {
                     dsCollection: new QLCollectionDataSource(this.app.dbConn),
-                    dsSystem: new QLSystemDataSource(this.app.dbConn)
+                    dsSystem: new QLSystemDataSource(this.app.dbConn),
+                    dsPerson: new QLPersonDataSource(this.app.dbConn)
                 };
             },
             uploads: false

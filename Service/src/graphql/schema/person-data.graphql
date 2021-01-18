@@ -1,6 +1,6 @@
 type PersonInfo {
     id: Int!,
-    name: Stirng!
+    name: String!
     flag: Int,
     created: DateTime
 }
@@ -39,7 +39,7 @@ type PersonQuery {
 
 type PersonMutation {
     add(name: String!): Int!
-    updateStock(id: Int!, stockId: Int!, action: Int!, total: Int!, price: Float): Int! # return stock total
+    updateStock(id: Int!, stockId: Int!, action: Int!, total: Int!, price: Float): Number! # return stock total
 }
 
 type Query {

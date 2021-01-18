@@ -10,7 +10,10 @@ export default {
 
     PersonMutation: {
         add: (parent: any, args: any, context: any): Promise<number> => {
-            return context.dataSources.dsSystem.findTradeDay(args['date'])                        
+            return context.dataSources.dsPerson.addPersonInfo(args['name'])                        
+        },
+        updateStock: (parent: any, args: any, context: any): Promise<number> => {
+            return context.dataSources.dsPerson.updateStockData(args['id'], args['stockId'], args['action'], args['total'], args['price']);
         }
     }
 }
