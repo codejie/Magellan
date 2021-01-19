@@ -70,6 +70,10 @@ export interface PersonStockData {
     updated: Date
 }
 
+export const ACTION_STOCK_BUY = 0;
+export const ACTION_STOCK_SELL = 1;
+export const ACTION_STOCK_SHARE = 2;
+
 export interface PersonStockLog {
     id: number,
     stockId: number,
