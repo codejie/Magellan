@@ -1,3 +1,4 @@
+import { PersonFundData, PersonInfo, PersonStockData, PersonStockLog } from "../../definition/data-define";
 
 export default {
     Query: {
@@ -16,24 +17,28 @@ export default {
             return context.dataSources.dsPerson.updateStockData(args['id'], args['stockId'], args['action'], args['total'], args['price']);
         },
         removeStock: (parent: any, args: any, context: any): Promise<number> => {
-            return context.dataSources.dsPerson.removeStockData(args['id'], args['stockId'])
+            return context.dataSources.dsPerson.removeStockData(args['id'], args['stockId']);
         },
         updateFundData: (parent: any, args: any, context: any): Promise<number> => {
+            return context.dataSources.dsPerson.updateFundData(args['id'], args['base'], args['valid']);
         }
     },
 
     PersonQuery: {
-        one: (parent: any, args: any, context: any): Promise<PersonInfo> => {
-
+        one: (parent: any, args: any, context: any): Promise<PersonInfo | null> => {
+            return context.dataSources.dsPerson.fetchPersonInfo(args['id']);
         },
         all: (parent: any, args: any, context: any): Promise<PersonInfo[]> => {
-
+            return context.dataSources.dsPerson.fetchPersonInfos();
         },
-        stockData: (parent: any, args: any, context: any): Promise<PersonStockData> => {
+        stockData: (parent: any, args: any, context: any): Promise<PersonStockData[]> => {
+            return context.dataSources.dsPerson.fetchStockData(args['id'], args['stockId']);
         },
-        stockLogs: (parent: any, args: any, context: any): Promise<PersonStockLog> => {
+        stockLogs: (parent: any, args: any, context: any): Promise<PersonStockLog[]> => {
+            return context.dataSources.dsPerson.fetchStockLog(args['id'], args['stockId'], args['begin'], args['end']);
         },
         fundData: (parent: any, args: any, context: any): Promise<PersonFundData> => {
+            return context.dataSources.dsPerson.fetchFundData(args['id']);
         }
 
     }

@@ -75,6 +75,7 @@ export const ACTION_STOCK_SELL = 1;
 export const ACTION_STOCK_SHARE = 2;
 
 export interface PersonStockLog {
+    logId: number,
     id: number,
     stockId: number,
     action: number, //0: buy, 1: sell, 2, share

@@ -1,7 +1,7 @@
 import { DataSource } from "apollo-datasource";
 import DBConnector from "../../db-connector";
-import { addPersonInfo, fetchPersonStockData, insertPersonStockData, insertPersonStockLog, removePersonStockData, updatePersonStockData } from "../../db/person-helper";
-import { ACTION_STOCK_BUY, ACTION_STOCK_SELL, ACTION_STOCK_SHARE, PersonStockData } from "../../definition/data-define";
+import { insertPersonInfo, fetchPersonFundData, fetchPersonStockData, insertPersonFundData, insertPersonStockData, insertPersonStockLog, removePersonStockData, updatePersonFundData, updatePersonStockData, fetchPersonInfos, fetchPersonStockLog } from "../../db/person-helper";
+import { ACTION_STOCK_BUY, ACTION_STOCK_SELL, ACTION_STOCK_SHARE, PersonFundData, PersonInfo, PersonStockData, PersonStockLog } from "../../definition/data-define";
 
 export default class QLPersonDataSource extends DataSource {
     context!: any;
@@ -17,7 +17,27 @@ export default class QLPersonDataSource extends DataSource {
     }
     
     addPersonInfo(name: string): Promise<number> {
-        return addPersonInfo(this.conn, name);
+        return insertPersonInfo(this.conn, name);
+    }
+
+    fetchPersonInfo(id: string): Promise<PersonInfo | null> {
+        return new Promise<PersonInfo | null>((resolve, reject) => {
+            fetchPersonInfos(this.conn, id)
+                .then((ret: PersonInfo[]) => {
+                    if (ret && ret.length > 0) {
+                        resolve(ret[0]);
+                    } else {
+                        resolve(null)
+                    }
+                })
+                .catch((err: Error) => {
+                    reject(err);
+                });
+        });
+    }
+
+    fetchPersonInfos(): Promise<PersonInfo[]> {
+        return fetchPersonInfos(this.conn);
     }
 
     async updateStockData(id: number, stockId: number, action: number, total: number, price: number): Promise<number> {
@@ -46,5 +66,26 @@ export default class QLPersonDataSource extends DataSource {
 
     removeStockData(id: number, stockId: number): Promise<number> {
         return removePersonStockData(this.conn, id, stockId);
+    }
+
+    fetchStockData(id: number, stockId?: number): Promise<PersonStockData[]> {
+        return fetchPersonStockData(this.conn, id, stockId);     
+    }
+
+    fetchStockLog(id: number, stockId?: number, begin?: Date, end?: Date): Promise<PersonStockLog[]> {
+        return fetchPersonStockLog(this.conn, id, stockId, begin, end);
+    }
+
+    fetchFundData(id: number): Promise<PersonFundData | null> {
+        return fetchPersonFundData(this.conn, id);        
+    }
+
+    async updateFundData(id: number, base: number, valid: number): Promise<number> {
+        const data = await fetchPersonFundData(this.conn, id);
+        if (data) {
+            return await updatePersonFundData(this.conn, id, base, valid);
+        } else {
+            return await insertPersonFundData(this.conn, id, base);
+        }
     }
 }

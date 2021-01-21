@@ -14,12 +14,13 @@ type PersonStockData {
 }
 
 type PersonStockLog {
+    logId: Int,
     id: Int!
     stockId: Int!
     action: Int! # 0: buy, 1: sell, 2, share
     total: Int!,
     price: Float!,
-    updated: DateTime
+    created: DateTime
 }
 
 type PersonFundData {
@@ -33,15 +34,15 @@ type PersonQuery {
     one(id: Int!): PersonInfo
     all: [PersonInfo]
     stockData(id: Int!, stockId: Int): [PersonStockData]
-    stockLogs(id: Int!, stockId: Int): [PersonStockLog]
+    stockLogs(id: Int!, stockId: Int, begin: Date, end: Date): [PersonStockLog]
     fundData(id: Int!): PersonFundData
 }
 
 type PersonMutation {
     add(name: String!): Int!
-    updateStock(id: Int!, stockId: Int!, action: Int!, total: Int!, price: Float): Int! # return stock total
+    updateStock(id: Int!, stockId: Int!, action: Int!, total: Int!, price: Float!): Int! # return stock total
     removeStock(id: Int!, stockId: Int!): Int!
-    updateFundData(id: Int!, fund: number): Int!
+    updateFundData(id: Int!, fund: Int!): Int!
 }
 
 type Query {
