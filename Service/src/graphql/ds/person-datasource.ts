@@ -48,16 +48,17 @@ export default class QLPersonDataSource extends DataSource {
         if (stockData.length === 1) {
             // calc
             const data = stockData[0];
-            const p = data.total * data.price + (total * price) * (action === ACTION_STOCK_SELL ? -1 : 1 );
             const t = data.total + total * (action === ACTION_STOCK_SELL ? -1 : 1 );
+            const p = t != 0 ? (data.total * data.price + (total * price) * (action === ACTION_STOCK_SELL ? -1 : 1 )) / t : 0.0;
             await updatePersonStockData(this.conn, id, stockId, t, p);
             ret = t;
         } else {
             if (action === ACTION_STOCK_BUY || action === ACTION_STOCK_SHARE) {
                 await insertPersonStockData(this.conn, id, stockId, total, price);
                 ret = total;
+            } else {
+                throw new Error('not exist');
             }
-            throw new Error('not exist');
         }
         await insertPersonStockLog(this.conn, id, stockId, action, total, price);
         

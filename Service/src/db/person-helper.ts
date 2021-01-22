@@ -73,7 +73,7 @@ export function updatePersonStockData(db: DBConnector, id: number, stockId: numb
     return new Promise<number>((resolve, reject) => {
         db.execute(opts, (err, result) => {
             if (err) return reject(err);
-            resolve(result.effectedRows);
+            resolve(result.affectedRows);
         });
     });
 }
@@ -86,7 +86,7 @@ export function removePersonStockData(db: DBConnector, id: number, stockId: numb
     return new Promise<number>((resolve, reject) => {
         db.execute(opts, (err, result) => {
             if (err) return reject(err);
-            resolve(result.effectedRows);
+            resolve(result.affectedRows);
         });
     });
 }
@@ -146,15 +146,15 @@ export function fetchPersonFundData(db: DBConnector, id: number): Promise<Person
     });
 }
 
-export function updatePersonFundData(db: DBConnector, id: number, base: number, valid: number): Promise<number> {
+export function updatePersonFundData(db: DBConnector, id: number, base: number, valid?: number): Promise<number> {
     const opts = {
         sql: 'UPDATE m_person_fund_data SET base=?, valid=? WHERE id=?',
-        values: [base, valid, id]        
+        values: [base, valid || base, id]        
     };
     return new Promise<number>((resolve, reject) => {
         db.execute(opts, (err, result) => {
             if (err) return reject(err);
-            resolve(result.effectedRows);
+            resolve(result.affectedRows);
         });
     });
 }

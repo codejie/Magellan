@@ -13,10 +13,10 @@ export default {
         add: (parent: any, args: any, context: any): Promise<number> => {
             return context.dataSources.dsPerson.addPersonInfo(args['name'])                        
         },
-        updateStock: (parent: any, args: any, context: any): Promise<number> => {
+        updateStockData: (parent: any, args: any, context: any): Promise<number> => {
             return context.dataSources.dsPerson.updateStockData(args['id'], args['stockId'], args['action'], args['total'], args['price']);
         },
-        removeStock: (parent: any, args: any, context: any): Promise<number> => {
+        removeStockData: (parent: any, args: any, context: any): Promise<number> => {
             return context.dataSources.dsPerson.removeStockData(args['id'], args['stockId']);
         },
         updateFundData: (parent: any, args: any, context: any): Promise<number> => {

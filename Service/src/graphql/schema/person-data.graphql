@@ -40,9 +40,9 @@ type PersonQuery {
 
 type PersonMutation {
     add(name: String!): Int!
-    updateStock(id: Int!, stockId: Int!, action: Int!, total: Int!, price: Float!): Int! # return stock total
-    removeStock(id: Int!, stockId: Int!): Int!
-    updateFundData(id: Int!, fund: Int!): Int!
+    updateStockData(id: Int!, stockId: Int!, action: Int!, total: Int!, price: Float!): Int! # return stock total
+    removeStockData(id: Int!, stockId: Int!): Int!
+    updateFundData(id: Int!, base: Float!, valid: Float): Int!
 }
 
 type Query {
