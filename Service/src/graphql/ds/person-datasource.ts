@@ -16,8 +16,8 @@ export default class QLPersonDataSource extends DataSource {
         this.context = config.context;
     }
     
-    addPersonInfo(name: string): Promise<number> {
-        return insertPersonInfo(this.conn, name);
+    addPersonInfo(name: string, passwd: string): Promise<number> {
+        return insertPersonInfo(this.conn, name, passwd);
     }
 
     fetchPersonInfo(id: string): Promise<PersonInfo | null> {

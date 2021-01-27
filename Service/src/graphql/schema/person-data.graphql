@@ -2,7 +2,9 @@ type PersonInfo {
     id: Int!,
     name: String!
     flag: Int,
-    created: DateTime
+    passwd: String!,
+    created: DateTime,
+    updated: DateTime
 }
 
 type PersonStockData {

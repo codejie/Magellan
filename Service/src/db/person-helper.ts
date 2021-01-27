@@ -2,10 +2,10 @@ import DBConnector from "../db-connector";
 import { PersonFundData, PersonInfo, PersonStockData, PersonStockLog } from "../definition/data-define";
 import { getDateString } from "./helper";
 
-export function insertPersonInfo(db: DBConnector, name: string): Promise<number> {
+export function insertPersonInfo(db: DBConnector, name: string, passwd: string): Promise<number> {
     const opts = {
-        sql: 'INSERT INTO m_person_info (name, flag) VALUES (?,?)',
-        values: [name, 0]
+        sql: 'INSERT INTO m_person_info (name, flag, passwd) VALUES (?,?)',
+        values: [name, 0, ]
     };
     
     return new Promise<number>((resolve, reject) => {
@@ -18,7 +18,7 @@ export function insertPersonInfo(db: DBConnector, name: string): Promise<number>
 
 export function fetchPersonInfos(db: DBConnector, id?: string): Promise<PersonInfo[]> {
     const opts = {
-        sql: 'SELECT id, name, flag, created FROM m_person_info',
+        sql: 'SELECT id, name, flag, passwd, created, updated FROM m_person_info',
         values: []
     };
     if (id) {
@@ -31,6 +31,14 @@ export function fetchPersonInfos(db: DBConnector, id?: string): Promise<PersonIn
             resolve(results as PersonInfo[]);
         });
     });
+}
+
+export function fetchPersonInfoByName(db: DBConnector, name: string): Promise<PersonInfo | null> {
+
+}
+
+export function updatePersonToken(db: DBConnector, id: number, name: string): Promise<string> {
+
 }
 
 export function fetchPersonStockData(db: DBConnector, id: number, stockId?: number): Promise<PersonStockData[]> {

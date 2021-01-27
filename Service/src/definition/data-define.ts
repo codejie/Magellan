@@ -59,7 +59,9 @@ export interface PersonInfo {
     id: number,
     name: string,
     flag: number,
-    created: Date
+    passwd: string,
+    created: Date,
+    updated: Date
 }
 
 export interface PersonStockData {
