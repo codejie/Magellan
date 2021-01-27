@@ -57,6 +57,23 @@ import { validUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
+  // apollo: {
+  //   login: {
+  //     query: LOGIN,
+  //     variables: {
+  //       id: 1
+  //     },
+  //     // update: (data) => console.log(data),
+  //     manual: true,
+  //     result: ({ data, loading }) => {
+  //       if (!loading) {
+  //         console.log('====' + data)
+  //       } else {
+  //         console.log('loading...')
+  //       }
+  //     }
+  //   }
+  // },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -106,10 +123,26 @@ export default {
       })
     },
     handleLogin() {
+      console.log('handleLogin')
+      // this.$apollo.query({
+      //   query: LOGIN,
+      //   variables: {
+      //     id: 1
+      //   }
+      // }).then(data => {
+      //   console.log(data)
+      // }).catch(err => {
+      //   console.error(err)
+      // })
+      // }) .queries.login.refetch()
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
+          this.$store.dispatch('user/login', {
+            vue: this,
+            userInfo: this.loginForm
+          }).then((data) => {
+            console.log(data)
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
