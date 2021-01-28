@@ -36,16 +36,20 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+const apolloProvider = createProvider({
+  httpEndpoint: 'http://localhost:3000/graphql',
+  wsEndpoint: 'ws://localhost:3000/subscriptions',
+  persisting: false,
+  websocketsOnly: false,
+  ssr: false,
+  tokenName: 'Magellan',
+  getAuth: (data) => data
+})
+
 new Vue({
   el: '#app',
   router,
   store,
-  apolloProvider: createProvider({
-    httpEndpoint: 'http://localhost:3000/graphql',
-    wsEndpoint: 'ws://localhost:3000/subscriptions',
-    tokenName: '1111',
-    getAuth: (data) => data
-  }),  
-  // apolloProvider: createProvider(),
+  apolloProvider: apolloProvider,  
   render: h => h(App)
 })

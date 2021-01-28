@@ -7,7 +7,9 @@ const SAY_HELLO = 'SAY_HELLO';
 
 export default {
     Query: {
-        hello: () => 'HELLO',
+        hello: (root:any, args: any, context: any) => {
+            return 'HELLO'
+        },
         datetime: () => new Date(),
         date: () => new Date(),
         time: () => new Date()

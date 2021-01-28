@@ -2,6 +2,7 @@ import { logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import { login } from '@/graphql/user'
+// import { apolloClient } from '@/vue-apollo'
 
 const getDefaultState = () => {
   return {

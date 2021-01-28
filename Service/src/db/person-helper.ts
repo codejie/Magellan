@@ -33,13 +33,13 @@ export function fetchPersonInfos(db: DBConnector, id?: string): Promise<PersonIn
     });
 }
 
-export function fetchPersonInfoByName(db: DBConnector, name: string): Promise<PersonInfo | null> {
+// export function fetchPersonInfoByName(db: DBConnector, name: string): Promise<PersonInfo | null> {
 
-}
+// }
 
-export function updatePersonToken(db: DBConnector, id: number, name: string): Promise<string> {
+// export function updatePersonToken(db: DBConnector, id: number, name: string): Promise<string> {
 
-}
+// }
 
 export function fetchPersonStockData(db: DBConnector, id: number, stockId?: number): Promise<PersonStockData[]> {
     const opts = {
