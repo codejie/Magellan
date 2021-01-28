@@ -5,14 +5,12 @@ import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client'
 // Install the vue plugin
 Vue.use(VueApollo)
 
-export var grapqlConnection = null
+export var graphqlConnection = null
 
 export function createProvider(options) {
-  const { apolloClient, wsClient } = createApolloClient({
-    options
-  })
+  const { apolloClient, wsClient } = createApolloClient(options)
   apolloClient.wsClient = wsClient
-  grapqlConnection = apolloClient
+  graphqlConnection = apolloClient
 
   const apolloProvider = new VueApollo({
     defaultClient: apolloClient,

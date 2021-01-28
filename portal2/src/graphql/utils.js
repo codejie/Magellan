@@ -1,9 +1,9 @@
-import { grapqlConnection } from '@/vue-apollo'
+import { graphqlConnection } from '@/vue-apollo'
 
 export function query(vue, gql, variables, update) {
   return new Promise((resolve, reject) => {
-    console.log(grapqlConnection)
-    grapqlConnection.query({
+    console.log(graphqlConnection)
+    graphqlConnection.query({
       query: gql,
       variables: variables
     }).then(data => {
