@@ -33,9 +33,21 @@ export function fetchPersonInfos(db: DBConnector, id?: string): Promise<PersonIn
     });
 }
 
-// export function fetchPersonInfoByName(db: DBConnector, name: string): Promise<PersonInfo | null> {
-
-// }
+export function fetchPersonInfoByName(db: DBConnector, name: string): Promise<PersonInfo | null> {
+    const opts = {
+        sql: 'SELECT id, name, flag, passwd, created, updated FROM m_person_info WHERE name=?',
+        values: [name]
+    };
+    return new Promise<PersonInfo | null>((resolve, reject) => {
+        db.query(opts, (err, results) => {
+            if (err) return reject(err);
+            if (results && results.length > 0) {
+                return resolve(results[0] as PersonInfo);
+            }
+            return resolve(null);
+        });
+    });
+}
 
 // export function updatePersonToken(db: DBConnector, id: number, name: string): Promise<string> {
 

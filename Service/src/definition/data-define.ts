@@ -64,6 +64,12 @@ export interface PersonInfo {
     updated: Date
 }
 
+export interface PersonToken {
+    name: string,
+    flag: number,
+    token: string
+}
+
 export interface PersonStockData {
     id: number,
     stockId: number,

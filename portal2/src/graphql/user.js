@@ -1,10 +1,8 @@
 import LOGIN from './schema/login.gql'
 import { query } from './utils'
 
-export function login(vue, data) {
-  return query(vue, LOGIN, {
-    id: 1
-  }, (data) => { data }); 
+export function login(data) {
+  return query(LOGIN, data, (data) => { data })
 }
 
 // export async function tLogin(apollo, data) {

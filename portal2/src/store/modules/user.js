@@ -44,10 +44,10 @@ const actions = {
   //     })
   //   })
   // },
-  login({ commit }, { vue, userInfo }) {
+  login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login(vue, { username: username.trim(), password: password }).then(response => {
+      login({ user: username.trim(), passwd: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.Person.one.name)
         setToken('123')// data.Person.one.name)

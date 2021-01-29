@@ -7,6 +7,12 @@ type PersonInfo {
     updated: DateTime
 }
 
+type PersonToken {
+    name: String!,
+    flag: Int,
+    token: String!
+}
+
 type PersonStockData {
     id: Int! # personId
     stockId: Int!
@@ -34,6 +40,7 @@ type PersonFundData {
 
 type PersonQuery {
     one(id: Int!): PersonInfo
+    oneToken(name: String!, passwd: String!): PersonToken
     all: [PersonInfo]
     stockData(id: Int!, stockId: Int): [PersonStockData]
     stockLogs(id: Int!, stockId: Int, begin: Date, end: Date): [PersonStockLog]

@@ -43,10 +43,13 @@ export default class DataServer extends Module {
                     dsPerson: new QLPersonDataSource(this.app.dbConn)
                 };
             },
-            context: ({req, request }) => {
-                console.log(req);
-                console.log(request);
-                return {user: 1};
+            context: ({request }) => {
+                // const headers: any[] = request.headers;
+                if (request.headers && request.headers['authurization']) {
+                    return {user: 1};
+                } else {
+                    return {};
+                }
             },
             uploads: false
         });

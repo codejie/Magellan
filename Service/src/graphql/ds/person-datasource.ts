@@ -1,7 +1,8 @@
 import { DataSource } from "apollo-datasource";
 import DBConnector from "../../db-connector";
-import { insertPersonInfo, fetchPersonFundData, fetchPersonStockData, insertPersonFundData, insertPersonStockData, insertPersonStockLog, removePersonStockData, updatePersonFundData, updatePersonStockData, fetchPersonInfos, fetchPersonStockLog } from "../../db/person-helper";
-import { ACTION_STOCK_BUY, ACTION_STOCK_SELL, ACTION_STOCK_SHARE, PersonFundData, PersonInfo, PersonStockData, PersonStockLog } from "../../definition/data-define";
+import { comparePasswd, getDateString, makeToken } from "../../db/helper";
+import { insertPersonInfo, fetchPersonFundData, fetchPersonStockData, insertPersonFundData, insertPersonStockData, insertPersonStockLog, removePersonStockData, updatePersonFundData, updatePersonStockData, fetchPersonInfos, fetchPersonStockLog, fetchPersonInfoByName } from "../../db/person-helper";
+import { ACTION_STOCK_BUY, ACTION_STOCK_SELL, ACTION_STOCK_SHARE, PersonFundData, PersonInfo, PersonStockData, PersonStockLog, PersonToken } from "../../definition/data-define";
 
 export default class QLPersonDataSource extends DataSource {
     context!: any;
@@ -88,5 +89,20 @@ export default class QLPersonDataSource extends DataSource {
         } else {
             return await insertPersonFundData(this.conn, id, base);
         }
+    }
+
+    async fetchToken(name: string, passwd: string): Promise<PersonToken | null> {
+        const info: PersonInfo | null = await fetchPersonInfoByName(this.conn, name);
+        if (info) {
+            if (comparePasswd(passwd, info.passwd)) {
+                const seed: string = info.name + info.id + (new Date()).getTime();
+                return {
+                    name: info.name,
+                    flag: info.flag,
+                    token: makeToken(seed)
+                };
+            }
+        }
+        return null;
     }
 }

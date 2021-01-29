@@ -138,10 +138,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', {
-            vue: this,
-            userInfo: this.loginForm
-          }).then((data) => {
+          this.$store.dispatch('user/login', this.loginForm).then((data) => {
             console.log(data)
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false

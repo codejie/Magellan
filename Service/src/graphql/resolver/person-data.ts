@@ -1,4 +1,4 @@
-import { PersonFundData, PersonInfo, PersonStockData, PersonStockLog } from "../../definition/data-define";
+import { PersonFundData, PersonInfo, PersonStockData, PersonStockLog, PersonToken } from "../../definition/data-define";
 
 export default {
     Query: {
@@ -39,6 +39,9 @@ export default {
         },
         fundData: (parent: any, args: any, context: any): Promise<PersonFundData> => {
             return context.dataSources.dsPerson.fetchFundData(args['id']);
+        },
+        oneToken: (parent: any, args: any, context: any): Promise<PersonToken | null> => {
+            return context.dataSources.dsPerson.fetchToken(args['name'], args['passwd']);
         }
 
     }
