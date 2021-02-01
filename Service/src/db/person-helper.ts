@@ -1,11 +1,11 @@
 import DBConnector from "../db-connector";
 import { PersonFundData, PersonInfo, PersonStockData, PersonStockLog } from "../definition/data-define";
-import { getDateString } from "./helper";
+import { encodePasswd, getDateString } from "./helper";
 
 export function insertPersonInfo(db: DBConnector, name: string, passwd: string): Promise<number> {
     const opts = {
-        sql: 'INSERT INTO m_person_info (name, flag, passwd) VALUES (?,?)',
-        values: [name, 0, ]
+        sql: 'INSERT INTO m_person_info (name, flag, passwd) VALUES (?,?,?)',
+        values: [name, 0, encodePasswd(passwd)]
     };
     
     return new Promise<number>((resolve, reject) => {
