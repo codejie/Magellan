@@ -45,8 +45,11 @@ export default class DataServer extends Module {
             },
             context: ({request }) => {
                 // const headers: any[] = request.headers;
+                // const ret = {
+                //     module: this
+                // };
                 if (request.headers && request.headers['authurization']) {
-                    return {user: 1};
+                    return { user: 1};
                 } else {
                     return {};
                 }

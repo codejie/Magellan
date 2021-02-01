@@ -40,9 +40,8 @@ export default {
         fundData: (parent: any, args: any, context: any): Promise<PersonFundData> => {
             return context.dataSources.dsPerson.fetchFundData(args['id']);
         },
-        token: (parent: any, args: any, context: any): Promise<PersonToken | null> => {
+        token: (parent: any, args: any, context: any, info: any): Promise<PersonToken | null> => {
             return context.dataSources.dsPerson.fetchToken(args['name'], args['passwd']);
         }
-
     }
 }

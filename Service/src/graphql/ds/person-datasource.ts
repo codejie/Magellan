@@ -3,6 +3,7 @@ import DBConnector from "../../db-connector";
 import { comparePasswd, getDateString, makeToken } from "../../db/helper";
 import { insertPersonInfo, fetchPersonFundData, fetchPersonStockData, insertPersonFundData, insertPersonStockData, insertPersonStockLog, removePersonStockData, updatePersonFundData, updatePersonStockData, fetchPersonInfos, fetchPersonStockLog, fetchPersonInfoByName } from "../../db/person-helper";
 import { ACTION_STOCK_BUY, ACTION_STOCK_SELL, ACTION_STOCK_SHARE, PersonFundData, PersonInfo, PersonStockData, PersonStockLog, PersonToken } from "../../definition/data-define";
+import { fetchToken, registerToken, unregisterToken } from "../../system-buffer";
 
 export default class QLPersonDataSource extends DataSource {
     context!: any;
@@ -96,10 +97,12 @@ export default class QLPersonDataSource extends DataSource {
         if (info) {
             if (comparePasswd(passwd, info.passwd)) {
                 const seed: string = info.name + info.id + (new Date()).getTime();
+                const token = makeToken(seed);
+                registerToken(info.id, token);
                 return {
                     name: info.name,
                     flag: info.flag,
-                    token: makeToken(seed)
+                    token
                 };
             }
         }
