@@ -13,7 +13,7 @@ export const tokenInfo: TokenInfo = {
     ids: {}
 };
 
-export function registerToken(id: number, token: string) {
+export function registerToken(id: number, token: string): void {
 
     delete tokenInfo.tokens[tokenInfo.ids[id]];
 
@@ -21,11 +21,15 @@ export function registerToken(id: number, token: string) {
     tokenInfo.tokens[token] = id;
 }
 
-export function unregisterToken(token: string) {
+export function unregisterToken(token: string): void {
     delete tokenInfo.ids[tokenInfo.tokens[token]];
     delete tokenInfo.tokens[token];
 }
 
-export function fetchToken(id: number) {
+export function fetchToken(id: number): string | undefined {
     return tokenInfo.ids[id];
+}
+
+export function fetchTokenId(token: string): number | undefined {
+    return tokenInfo.tokens[token];
 }

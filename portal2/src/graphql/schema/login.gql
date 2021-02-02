@@ -1,8 +1,9 @@
-query ($id: Int!) {
-    Person {
-        one(id: $id) {
-            name
-            id
-        }
+query ($name: String!, $passwd: String!) {
+  Person {
+    token(name: $name, passwd: $passwd) {
+      name
+      token
+      flag
     }
+  }
 }

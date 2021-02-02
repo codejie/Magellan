@@ -2,7 +2,9 @@ import LOGIN from './schema/login.gql'
 import { query } from './utils'
 
 export function login(data) {
-  return query(LOGIN, data, (data) => { data })
+  return query(LOGIN, { id: 1 }, (resp) => {
+    return resp.data
+  })
 }
 
 // export async function tLogin(apollo, data) {

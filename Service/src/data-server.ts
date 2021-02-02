@@ -5,6 +5,7 @@ import logger from "./logger";
 import Module from "./module";
 
 import { typeDefs, resolvers, QLCollectionDataSource, QLSystemDataSource, QLPersonDataSource } from "./graphql"
+import { fetchToken, fetchTokenId } from "./system-buffer";
 
 export default class DataServer extends Module {
 
@@ -43,13 +44,15 @@ export default class DataServer extends Module {
                     dsPerson: new QLPersonDataSource(this.app.dbConn)
                 };
             },
-            context: ({request }) => {
-                // const headers: any[] = request.headers;
-                // const ret = {
-                //     module: this
-                // };
-                if (request.headers && request.headers['authurization']) {
-                    return { user: 1};
+            context: ({ request }) => {
+                const headers: any = request.headers;
+                if (headers && headers['authorization']) {
+                    const token = headers['authorization'];
+                    const id = fetchTokenId(token);
+
+                    return {
+                        id
+                    };
                 } else {
                     return {};
                 }

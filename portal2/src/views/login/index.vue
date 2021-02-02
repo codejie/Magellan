@@ -54,6 +54,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+// import LOGIN from '@/graphql/schema/login.gql'
 
 export default {
   name: 'Login',
@@ -67,7 +68,7 @@ export default {
   //     manual: true,
   //     result: ({ data, loading }) => {
   //       if (!loading) {
-  //         console.log('====' + data)
+  //         console.log(data)
   //       } else {
   //         console.log('loading...')
   //       }
@@ -83,11 +84,11 @@ export default {
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
+      // if (value.length < 6) {
+      //   callback(new Error('The password can not be less than 6 digits'))
+      // } else {
+      callback()
+      // }
     }
     return {
       loginForm: {
