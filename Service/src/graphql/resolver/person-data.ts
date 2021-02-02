@@ -21,7 +21,11 @@ export default {
         },
         updateFundData: (parent: any, args: any, context: any): Promise<number> => {
             return context.dataSources.dsPerson.updateFundData(args['id'], args['base'], args['valid']);
-        }
+        },
+        removeToken: (parent: any, args: any, context: any, info: any): Promise<void> => {
+            const id = context.id;
+            return context.dataSources.dsPerson.removeTokenId(id);
+        }        
     },
 
     PersonQuery: {
@@ -40,7 +44,7 @@ export default {
         fundData: (parent: any, args: any, context: any): Promise<PersonFundData> => {
             return context.dataSources.dsPerson.fetchFundData(args['id']);
         },
-        token: (parent: any, args: any, context: any, info: any): Promise<PersonToken | null> => {
+        fetchToken: (parent: any, args: any, context: any, info: any): Promise<PersonToken | null> => {
             return context.dataSources.dsPerson.fetchToken(args['name'], args['passwd']);
         }
     }

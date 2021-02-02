@@ -1,6 +1,6 @@
 query ($name: String!, $passwd: String!) {
   Person {
-    token(name: $name, passwd: $passwd) {
+    fetchToken(name: $name, passwd: $passwd) {
       name
       token
       flag

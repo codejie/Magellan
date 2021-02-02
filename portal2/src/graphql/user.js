@@ -1,8 +1,15 @@
 import LOGIN from './schema/login.gql'
-import { query } from './utils'
+import LOGOUT from './schema/logout.gql'
+import { query, mutation } from './utils'
 
 export function login(data) {
-  return query(LOGIN, { id: 1 }, (resp) => {
+  return query(LOGIN, data, (resp) => {
+    return resp.data
+  })
+}
+
+export function logout(data) {
+  return mutation(LOGOUT, data, (resp) => {
     return resp.data
   })
 }

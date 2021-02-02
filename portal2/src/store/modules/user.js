@@ -1,7 +1,7 @@
-import { logout } from '@/api/user'
+// import { logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-import { login } from '@/graphql/user'
+import { login, logout } from '@/graphql/user'
 // import { apolloClient } from '@/vue-apollo'
 
 const getDefaultState = () => {
@@ -47,9 +47,9 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ user: username.trim(), passwd: password }).then(response => {
+      login({ name: username.trim(), passwd: password }).then(response => {
         const { Person } = response
-        const token = Person.token.token
+        const token = Person.fetchToken.token
         commit('SET_TOKEN', token)
         setToken(token)// data.Person.one.name)
         resolve(response)
@@ -83,11 +83,24 @@ const actions = {
       commit('SET_NAME', 'Jie')
       commit('SET_AVATAR', '')
       resolve({
-        name: 'Jie'
+        name: 'Jie',
+        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
       })
     })
   },
   // user logout
+  // logout({ commit, state }) {
+  //   return new Promise((resolve, reject) => {
+  //     logout(state.token).then(() => {
+  //       removeToken() // must remove  token  first
+  //       resetRouter()
+  //       commit('RESET_STATE')
+  //       resolve()
+  //     }).catch(error => {
+  //       reject(error)
+  //     })
+  //   })
+  // },
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
@@ -100,7 +113,6 @@ const actions = {
       })
     })
   },
-
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {

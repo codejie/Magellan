@@ -26,6 +26,11 @@ export function unregisterToken(token: string): void {
     delete tokenInfo.tokens[token];
 }
 
+export function unregisterId(id: number): void {
+    delete tokenInfo.tokens[tokenInfo.ids[id]];
+    delete tokenInfo.ids[id];
+}
+
 export function fetchToken(id: number): string | undefined {
     return tokenInfo.ids[id];
 }

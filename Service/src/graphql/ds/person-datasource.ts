@@ -1,9 +1,9 @@
 import { DataSource } from "apollo-datasource";
 import DBConnector from "../../db-connector";
-import { comparePasswd, getDateString, makeToken } from "../../db/helper";
+import { comparePasswd, makeToken } from "../../db/helper";
 import { insertPersonInfo, fetchPersonFundData, fetchPersonStockData, insertPersonFundData, insertPersonStockData, insertPersonStockLog, removePersonStockData, updatePersonFundData, updatePersonStockData, fetchPersonInfos, fetchPersonStockLog, fetchPersonInfoByName } from "../../db/person-helper";
 import { ACTION_STOCK_BUY, ACTION_STOCK_SELL, ACTION_STOCK_SHARE, PersonFundData, PersonInfo, PersonStockData, PersonStockLog, PersonToken } from "../../definition/data-define";
-import { fetchToken, registerToken, unregisterToken } from "../../system-buffer";
+import { registerToken, unregisterId } from "../../system-buffer";
 
 export default class QLPersonDataSource extends DataSource {
     context!: any;
@@ -107,5 +107,12 @@ export default class QLPersonDataSource extends DataSource {
             }
         }
         return null;
+    }
+
+    removeTokenId(id: number): Promise<void> {
+        return new Promise<void>((resolve) => {
+            unregisterId(id);
+            resolve();
+        });
     }
 }

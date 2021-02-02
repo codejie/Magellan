@@ -43,9 +43,11 @@ const apolloProvider = createProvider({
   persisting: false,
   websocketsOnly: false,
   ssr: false,
-  tokenName: 'Magellan',
+  tokenName: 'magellan',
   getAuth: (data) => {
-    return getToken()
+    const token = getToken()
+    console.log('token = ' + token)
+    return token // getToken()
   }
 })
 

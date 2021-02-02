@@ -92,8 +92,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: 'Jie',
+        password: '123'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -125,17 +125,6 @@ export default {
     },
     handleLogin() {
       console.log('handleLogin')
-      // this.$apollo.query({
-      //   query: LOGIN,
-      //   variables: {
-      //     id: 1
-      //   }
-      // }).then(data => {
-      //   console.log(data)
-      // }).catch(err => {
-      //   console.error(err)
-      // })
-      // }) .queries.login.refetch()
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
