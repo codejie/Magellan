@@ -1,4 +1,4 @@
-import { Header } from "../graphql/resolver/result";
+import { Header } from "../graphql/result";
 
 export interface StockData {
     id: number,

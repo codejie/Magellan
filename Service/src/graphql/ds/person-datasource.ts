@@ -22,7 +22,7 @@ export default class QLPersonDataSource extends DataSource {
         return insertPersonInfo(this.conn, name, passwd);
     }
 
-    fetchPersonInfo(id: string): Promise<PersonInfo | null> {
+    fetchPersonInfo(id: number): Promise<PersonInfo | null> {
         return new Promise<PersonInfo | null>((resolve, reject) => {
             fetchPersonInfos(this.conn, id)
                 .then((ret: PersonInfo[]) => {
@@ -92,7 +92,7 @@ export default class QLPersonDataSource extends DataSource {
         }
     }
 
-    async fetchToken(name: string, passwd: string): Promise<PersonToken> {
+    async token(name: string, passwd: string): Promise<PersonToken> {
         const info: PersonInfo | null = await fetchPersonInfoByName(this.conn, name);
         if (info) {
             if (comparePasswd(passwd, info.passwd)) {

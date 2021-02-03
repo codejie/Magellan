@@ -16,7 +16,7 @@ export function insertPersonInfo(db: DBConnector, name: string, passwd: string):
     });
 }
 
-export function fetchPersonInfos(db: DBConnector, id?: string): Promise<PersonInfo[]> {
+export function fetchPersonInfos(db: DBConnector, id?: number): Promise<PersonInfo[]> {
     const opts = {
         sql: 'SELECT id, name, flag, passwd, created, updated FROM m_person_info',
         values: []

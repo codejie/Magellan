@@ -7,15 +7,15 @@ type PersonInfo {
     updated: DateTime
 }
 
-# type PersonToken {
-#     header: Header!,
-#     name: String!,
-#     flag: Int,
-#     token: String!
-# }
-type Result {
+type PersonToken {
+    name: String!,
+    flag: Int,
+    token: String!
+}
+
+type PersonTokenResult {
     header: Header!,
-    body: Body
+    body: PersonToken
 }
 
 type PersonStockData {
@@ -24,6 +24,11 @@ type PersonStockData {
     total: Int!,
     price: Float!,
     updated: DateTime
+}
+
+type PersonStockDataResult {
+    header: Header!,
+    body: PersonStockData
 }
 
 type PersonStockLog {
@@ -45,9 +50,10 @@ type PersonFundData {
 
 type PersonQuery {
     one(id: Int!): PersonInfo
-    fetchToken(name: String!, passwd: String!): Result #PersonToken
+    token(name: String!, passwd: String!): PersonTokenResult #PersonToken
+    refreshToken(token: String!): PersonTokenResult
     all: [PersonInfo]
-    stockData(stockId: Int): [PersonStockData]
+    stockData(stockId: Int): [PersonStockDataResult]
     stockLogs(id: Int!, stockId: Int, begin: Date, end: Date): [PersonStockLog]
     fundData(id: Int!): PersonFundData
 }

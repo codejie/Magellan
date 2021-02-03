@@ -2,6 +2,11 @@ scalar DateTime
 scalar Date
 scalar Time
 
-scalar Header
-scalar Body
+# scalar Header
+# scalar Body
 # scalar Result
+
+type Header {
+    code: Int!,
+    text: String
+}
