@@ -1,3 +1,5 @@
+import { Header } from "../graphql/resolver/result";
+
 export interface StockData {
     id: number,
     type: number,
@@ -65,9 +67,12 @@ export interface PersonInfo {
 }
 
 export interface PersonToken {
-    name: string,
-    flag: number,
-    token: string
+    header: Header,
+    body?: {
+        name: string,
+        flag: number,
+        token: string
+    }
 }
 
 export interface PersonStockData {

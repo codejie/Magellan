@@ -1,4 +1,4 @@
-import { ApolloServer, gql } from "apollo-server-fastify";
+import { ApolloServer, gql, AuthenticationError } from "apollo-server-fastify";
 import fastify from "fastify";
 import { App } from "./app";
 import logger from "./logger";

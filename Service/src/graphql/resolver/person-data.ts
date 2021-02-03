@@ -1,4 +1,5 @@
 import { PersonFundData, PersonInfo, PersonStockData, PersonStockLog, PersonToken } from "../../definition/data-define";
+import { Result } from "./result";
 
 export default {
     Query: {
@@ -36,7 +37,8 @@ export default {
             return context.dataSources.dsPerson.fetchPersonInfos();
         },
         stockData: (parent: any, args: any, context: any): Promise<PersonStockData[]> => {
-            return context.dataSources.dsPerson.fetchStockData(args['id'], args['stockId']);
+            const id = context.id;
+            return context.dataSources.dsPerson.fetchStockData(id, args['stockId']);
         },
         stockLogs: (parent: any, args: any, context: any): Promise<PersonStockLog[]> => {
             return context.dataSources.dsPerson.fetchStockLog(args['id'], args['stockId'], args['begin'], args['end']);
@@ -44,8 +46,8 @@ export default {
         fundData: (parent: any, args: any, context: any): Promise<PersonFundData> => {
             return context.dataSources.dsPerson.fetchFundData(args['id']);
         },
-        fetchToken: (parent: any, args: any, context: any, info: any): Promise<PersonToken | null> => {
-            return context.dataSources.dsPerson.fetchToken(args['name'], args['passwd']);
+        fetchToken: (parent: any, args: any, context: any, info: any): Promise<Result> => {
+            return context.dataSources.dsPerson.fetchToken(args['name'], args['passwd']) as Promise<Result>;
         }
     }
 }

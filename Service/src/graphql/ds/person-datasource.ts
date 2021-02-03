@@ -92,7 +92,7 @@ export default class QLPersonDataSource extends DataSource {
         }
     }
 
-    async fetchToken(name: string, passwd: string): Promise<PersonToken | null> {
+    async fetchToken(name: string, passwd: string): Promise<PersonToken> {
         const info: PersonInfo | null = await fetchPersonInfoByName(this.conn, name);
         if (info) {
             if (comparePasswd(passwd, info.passwd)) {
@@ -100,13 +100,22 @@ export default class QLPersonDataSource extends DataSource {
                 const token = makeToken(seed);
                 registerToken(info.id, token);
                 return {
-                    name: info.name,
-                    flag: info.flag,
-                    token
+                    header: {
+                        code: 0
+                    },
+                    body: {
+                        name: info.name,
+                        flag: info.flag,
+                        token
+                    }
                 };
             }
         }
-        return null;
+        return {
+            header: {
+                code: -1
+            }
+        };
     }
 
     removeTokenId(id: number): Promise<void> {

@@ -80,12 +80,14 @@ const actions = {
   // },
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      commit('SET_NAME', 'Jie')
-      commit('SET_AVATAR', '')
-      resolve({
+      const data = {
         name: 'Jie',
         avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
-      })
+      }
+      commit('SET_NAME', data.name)
+      commit('SET_AVATAR', data.avatar)
+
+      resolve(data)
     })
   },
   // user logout

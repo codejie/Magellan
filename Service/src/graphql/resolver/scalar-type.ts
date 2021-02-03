@@ -1,4 +1,5 @@
 import { GraphQLScalarType } from 'graphql'
+import { Header, Body, Result } from './result'
 
 function toDateString(date: Date): string {
     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
@@ -31,5 +32,24 @@ export default {
         serialize: (value) => toTimeString(value),
         parseValue: (value) => new Date(value),
         parseLiteral: (ast: any) => new Date(ast.value)
+    }),
+
+    Header: new GraphQLScalarType({
+        name: 'Header',
+        serialize: (value) => JSON.stringify(value),
+        parseValue: (value) => (JSON.parse(value)) as Header,
+        parseLiteral: (ast: any) => ast as Header
+    }),
+    Body: new GraphQLScalarType({
+        name: 'Body',
+        serialize: (value) => JSON.stringify(value),
+        parseValue: (value) => (JSON.parse(value)) as Body,
+        parseLiteral: (ast: any) => ast as Body
     })
+    // Result: new GraphQLScalarType({
+    //     name: 'Result',
+    //     serialize: (value) => JSON.stringify(value),
+    //     parseValue: (value) => (JSON.parse(value)) as Result,
+    //     parseLiteral: (ast: any) => ast as Result
+    // })    
 }

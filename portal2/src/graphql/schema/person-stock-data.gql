@@ -1,0 +1,7 @@
+query ($stockId: Int) {
+    Person {
+        stockData(stockId: $stockId) {
+            stockId
+        }
+    }
+}
