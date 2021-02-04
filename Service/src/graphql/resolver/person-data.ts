@@ -1,6 +1,6 @@
 import { comparePasswd, makeToken } from "../../db/helper";
 import { PersonFundData, PersonInfo, PersonStockData, PersonStockLog } from "../../definition/data-define";
-import { registerToken } from "../../system-buffer";
+import { fetchToken, registerToken } from "../../system-buffer";
 import { errorResult, makeResult, Result, ResultHeader } from "../result";
 
 interface PersonInfoResult extends Result {
@@ -17,6 +17,14 @@ interface PersonStockLogResult extends Result {
 
 interface PersonFundDataResult extends Result {
     body?: PersonFundData
+}
+
+interface TokenResult extends Result {
+    body?: {
+        name: string,
+        flag: number,
+        token: string
+    }
 }
 
 export default {
@@ -98,29 +106,46 @@ export default {
                 return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
             }
         },
-        token: async (parent: any, args: any, context: any, info: any): Promise<Result> => {
-            const personInfo: PersonInfo | null = await context.dataSources.dsPerson.fetchPersonInfoByName(args['name']);
-            if (personInfo) {
-                if (comparePasswd(args['passwd'], info.passwd)) {
-                    const seed: string = info.name + info.id + (new Date()).getTime();
-                    const token = makeToken(seed);
-                    registerToken(info.id, token);
-                    return {
-                        header: ResultHeader.OK,
-                        body: {
-                            name: info.name,
-                            flag: info.flag,
-                            token
-                        }
-                    };
+        token: async (parent: any, args: any, context: any, info: any): Promise<TokenResult> => {
+            try {
+                const result: PersonInfo | null = await context.dataSources.dsPerson.fetchPersonInfoByName(args['name']);
+                if (result) {
+                    if (comparePasswd(args['passwd'], result.passwd)) {
+                        const seed: string = result.name + result.id + (new Date()).getTime();
+                        const token = makeToken(seed);
+                        registerToken(result.id, token);
+                        return await makeResult({
+                            name: result.name,
+                            flag: result.flag,
+                            token                            
+                        });
+                    }
                 }
+                return await errorResult(ResultHeader.INVALID_TOKEN);
+            } catch (error) {
+                return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
             }
-            return {
-                header: ResultHeader.INVALID_TOKEN
-            };
         },
-        refreshToken: (): Promise<Result> => {
-            return makeResult(ResultHeader.OK);
+        refreshToken: async (parent: any, args: any, context: any): Promise<TokenResult> => {
+            try {
+                const id = context.id;
+                if (id) {
+                    const result: PersonInfo | null = await context.dataSources.dsPerson.fetchPersonInfo(id);
+                    if (result) {
+                        const seed: string = result.name + result.id + (new Date()).getTime();
+                        const token = makeToken(seed);
+                        registerToken(result.id, token);
+                        return await makeResult({
+                            name: result.name,
+                            flag: result.flag,
+                            token                            
+                        });
+                    }
+                }
+                return await errorResult(ResultHeader.INVALID_TOKEN);
+            } catch (error) {
+                return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
+            }
         }
     }
 }
