@@ -1,7 +1,23 @@
 import { comparePasswd, makeToken } from "../../db/helper";
-import { PersonFundData, PersonInfo, PersonStockLog } from "../../definition/data-define";
+import { PersonFundData, PersonInfo, PersonStockData, PersonStockLog } from "../../definition/data-define";
 import { registerToken } from "../../system-buffer";
-import { makeResult, Result, ResultHeader } from "../result";
+import { errorResult, makeResult, Result, ResultHeader } from "../result";
+
+interface PersonInfoResult extends Result {
+    body?: PersonInfo[]
+}
+
+interface PersonStockDataResult extends Result {
+    body?: PersonStockData[]
+}
+
+interface PersonStockLogResult extends Result {
+    body?: PersonStockLog[]
+}
+
+interface PersonFundDataResult extends Result {
+    body?: PersonFundData
+}
 
 export default {
     Query: {
@@ -32,25 +48,55 @@ export default {
     },
 
     PersonQuery: {
-        one: (parent: any, args: any, context: any): Promise<PersonInfo | null> => {
-            return context.dataSources.dsPerson.fetchPersonInfo(args['id']);
-        },
-        all: (parent: any, args: any, context: any): Promise<PersonInfo[]> => {
-            return context.dataSources.dsPerson.fetchPersonInfos();
-        },
-        stockData: (parent: any, args: any, context: any): Promise<Result> => {
-            const id = context.id;
-            if (id) {
-                return context.dataSources.dsPerson.fetchStockData(id, args['stockId']);
-            } else {
-                return makeResult(ResultHeader.INVALID_TOKEN);
+        // one: (parent: any, args: any, context: any): Promise<PersonInfo | null> => {
+        //     return context.dataSources.dsPerson.fetchPersonInfo(args['id']);
+        // },
+        all: async (parent: any, args: any, context: any): Promise<PersonInfoResult> => {
+            try {
+                const results: PersonInfo[] = await context.dataSources.dsPerson.fetchPersonInfos();
+                return await makeResult(results);
+            } catch (error) {
+                return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
             }
         },
-        stockLogs: (parent: any, args: any, context: any): Promise<PersonStockLog[]> => {
-            return context.dataSources.dsPerson.fetchStockLog(args['id'], args['stockId'], args['begin'], args['end']);
+        stockData: async (parent: any, args: any, context: any): Promise<PersonStockDataResult> => {
+            try {
+                const id = context.id;
+                if (id) {
+                    const results: PersonStockData[] = await context.dataSources.dsPerson.fetchStockData(id, args['stockId']);
+                    return await makeResult(results);
+                } else {
+                    return await errorResult(ResultHeader.INVALID_TOKEN);
+                }
+            } catch (error) {
+                return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
+            }
         },
-        fundData: (parent: any, args: any, context: any): Promise<PersonFundData> => {
-            return context.dataSources.dsPerson.fetchFundData(args['id']);
+        stockLogs: async (parent: any, args: any, context: any): Promise<PersonStockLogResult> => {
+            try {
+                const id = context.id;
+                if (id) {
+                    const results: PersonStockLog[] = await context.dataSources.dsPerson.fetchStockLog(id, args['stockId'], args['begin'], args['end']);
+                    return await makeResult(results);
+                } else {
+                    return await errorResult(ResultHeader.INVALID_TOKEN);
+                }
+            } catch (error) {
+                return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
+            }
+        },
+        fundData: async (parent: any, args: any, context: any): Promise<PersonFundDataResult> => {
+            try {
+                const id = context.id;
+                if (id) {
+                    const result: PersonFundData = context.dataSources.dsPerson.fetchFundData(id);
+                    return await makeResult(result);
+                } else {
+                    return await errorResult(ResultHeader.INVALID_TOKEN);
+                }
+            } catch (error) {
+                return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
+            }
         },
         token: async (parent: any, args: any, context: any, info: any): Promise<Result> => {
             const personInfo: PersonInfo | null = await context.dataSources.dsPerson.fetchPersonInfoByName(args['name']);

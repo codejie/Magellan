@@ -7,6 +7,11 @@ type PersonInfo {
     updated: DateTime
 }
 
+type PersonInfoResult {
+    header: Header!,
+    body: [PersonInfo]
+}
+
 type PersonToken {
     name: String!,
     flag: Int,
@@ -28,7 +33,7 @@ type PersonStockData {
 
 type PersonStockDataResult {
     header: Header!,
-    body: PersonStockData
+    body: [PersonStockData]
 }
 
 type PersonStockLog {
@@ -41,6 +46,11 @@ type PersonStockLog {
     created: DateTime
 }
 
+type PersonStockLogResult {
+    header: Header!,
+    body: [PersonStockLog]    
+}
+
 type PersonFundData {
     id: Int!
     base: Float!,
@@ -48,22 +58,27 @@ type PersonFundData {
     updated: DateTime
 }
 
+type PersonFundDataResult {
+    header: Header!,
+    body: PersonFundData    
+}
+
 type PersonQuery {
-    one(id: Int!): PersonInfo
-    token(name: String!, passwd: String!): PersonTokenResult #PersonToken
-    refreshToken(token: String!): PersonTokenResult
-    all: [PersonInfo]
-    stockData(stockId: Int): [PersonStockDataResult]
-    stockLogs(id: Int!, stockId: Int, begin: Date, end: Date): [PersonStockLog]
-    fundData(id: Int!): PersonFundData
+    # one(id: Int!): PersonInfo
+    token(name: String!, passwd: String!): PersonTokenResult! #PersonToken
+    refreshToken(token: String!): PersonTokenResult!
+    all: PersonInfoResult!
+    stockData(stockId: Int): PersonStockDataResult!
+    stockLogs(stockId: Int, begin: Date, end: Date): PersonStockLogResult!
+    fundData: PersonFundDataResult!
 }
 
 type PersonMutation {
-    add(name: String!, passwd: String!): Int!
-    removeToken: Boolean
-    updateStockData(id: Int!, stockId: Int!, action: Int!, total: Int!, price: Float!): Int! # return stock total
-    removeStockData(id: Int!, stockId: Int!): Int!
-    updateFundData(id: Int!, base: Float!, valid: Float): Int!
+    add(name: String!, passwd: String!): Result!
+    removeToken: Result!
+    updateStockData(stockId: Int!, action: Int!, total: Int!, price: Float!): Result! # return stock total
+    removeStockData(stockId: Int!): Result!
+    updateFundData(base: Float!, valid: Float): Result!
 }
 
 type Query {

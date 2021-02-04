@@ -10,3 +10,7 @@ type Header {
     code: Int!,
     text: String
 }
+
+type Result {
+    header: Header!
+}
