@@ -1,9 +1,14 @@
 query ($name: String!, $passwd: String!) {
   Person {
-    fetchToken(name: $name, passwd: $passwd) {
-      name
-      token
-      flag
+    token(name: $name, passwd: $passwd) {
+      header {
+        code
+      }
+      body {
+        name
+        token
+        flag
+      }
     }
   }
 }

@@ -1,5 +1,9 @@
 mutation {
     Person {
-        removeToken
+        removeToken {
+            header {
+                code
+            }
+        }
     }
 }

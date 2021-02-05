@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { MessageBox, Message } from 'element-ui'
 import { validUsername } from '@/utils/validate'
 // import LOGIN from '@/graphql/schema/login.gql'
 
@@ -132,8 +133,13 @@ export default {
             console.log(data)
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
-          }).catch(() => {
+          }).catch((error) => {
             this.loading = false
+            Message({
+              message: 'Wrong name or password.',
+              type: 'error',
+              duration: 5 * 1000
+            })
           })
         } else {
           console.log('error submit!!')

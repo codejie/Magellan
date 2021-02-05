@@ -1,7 +1,16 @@
 query ($stockId: Int) {
     Person {
         stockData(stockId: $stockId) {
-            stockId
+            header {
+                code
+                text
+            }
+            body {
+                stockId
+                total
+                price
+                updated
+            }
         }
     }
 }

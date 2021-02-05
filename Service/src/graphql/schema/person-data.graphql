@@ -66,7 +66,6 @@ type PersonFundDataResult {
 type PersonQuery {
     # one(id: Int!): PersonInfo
     token(name: String!, passwd: String!): PersonTokenResult! #PersonToken
-    refreshToken(token: String!): PersonTokenResult!
     all: PersonInfoResult!
     stockData(stockId: Int): PersonStockDataResult!
     stockLogs(stockId: Int, begin: Date, end: Date): PersonStockLogResult!
@@ -75,6 +74,7 @@ type PersonQuery {
 
 type PersonMutation {
     add(name: String!, passwd: String!): Result!
+    refreshToken(token: String!): PersonTokenResult!
     removeToken: Result!
     updateStockData(stockId: Int!, action: Int!, total: Int!, price: Float!): Result! # return stock total
     removeStockData(stockId: Int!): Result!

@@ -1,9 +1,9 @@
 import { DataSource } from "apollo-datasource";
 import DBConnector from "../../db-connector";
-import { comparePasswd, makeToken } from "../../db/helper";
+// import { comparePasswd, makeToken } from "../../db/helper";
 import { insertPersonInfo, fetchPersonFundData, fetchPersonStockData, insertPersonFundData, insertPersonStockData, insertPersonStockLog, removePersonStockData, updatePersonFundData, updatePersonStockData, fetchPersonInfos, fetchPersonStockLog, fetchPersonInfoByName } from "../../db/person-helper";
 import { ACTION_STOCK_BUY, ACTION_STOCK_SELL, ACTION_STOCK_SHARE, PersonFundData, PersonInfo, PersonStockData, PersonStockLog, PersonToken } from "../../definition/data-define";
-import { registerToken, unregisterId } from "../../system-buffer";
+// import { registerToken, unregisterId } from "../../system-buffer";
 
 export default class QLPersonDataSource extends DataSource {
     context!: any;
@@ -40,6 +40,10 @@ export default class QLPersonDataSource extends DataSource {
 
     fetchPersonInfos(): Promise<PersonInfo[]> {
         return fetchPersonInfos(this.conn);
+    }
+
+    fetchPersonInfoByName(name: string): Promise<PersonInfo | null> {
+        return fetchPersonInfoByName(this.conn, name);
     }
 
     async updateStockData(id: number, stockId: number, action: number, total: number, price: number): Promise<number> {
@@ -92,36 +96,36 @@ export default class QLPersonDataSource extends DataSource {
         }
     }
 
-    async token(name: string, passwd: string): Promise<PersonToken> {
-        const info: PersonInfo | null = await fetchPersonInfoByName(this.conn, name);
-        if (info) {
-            if (comparePasswd(passwd, info.passwd)) {
-                const seed: string = info.name + info.id + (new Date()).getTime();
-                const token = makeToken(seed);
-                registerToken(info.id, token);
-                return {
-                    header: {
-                        code: 0
-                    },
-                    body: {
-                        name: info.name,
-                        flag: info.flag,
-                        token
-                    }
-                };
-            }
-        }
-        return {
-            header: {
-                code: -1
-            }
-        };
-    }
+    // async token(name: string, passwd: string): Promise<PersonToken> {
+    //     const info: PersonInfo | null = await fetchPersonInfoByName(this.conn, name);
+    //     if (info) {
+    //         if (comparePasswd(passwd, info.passwd)) {
+    //             const seed: string = info.name + info.id + (new Date()).getTime();
+    //             const token = makeToken(seed);
+    //             registerToken(info.id, token);
+    //             return {
+    //                 header: {
+    //                     code: 0
+    //                 },
+    //                 body: {
+    //                     name: info.name,
+    //                     flag: info.flag,
+    //                     token
+    //                 }
+    //             };
+    //         }
+    //     }
+    //     return {
+    //         header: {
+    //             code: -1
+    //         }
+    //     };
+    // }
 
-    removeTokenId(id: number): Promise<void> {
-        return new Promise<void>((resolve) => {
-            unregisterId(id);
-            resolve();
-        });
-    }
+    // removeTokenId(id: number): Promise<void> {
+    //     return new Promise<void>((resolve) => {
+    //         unregisterId(id);
+    //         resolve();
+    //     });
+    // }
 }

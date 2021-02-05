@@ -48,8 +48,11 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ name: username.trim(), passwd: password }).then(response => {
-        const { Person } = response
-        const token = Person.fetchToken.token
+        const { header, body } = response
+        if (header.code !== 0) {
+          return reject(new Error(header.text))
+        }
+        const token = body.token
         commit('SET_TOKEN', token)
         setToken(token)// data.Person.one.name)
         resolve(response)
