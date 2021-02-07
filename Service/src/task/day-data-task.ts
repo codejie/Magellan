@@ -1,7 +1,7 @@
 import { App } from "../app";
 import { hasTodayDayData, insertDayData, insertTodayDayData, updateDayData, updateYesterdayDayData } from "../db/collection-helper";
 import { findTradeDays, getBeforeTradeDay } from "../db/system-helper";
-import { DayData, RuntimeData, TradeDay } from "../definition/data-define";
+import { StockDayData, RuntimeData, TradeDay } from "../definition/data-define";
 import { Stock } from "../definition/struct-define";
 import NetEaseFetcher from "../fetcher/netease-fetcher";
 import tradeDay from "../graphql/resolver/trade-day";
@@ -98,8 +98,8 @@ export default class DayDataTask extends Task {
         super.setTimer();
     }
     
-    fetchDayData(req: Stock): Promise<DayData> {
-        return new Promise<DayData>((resolve, reject) => {
+    fetchDayData(req: Stock): Promise<StockDayData> {
+        return new Promise<StockDayData>((resolve, reject) => {
             this.fetcher.fetchRuntime(req)
                 .then(data => {
                     resolve(this.fetcher.makehDayData(req, data));

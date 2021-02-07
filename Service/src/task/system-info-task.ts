@@ -1,6 +1,6 @@
 import { App } from "../app";
 import { findStockData } from "../db/collection-helper";
-import { StockData } from "../definition/data-define";
+import { StockInfo } from "../definition/data-define";
 import logger from "../logger";
 import systemInfo from "../system-info";
 import Task from "./task";
@@ -59,7 +59,7 @@ export default class SystemInfoTask extends Task {
     }
 
     async updateStockInfos(): Promise<void> {
-        const data: StockData[] = await findStockData(this.app.dbConn);
+        const data: StockInfo[] = await findStockData(this.app.dbConn);
         data.forEach(item => {
             systemInfo.stocks.push({
                 id: item.id,

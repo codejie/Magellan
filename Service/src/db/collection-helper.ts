@@ -1,5 +1,5 @@
 import DBConnector from "../db-connector";
-import { StockData, DayData, DayDataSelectCondition, RuntimeData, RuntimeDataSelectCondtion, TradeDay } from "../definition/data-define";
+import { StockInfo, RuntimeData, RuntimeDataSelectCondtion, TradeDay, StockDayData } from "../definition/data-define";
 import logger from "../logger";
 import { assembleInsertSqlOpts, getDateString } from "./helper";
 
@@ -7,15 +7,24 @@ import { assembleInsertSqlOpts, getDateString } from "./helper";
 //     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 // }
 
-export function findStockData(db: DBConnector): Promise<StockData[]> {
-    const sql = 'SELECT id,type,code,market,name,created FROM m_base_info WHERE state=1';
-    return new Promise<StockData[]>((resolve, reject) => {
-        db.query(sql, (err, results) => {
+export function findStockData(db: DBConnector, id?: number): Promise<StockInfo[]> {
+    const opts = {
+        sql: 'SELECT id,type,code,market,name,created FROM m_base_info \
+                WHERE state=1',
+        values: []
+    };
+    if (id) {
+        opts.sql += ' AND id=?',
+        (opts.values as any[]).push(id);
+    }
+
+    return new Promise<StockInfo[]>((resolve, reject) => {
+        db.query(opts, (err, results) => {
             if (err) return reject(err);
-            const ret:StockData[] = [];
+            const ret:StockInfo[] = [];
             if (results && results.length > 0) {
                 results.forEach((r: any) => {
-                    ret.push(r as StockData);
+                    ret.push(r as StockInfo);
                 });
             }
             resolve(ret);
@@ -23,25 +32,25 @@ export function findStockData(db: DBConnector): Promise<StockData[]> {
     });
 }
 
-export function findStockDataById(db: DBConnector, id: number): Promise<StockData | null> {
-    const opts = {
-        sql: 'SELECT id,type,code,market,name,created FROM m_base_info \
-                WHERE state=1 AND id=?',
-        values: [id]
-    };
-    return new Promise<StockData | null>((resolve, reject) => {
-        db.query(opts, (err, results) => {
-            if (err) return reject(err);
-            if (results && results.length > 0) {
-                resolve(results[0] as StockData);
-            } else {
-                resolve(null);
-            }
-        });
-    });
-}
+// export function findStockDataById(db: DBConnector, id: number): Promise<StockData | null> {
+//     const opts = {
+//         sql: 'SELECT id,type,code,market,name,created FROM m_base_info \
+//                 WHERE state=1 AND id=?',
+//         values: [id]
+//     };
+//     return new Promise<StockData | null>((resolve, reject) => {
+//         db.query(opts, (err, results) => {
+//             if (err) return reject(err);
+//             if (results && results.length > 0) {
+//                 resolve(results[0] as StockData);
+//             } else {
+//                 resolve(null);
+//             }
+//         });
+//     });
+// }
 
-export function insertStockData(db: DBConnector, data: StockData): Promise<number> {
+export function insertStockData(db: DBConnector, data: StockInfo): Promise<number> {
     const opts = assembleInsertSqlOpts('m_base_info', data);
     return new Promise<number>((resolve, reject) => {
         db.execute(opts, (err, result) => {
@@ -117,7 +126,7 @@ export function updateDayData(db: DBConnector, date: Date, id: number, close?: n
     });     
 }
 
-export async function insertTodayDayData(db: DBConnector, data: DayData): Promise<void> {
+export async function insertTodayDayData(db: DBConnector, data: StockDayData): Promise<void> {
     const opts = {
         sql: 'INSERT INTO m_day_data (id,todayopen,yestclose,todaydate) VALUES (?,?,?,?)',
         values: [data.id, data.todayopen, data.yestclose, data.todaydate]
@@ -130,7 +139,7 @@ export async function insertTodayDayData(db: DBConnector, data: DayData): Promis
     });
 }
 
-export function updateYesterdayDayData(db: DBConnector, data: DayData): Promise<void> {
+export function updateYesterdayDayData(db: DBConnector, data: StockDayData): Promise<void> {
     const date: Date = new Date(data.todaydate);
     date.setDate(date.getDate() - 1);
     const opts = {
@@ -164,16 +173,39 @@ export function findRuntimeData(db: DBConnector, condition: RuntimeDataSelectCon
     });    
 }
 
-export function findDayData(db: DBConnector, condition: DayDataSelectCondition): Promise<DayData[]> {
+export function findDayData(db: DBConnector, id?: number, start?: Date, end?: Date): Promise<StockDayData[]> {
     const opts = {
-        sql: 'SELECT id,todayopen,yestclose,todayclose,todaydate,created FROM m_day_data WHERE id=? AND todaydate >=? AND todaydate <?',
-        values: [condition.id, condition.start, condition.end]
+        sql: 'SELECT id,todayopen,yestclose,todayclose,todaydate,created FROM m_day_data',
+        values: []
     };
-    return new Promise<DayData[]>((resolve, reject) => {
+    if (id || start || end) {
+        opts.sql += ' WHERE';
+        if (id) {
+            opts.sql += 'id=?';
+            (opts.values as any[]).push(id);
+        }
+        if (start) {
+            if (opts.values.length > 0) {
+                opts.sql += ' AND todaydate>=?';
+            } else {
+                opts.sql += ' todaydate>=?';
+            }
+            (opts.values as any[]).push(start);
+        }
+        if (end) {
+            if (opts.values.length > 0) {
+                opts.sql += ' AND todaydate<?';
+            } else {
+                opts.sql += ' todaydate<?';
+            }
+            (opts.values as any[]).push(end);
+        }        
+    }
+    return new Promise<StockDayData[]>((resolve, reject) => {
         db.query(opts, (err, results) => {
             if (err) return reject(err);
             if (results && results.length > 0) {
-                return resolve(results as DayData[]);
+                return resolve(results as StockDayData[]);
             }
             return resolve([]);
         });

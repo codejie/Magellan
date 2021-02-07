@@ -1,6 +1,6 @@
 import { threadId } from "worker_threads";
 import { App } from "./app";
-import { StockData, DayData, RuntimeData } from "./definition/data-define";
+import { RuntimeData, StockDayData } from "./definition/data-define";
 import { Stock } from "./definition/struct-define";
 import NetEaseFetcher from "./fetcher/netease-fetcher";
 import { makeStockCode } from "./fetcher/netease-util";
@@ -37,8 +37,8 @@ export default class DataFetcher extends Module {
         });
     }
 
-    fetchDayData(req: Stock): Promise<DayData> {
-        return new Promise<DayData>((resolve, reject) => {
+    fetchDayData(req: Stock): Promise<StockDayData> {
+        return new Promise<StockDayData>((resolve, reject) => {
             this.fetcher.fetchRuntime(req)
                 .then(data => {
                     return this.fetcher.makehDayData(req, data);

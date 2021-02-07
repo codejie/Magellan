@@ -24,6 +24,23 @@ export function findTradeDays(db: DBConnector, begin: Date, end?: Date): Promise
     });
 }
 
+export function findTradeDayLatest(db: DBConnector, date: Date): Promise<TradeDay | null> {
+    const opts = {
+        sql: 'SELECT id, date, flag FROM m_trade_day WHERE date <= ? LIMIT 1',
+        values: [getDateString(date)]
+    };
+    return new Promise<TradeDay | null>((resolve, reject) => {
+        db.query(opts, (err, results) => {
+            if (err) return reject(err);
+            if (results && results.length > 0) {
+                resolve(results[0] as TradeDay);
+            } else {
+                resolve(null);
+            }
+        });
+    });    
+}
+
 export function removeTradeDay(db: DBConnector, year: string): Promise<number> {
     const opts = {
         sql: 'DELETE FROM m_trade_day WHERE date >= ? AND date <= ?',

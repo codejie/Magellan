@@ -1,4 +1,4 @@
-import { RuntimeData, DayData } from "../definition/data-define";
+import { RuntimeData, StockDayData } from "../definition/data-define";
 import { Stock } from "../definition/struct-define";
 import Fetcher from "./fetcher";
 import { makeRandomString, makeStockCode, runtimeItems } from "./netease-util";
@@ -32,7 +32,7 @@ export default class NetEaseFetcher extends Fetcher {
 
         return ret;
     }
-    makehDayData(req: Stock, data: any): DayData {
+    makehDayData(req: Stock, data: any): StockDayData {
         const ret: any = {
             id: req.id,
             todayopen: data['open'],

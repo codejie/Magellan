@@ -1,19 +1,6 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
-    <ApolloQuery
-      :query="gql.query"
-      :variables="gql.variables"
-    >
-      <template #default="{ result: { loading, error, data }}">
-        <div v-if="loading">Loading..</div>
-        <div v-else-if="error">Fetch Data Failed</div>
-        <div v-else-if="data">
-          {{ data }}
-          <person-stock-data :table="data.Person.stockData" />
-        </div>
-      </template>
-    </ApolloQuery>
     <person-stock-data :table-data="tableData" />
   </div>
 </template>
@@ -21,7 +8,8 @@
 <script>
 import PersonStockData from '@/components/PersonStockData.vue'
 import { mapGetters } from 'vuex'
-import QueryPersonStockData from '@/graphql/schema/person-stock-data.gql'
+import { stockData } from '@/graphql/person'
+import { items as stockInfo } from '@/graphql/stock-info'
 
 export default {
   name: 'Dashboard',
@@ -30,22 +18,56 @@ export default {
   },
   data() {
     return {
-      gql: {
-        query: QueryPersonStockData,
-        variables: {}
-      },
-      tableData: [
-        {
-          id: 1,
-          name: 'name'
-        }
-      ]
+      temp: [],
+      tableData: []
     }
   },
   computed: {
     ...mapGetters([
       'name'
     ])
+  },
+  watch: {
+    async temp() {
+      for (let i = 0; i < this.temp.length; ++i) {
+        const item = this.temp[i]
+        const { header, body } = await stockInfo({ id: item.stockId })
+        console.log(body)
+        if (header.code === 0) {
+          if (body.length > 0) {
+            item.id = body[0].id
+            item.name = body[0].name
+            item.code = body[0].code
+            item.market = body[0].market
+            item.type = body[0].type
+          }
+        }
+
+        this.tableData.push(item)
+      }
+    }
+  },
+  created() {
+    this.fetchStockData()
+  },
+  methods: {
+    fetchStockData() {
+      this.listLoading = true
+      stockData({}).then(result => {
+        console.log(result)
+        const { header, body } = result
+        if (header.code === 0) {
+          body.forEach(element => {
+            element.fund = element.total * element.price
+            this.temp.push(element)
+          })
+        } else {
+          //
+        }
+      }).catch((error) => {
+        console.error(error)
+      })
+    }
   }
 }
 </script>

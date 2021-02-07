@@ -1,5 +1,5 @@
 import { default as MySQL, Pool, queryCallback, QueryOptions } from "mysql";
-import { StockData, RuntimeData } from "./definition/data-define";
+import { StockInfo, RuntimeData } from "./definition/data-define";
 import logger from "./logger";
 import Module from "./module";
 

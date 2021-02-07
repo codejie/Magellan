@@ -1,7 +1,7 @@
 import { strict } from "assert";
 import logger from "../logger";
 import { request } from "../requests";
-import { DayData, RuntimeData } from "../definition/data-define";
+import { StockDayData, RuntimeData } from "../definition/data-define";
 import { Stock } from "../definition/struct-define";
 
 export default abstract class Fetcher {
@@ -27,5 +27,5 @@ export default abstract class Fetcher {
     abstract fetchRuntime(req: Stock): Promise<any>;
 
     abstract makeRuntimeData(req: Stock, data: any): RuntimeData;
-    abstract makehDayData(req: Stock, data: any): DayData;
+    abstract makehDayData(req: Stock, data: any): StockDayData;
 }

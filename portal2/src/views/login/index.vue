@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { MessageBox, Message } from 'element-ui'
+import { Message } from 'element-ui'
 import { validUsername } from '@/utils/validate'
 // import LOGIN from '@/graphql/schema/login.gql'
 
@@ -129,11 +129,11 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then((data) => {
+          this.$store.dispatch('person/login', this.loginForm).then((data) => {
             console.log(data)
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
-          }).catch((error) => {
+          }).catch(() => {
             this.loading = false
             Message({
               message: 'Wrong name or password.',

@@ -1,12 +1,21 @@
 import { Header } from "../graphql/result";
 
-export interface StockData {
+export interface StockInfo {
     id: number,
     type: number,
     code: string,
     market: number,
     name: string,
     created: Date
+}
+
+export interface StockDayData {
+    id: number,
+    todayopen: number,
+    yestclose: number,
+    todayclose?: number,
+    todaydate: Date,
+    created: Date  
 }
 
 export interface RuntimeData {
@@ -40,15 +49,6 @@ export interface RuntimeData {
     turnover: number,
     updated: Date,
     created: Date
-}
-
-export interface DayData {
-    id: number,
-    todayopen: number,
-    yestclose: number,
-    todayclose?: number,
-    todaydate: Date,
-    created: Date  
 }
 
 export interface TradeDay {

@@ -1,9 +1,9 @@
 import { DataSource } from 'apollo-datasource'
 import DBConnector from '../../db-connector';
-import { findStockDataById, findStockData, insertStockData,
+import { findStockData, insertStockData,
         removeStockData, findRuntimeData, findDayData } from '../../db/collection-helper';
-import { StockData, DayData, DayDataSelectCondition,
-        RuntimeData, RuntimeDataSelectCondtion  } from '../../definition/data-define';
+import { StockInfo, DayDataSelectCondition,
+        RuntimeData, RuntimeDataSelectCondtion, StockDayData  } from '../../definition/data-define';
 
 export default class QLCollectionDataSource extends DataSource {
     
@@ -19,15 +19,15 @@ export default class QLCollectionDataSource extends DataSource {
         this.context = config.context;
     }
 
-    findStockInfos(): Promise<StockData[]> {
-        return findStockData(this.conn);
+    findStockInfos(id?: number): Promise<StockInfo[]> {
+        return findStockData(this.conn, id);
     }
 
-    findStockInfoById(id: number): Promise<StockData | null> {
-        return findStockDataById(this.conn, id);
-    }
+    // findStockInfoById(id: number): Promise<StockInfo | null> {
+    //     return findStockDataById(this.conn, id);
+    // }
 
-    insertStockInfo(data: StockData): Promise<number> {
+    insertStockInfo(data: StockInfo): Promise<number> {
         return insertStockData(this.conn, data);
     }
 
@@ -39,8 +39,8 @@ export default class QLCollectionDataSource extends DataSource {
         return findRuntimeData(this.conn, opts);
     }
 
-    findDayData(opts: DayDataSelectCondition): Promise<DayData[]> {
-        return findDayData(this.conn, opts);
+    findDayData(id?: number, start?: Date, end?: Date): Promise<StockDayData[]> {
+        return findDayData(this.conn, id, start, end);
     }
 
     // findTradeDays(begin: string, end: string): Promise<TradeDay[]> {

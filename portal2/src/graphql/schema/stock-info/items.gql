@@ -1,0 +1,18 @@
+query ($id: Int) {
+    StockInfo {
+        items (id: $id) {
+            header {
+                code
+                text
+            }
+            body {
+                id
+                type
+                market
+                code
+                name
+                created
+            }
+        }
+    }
+}

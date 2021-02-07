@@ -1,4 +1,4 @@
-import { DayData } from "../../definition/data-define";
+import { StockDayData } from "../../definition/data-define";
 
 export default {
     Query: {
@@ -7,7 +7,7 @@ export default {
         }
     },
     DayDataQuery: {
-        data: (parent: any, args: any, context: any): Promise<DayData[]> => {
+        data: (parent: any, args: any, context: any): Promise<StockDayData[]> => {
             const opts = {
                 id: args['id'],
                 start: args['start'],

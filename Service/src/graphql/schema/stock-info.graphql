@@ -7,9 +7,32 @@ type StockInfo {
     created: DateTime
 }
 
+type StockInfoResult {
+    header: Header!,
+    body: [StockInfo]
+}
+
+type StockDayData {
+    id: Int!,
+    todayopen: Float,
+    yestclose: Float,
+    todayclose: Float,
+    todaydate: Date,
+    created: DateTime
+}
+
+type StockDayDataResult {
+    header: Header!,
+    body: [DayData]
+}
+
+
 type StockInfoQuery {
-    oneById(id: Int!): StockInfo,
-    many: [StockInfo]
+    items(id: Int): StockInfoResult!
+    dayData(id: Int, start: Date, end: Date): StockDayDataResult!
+    dayDataLatest(id: Int, date: Date): StockDayDataResult!
+    # one(id: Int!): StockInfo,
+    # many: [StockInfo]
 }
 
 type StockInfoMutation {
