@@ -1,12 +1,18 @@
 type TradeDay {
     id: Int!,
-    date: String!,
+    date: Date!,
     flag: Int
 }
 
+type TradeDayResult {
+    header: Header!
+    body: [TradeDay]
+}
+
 type TradeDayQuery {
-    flag(date: Date!): Int,
-    many(begin: Date!, end: Date): [TradeDay]
+    # flag(date: Date!): Int,
+    many(begin: Date!, end: Date): TradeDayResult!,
+    latest(date: Date): TradeDayResult!
 }
 
 type TradeDayMutation {

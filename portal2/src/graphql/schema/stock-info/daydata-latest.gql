@@ -1,0 +1,19 @@
+query ($id: Int) {
+    StockInfo {
+        dayDataLatest(id: $id) {
+            header {
+                code
+                text
+            }
+            body {
+                id
+                todayopen
+                todayclose
+                todaydate
+                yestclose
+                created
+            }
+        }
+        
+    }
+}

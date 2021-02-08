@@ -181,24 +181,31 @@ export function findDayData(db: DBConnector, id?: number, start?: Date, end?: Da
     if (id || start || end) {
         opts.sql += ' WHERE';
         if (id) {
-            opts.sql += 'id=?';
+            opts.sql += ' id=?';
             (opts.values as any[]).push(id);
         }
         if (start) {
-            if (opts.values.length > 0) {
-                opts.sql += ' AND todaydate>=?';
+            if (start !== end) {
+                if (opts.values.length > 0) {
+                    opts.sql += ' AND todaydate>=?';
+                } else {
+                    opts.sql += ' todaydate>=?';
+                }
             } else {
-                opts.sql += ' todaydate>=?';
+                if (opts.values.length > 0) {
+                    opts.sql += ' AND todaydate=?';
+                } else {
+                    opts.sql += ' todaydate=?';
+                }
             }
-            (opts.values as any[]).push(start);
-        }
-        if (end) {
+            (opts.values as any[]).push(getDateString(start));
+        } else if (end) {
             if (opts.values.length > 0) {
                 opts.sql += ' AND todaydate<?';
             } else {
                 opts.sql += ' todaydate<?';
             }
-            (opts.values as any[]).push(end);
+            (opts.values as any[]).push(getDateString(end));
         }        
     }
     return new Promise<StockDayData[]>((resolve, reject) => {

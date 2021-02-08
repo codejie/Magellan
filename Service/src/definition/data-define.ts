@@ -52,7 +52,7 @@ export interface RuntimeData {
 }
 
 export interface TradeDay {
-    id?: number,
+    id: number,
     date: Date,
     flag: number // 0: trade day, 1: weekend, 2: holiday, 3: other
 }

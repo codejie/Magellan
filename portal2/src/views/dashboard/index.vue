@@ -9,7 +9,7 @@
 import PersonStockData from '@/components/PersonStockData.vue'
 import { mapGetters } from 'vuex'
 import { stockData } from '@/graphql/person'
-import { items as stockInfo } from '@/graphql/stock-info'
+import { items as stockInfo, dayDataLatest } from '@/graphql/stock-info'
 
 export default {
   name: 'Dashboard',
@@ -41,6 +41,10 @@ export default {
             item.market = body[0].market
             item.type = body[0].type
           }
+        }
+        const ret = await dayDataLatest({ id: item.stockId })
+        if (ret.header.code === 0) {
+          item.value = item.total * ret.body[0].todayopen
         }
 
         this.tableData.push(item)

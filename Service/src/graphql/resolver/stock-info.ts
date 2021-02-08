@@ -1,4 +1,4 @@
-import { StockDayData, StockInfo } from "../../definition/data-define";
+import { StockDayData, StockInfo, TradeDay } from "../../definition/data-define";
 import { errorResult, makeResult, Result, ResultHeader } from "../result";
 
 interface StockInfoResult extends Result {
@@ -46,9 +46,13 @@ export default {
         },
         dayDataLatest: async (parent: any, args: any, context: any): Promise<StockDayDataResult> => {
             try {
-                const date = await context.dataSources.dsSystem.findDayDataLatest();
-                const results = await context.dataSources.dsCollection.findDayData(args['id'], date, date);
-                return await makeResult(results);
+                const date: TradeDay | null = await context.dataSources.dsSystem.findTradeDayLatest();
+                if (date) {
+                    const results = await context.dataSources.dsCollection.findDayData(args['id'], date.date, date.date);
+                    return await makeResult(results);
+                } else {
+                    return await makeResult(null);
+                }
             } catch (error) {
                 return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
             };               
