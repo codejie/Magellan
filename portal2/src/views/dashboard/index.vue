@@ -29,6 +29,12 @@ export default {
   },
   watch: {
     async temp() {
+      const sum = {
+        total: 0,
+        fund: 0.0,
+        value: 0.0
+      };
+
       for (let i = 0; i < this.temp.length; ++i) {
         const item = this.temp[i]
         const { header, body } = await stockInfo({ id: item.stockId })
@@ -42,13 +48,23 @@ export default {
             item.type = body[0].type
           }
         }
+        sum.total += item.total
+        sum.fund += item.fund
         const ret = await dayDataLatest({ id: item.stockId })
-        if (ret.header.code === 0) {
+        if (ret.header.code === 0 && ret.body.length > 0 && ret.body[0].todayopen) {
           item.value = item.total * ret.body[0].todayopen
+          sum.value += item.value
         }
 
         this.tableData.push(item)
       }
+
+      this.tableData.push({
+        name: '合计',
+        total: sum.total,
+        fund: sum.fund,
+        value: sum.value
+      })
     }
   },
   created() {
