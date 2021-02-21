@@ -1,4 +1,4 @@
-import { RuntimeData, StockDayData } from "../definition/data-define";
+import { StockRuntimeData, StockDayData } from "../definition/data-define";
 import { Stock } from "../definition/struct-define";
 import Fetcher from "./fetcher";
 import { makeRandomString, makeStockCode, runtimeItems } from "./netease-util";
@@ -21,7 +21,7 @@ export default class NetEaseFetcher extends Fetcher {
             });
         });
     }
-    makeRuntimeData(req: Stock, data: any): RuntimeData {
+    makeRuntimeData(req: Stock, data: any): StockRuntimeData {
         const ret: any = {
             id: req.id,
             updated: data['update']

@@ -1,6 +1,6 @@
 import { threadId } from "worker_threads";
 import { App } from "./app";
-import { RuntimeData, StockDayData } from "./definition/data-define";
+import { StockRuntimeData, StockDayData } from "./definition/data-define";
 import { Stock } from "./definition/struct-define";
 import NetEaseFetcher from "./fetcher/netease-fetcher";
 import { makeStockCode } from "./fetcher/netease-util";
@@ -25,8 +25,8 @@ export default class DataFetcher extends Module {
         });
     }
 
-    fetchRuntimeData(req: Stock): Promise<RuntimeData> {
-        return new Promise<RuntimeData>((resolve, reject) => {
+    fetchRuntimeData(req: Stock): Promise<StockRuntimeData> {
+        return new Promise<StockRuntimeData>((resolve, reject) => {
             this.fetcher.fetchRuntime(req)
                 .then(data => {
                     resolve(this.fetcher.makeRuntimeData(req, data));

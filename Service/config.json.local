@@ -12,11 +12,27 @@
         "database": "news"   
     },
     "Tasks": {
+        "system_info": {
+            "disabled": false,
+            "refreshTime": "00:00"
+        },
         "runtime_data": {
-            "interval": 6000
+            "disabled": true,
+            "interval": 2,
+            "validRanges": [
+                {
+                    "open": "09:30",
+                    "close": "11:30"
+                },
+                {
+                    "open": "13:00",
+                    "close": "15:00"
+                }
+            ]
         },
         "day_data": {
-            "interval": 3600000
+            "disabled": true,
+            "fetchTime": "09:35"
         }
     }
 }

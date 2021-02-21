@@ -1,4 +1,4 @@
-import { StockDayData, StockInfo, TradeDay } from "../../definition/data-define";
+import { StockDayData, StockInfo, StockRuntimeData, TradeDay } from "../../definition/data-define";
 import { errorResult, makeResult, Result, ResultHeader } from "../result";
 
 interface StockInfoResult extends Result {
@@ -7,6 +7,10 @@ interface StockInfoResult extends Result {
 
 interface StockDayDataResult extends Result {
     body?: StockDayData[]
+}
+
+interface StockRuntimeDataResult extends Result {
+    body?: StockRuntimeData[]
 }
 
 export default {
@@ -56,6 +60,14 @@ export default {
             } catch (error) {
                 return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
             };               
+        },
+        runtimeData: async (parent: any, args: any, context: any): Promise<StockRuntimeDataResult> => {
+            try {
+                const data: StockRuntimeData[] = await context.dataSources.dsCollection.findRuntimeData(args['id'], args['start'], args['end']);
+                return await makeResult(data);
+            } catch (error) {
+                return await errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
+            }
         }
     },
 

@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
-    <person-stock-data :table-data="tableData" />
+    <person-stock-data :table-data="tableData" :stock-infos="stockInfos" />
   </div>
 </template>
 
@@ -19,7 +19,8 @@ export default {
   data() {
     return {
       temp: [],
-      tableData: []
+      tableData: [],
+      stockInfos: {}
     }
   },
   computed: {
@@ -33,21 +34,29 @@ export default {
         total: 0,
         fund: 0.0,
         value: 0.0
-      };
+      }
 
       for (let i = 0; i < this.temp.length; ++i) {
         const item = this.temp[i]
-        const { header, body } = await stockInfo({ id: item.stockId })
+        // const { header, body } = await stockInfo({ id: item.stockId })
+        const body = this.stockInfos[item.stockId]
         console.log(body)
-        if (header.code === 0) {
-          if (body.length > 0) {
-            item.id = body[0].id
-            item.name = body[0].name
-            item.code = body[0].code
-            item.market = body[0].market
-            item.type = body[0].type
-          }
+        if (body) {
+          item.id = body.id
+          item.name = body.name
+          item.code = body.code
+          item.market = body.market
+          item.type = body.type
         }
+        // if (header.code === 0) {
+        //   if (body.length > 0) {
+        //     item.id = body[0].id
+        //     item.name = body[0].name
+        //     item.code = body[0].code
+        //     item.market = body[0].market
+        //     item.type = body[0].type
+        //   }
+        // }
         sum.total += item.total
         sum.fund += item.fund
         const ret = await dayDataLatest({ id: item.stockId })
@@ -71,22 +80,43 @@ export default {
     this.fetchStockData()
   },
   methods: {
-    fetchStockData() {
+    // fetchStockData() {
+    //   this.listLoading = true
+    //   stockData({}).then(result => {
+    //     console.log(result)
+    //     const { header, body } = result
+    //     if (header.code === 0) {
+    //       body.forEach(element => {
+    //         element.fund = element.total * element.price
+    //         this.temp.push(element)
+    //       })
+    //     } else {
+    //       //
+    //     }
+    //   }).catch((error) => {
+    //     console.error(error)
+    //   })
+    // },
+    async fetchStockData() {
       this.listLoading = true
-      stockData({}).then(result => {
-        console.log(result)
-        const { header, body } = result
-        if (header.code === 0) {
-          body.forEach(element => {
-            element.fund = element.total * element.price
-            this.temp.push(element)
-          })
-        } else {
-          //
-        }
-      }).catch((error) => {
-        console.error(error)
-      })
+      const stockInfoResult = await stockInfo({})
+      if (stockInfoResult.header.code === 0) {
+        stockInfoResult.body.forEach(element => {
+          this.stockInfos[element.id] = element
+          // console.log('id = ' + element.id)
+          // console.log(element)
+        })
+      }
+
+      const stockDataResult = await stockData({})
+      if (stockDataResult.header.code === 0) {
+        stockDataResult.body.forEach(element => {
+          element.fund = element.total * element.price
+          this.temp.push(element)
+        })
+      }
+
+      this.listLoading = false
     }
   }
 }

@@ -1,6 +1,6 @@
 import { App } from "../app";
 import { insertRuntimeData } from "../db/collection-helper";
-import { RuntimeData } from "../definition/data-define";
+import { StockRuntimeData } from "../definition/data-define";
 import { Stock } from "../definition/struct-define";
 import NetEaseFetcher from "../fetcher/netease-fetcher";
 import logger from "../logger";
@@ -115,8 +115,8 @@ export default class RuntimeDataTask extends Task {
         super.setTimer();
     }
     
-    fetchRuntimeData(req: Stock): Promise<RuntimeData> {
-        return new Promise<RuntimeData>((resolve, reject) => {
+    fetchRuntimeData(req: Stock): Promise<StockRuntimeData> {
+        return new Promise<StockRuntimeData>((resolve, reject) => {
             this.fetcher.fetchRuntime(req)
                 .then(data => {
                     resolve(this.fetcher.makeRuntimeData(req, data));

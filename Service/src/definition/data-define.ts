@@ -18,7 +18,7 @@ export interface StockDayData {
     created: Date  
 }
 
-export interface RuntimeData {
+export interface StockRuntimeData {
     id: number,
     price: number,
     high: number,
@@ -107,14 +107,14 @@ export interface PersonFundData {
 //////////////
 // query condition
 
-export interface RuntimeDataSelectCondtion {
-    id?: number,
-    start?: Date,
-    end?: Date
-}
+// export interface RuntimeDataSelectCondtion {
+//     id?: number,
+//     start?: Date,
+//     end?: Date
+// }
 
-export interface DayDataSelectCondition {
-    id?: number,
-    start: Date,
-    end?: Date
-}
+// export interface DayDataSelectCondition {
+//     id?: number,
+//     start: Date,
+//     end?: Date
+// }

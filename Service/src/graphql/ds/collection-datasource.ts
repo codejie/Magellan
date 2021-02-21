@@ -2,8 +2,7 @@ import { DataSource } from 'apollo-datasource'
 import DBConnector from '../../db-connector';
 import { findStockData, insertStockData,
         removeStockData, findRuntimeData, findDayData } from '../../db/collection-helper';
-import { StockInfo, DayDataSelectCondition,
-        RuntimeData, RuntimeDataSelectCondtion, StockDayData  } from '../../definition/data-define';
+import { StockInfo, StockRuntimeData, StockDayData  } from '../../definition/data-define';
 
 export default class QLCollectionDataSource extends DataSource {
     
@@ -35,8 +34,12 @@ export default class QLCollectionDataSource extends DataSource {
         return removeStockData(this.conn, id);
     }
 
-    findRuntimeData(opts: RuntimeDataSelectCondtion): Promise<RuntimeData[]> {
-        return findRuntimeData(this.conn, opts);
+    // findRuntimeData(opts: RuntimeDataSelectCondtion): Promise<RuntimeData[]> {
+    //     return findRuntimeData(this.conn, opts);
+    // }
+
+    findRuntimeData(id: number, start: Date, end: Date): Promise<StockRuntimeData[]> {
+        return findRuntimeData(this.conn, id, start, end);
     }
 
     findDayData(id?: number, start?: Date, end?: Date): Promise<StockDayData[]> {

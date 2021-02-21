@@ -1,5 +1,5 @@
 import DBConnector from "../db-connector";
-import { StockInfo, RuntimeData, RuntimeDataSelectCondtion, TradeDay, StockDayData } from "../definition/data-define";
+import { StockInfo, StockRuntimeData, StockDayData } from "../definition/data-define";
 import logger from "../logger";
 import { assembleInsertSqlOpts, getDateString } from "./helper";
 
@@ -73,13 +73,13 @@ export function removeStockData(db: DBConnector, id: number): Promise<number> {
     });        
 }
 
-export function insertRuntimeData(db: DBConnector, data: RuntimeData): Promise<void> {
+export function insertRuntimeData(db: DBConnector, data: StockRuntimeData): Promise<void> {
     const opts = assembleInsertSqlOpts('m_runtime_data', data);
 
     logger.debug('sql = ' + opts.sql);
 
     return new Promise<void>((resolve, reject) => {
-    db.execute(opts, (err, result) => {
+    db.execute(opts, (err) => {
             if (err) return reject(err);
             resolve();
         });
@@ -106,7 +106,7 @@ export async function insertDayData(db: DBConnector, date: Date, id: number, ope
         values: [id, open, close, date]
     };
     return new Promise<void>((resolve, reject) => {
-        db.execute(opts, (err, result) => {
+        db.execute(opts, (err) => {
             if (err) return reject(err);
             resolve();
         });
@@ -119,7 +119,7 @@ export function updateDayData(db: DBConnector, date: Date, id: number, close?: n
         values: [close || -1, id, getDateString(date)]
     };
     return new Promise<void>((resolve, reject) => {
-        db.execute(opts, (err, result) => {
+        db.execute(opts, (err) => {
             if (err) return reject(err);
             resolve();
         });
@@ -132,7 +132,7 @@ export async function insertTodayDayData(db: DBConnector, data: StockDayData): P
         values: [data.id, data.todayopen, data.yestclose, data.todaydate]
     };
     return new Promise<void>((resolve, reject) => {
-        db.execute(opts, (err, result) => {
+        db.execute(opts, (err) => {
             if (err) return reject(err);
             resolve();
         });
@@ -147,26 +147,26 @@ export function updateYesterdayDayData(db: DBConnector, data: StockDayData): Pro
         values: [data.todayclose, data.id, getDateString(date)]
     };
     return new Promise<void>((resolve, reject) => {
-        db.execute(opts, (err, result) => {
+        db.execute(opts, (err) => {
             if (err) return reject(err);
             resolve();
         });
     });     
 }
 
-export function findRuntimeData(db: DBConnector, condition: RuntimeDataSelectCondtion): Promise<RuntimeData[]> {
+export function findRuntimeData(db: DBConnector, id: number, start: Date, end: Date): Promise<StockRuntimeData[]> {
     const opts = {
         sql: 'SELECT id,price,high,low,percent,updown,bid1,bidvol1,bid2,bidvol2,bid3,bidvol3,bid4,bidvol4,bid5,bidvol5, \
                 ask1,askvol1,ask2,askvol2,ask3,askvol3,ask4,askvol4,ask5,askvol5,volume,turnover,updated,created \
             FROM m_runtime_data \
                 WHERE id=? AND updated >=? AND updated <?',
-        values: [condition.id, condition.start, condition.end]
+        values: [id, start, end]
     };
-    return new Promise<RuntimeData[]>((resolve, reject) => {
+    return new Promise<StockRuntimeData[]>((resolve, reject) => {
         db.query(opts, (err, results) => {
             if (err) return reject(err);
             if (results && results.length > 0) {
-                return resolve(results as RuntimeData[]);
+                return resolve(results as StockRuntimeData[]);
             }
             return resolve([]);
         });

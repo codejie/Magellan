@@ -26,11 +26,50 @@ type StockDayDataResult {
     body: [DayData]
 }
 
+type RuntimeData {
+    id: Int!,
+    price: Float,
+    high: Float,
+    low: Float,
+    percent: Float,
+    updown: Float,
+    bid1: Float,
+    bidvol1: Int,
+    bid2: Float,
+    bidvol2: Int,
+    bid3: Float,
+    bidvol3: Int,
+    bid4: Float,
+    bidvol4: Int,
+    bid5: Float,
+    bidvol5: Int,
+    ask1: Float,
+    askvol1: Int,
+    ask2: Float,
+    askvol2: Int,
+    ask3: Float,
+    askvol3: Int,
+    ask4: Float,
+    askvol4: Int,
+    ask5: Float,
+    askvol5: Int,
+    volume: Int,
+    turnover: Int,
+    updated: DateTime,
+    created: DateTime            
+}
+
+type RuntimeDataResult {
+    header: Header!,
+    body: [RuntimeData]
+}
+
 
 type StockInfoQuery {
     items(id: Int): StockInfoResult!
     dayData(id: Int, start: Date, end: Date): StockDayDataResult!
     dayDataLatest(id: Int, date: Date): StockDayDataResult!
+    runtimeData(id: Int!, start: DateTime!, end: DateTime!): RuntimeDataResult!
     # one(id: Int!): StockInfo,
     # many: [StockInfo]
 }

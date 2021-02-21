@@ -1,7 +1,7 @@
 import { App } from "../app";
 import { hasTodayDayData, insertDayData, insertTodayDayData, updateDayData, updateYesterdayDayData } from "../db/collection-helper";
 import { findTradeDays, getBeforeTradeDay } from "../db/system-helper";
-import { StockDayData, RuntimeData, TradeDay } from "../definition/data-define";
+import { StockDayData, StockRuntimeData, TradeDay } from "../definition/data-define";
 import { Stock } from "../definition/struct-define";
 import NetEaseFetcher from "../fetcher/netease-fetcher";
 import tradeDay from "../graphql/resolver/trade-day";
