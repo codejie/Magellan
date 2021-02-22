@@ -40,8 +40,18 @@ export default {
         add: (parent: any, args: any, context: any): Promise<number> => {
             return context.dataSources.dsPerson.addPersonInfo(args['name'], args['passwd'])                        
         },
-        updateStockData: (parent: any, args: any, context: any): Promise<number> => {
-            return context.dataSources.dsPerson.updateStockData(args['id'], args['stockId'], args['action'], args['total'], args['price']);
+        updateStockData: async (parent: any, args: any, context: any): Promise<Result> => {
+            try {
+                const id = context.id;
+                if (id) {
+                    await context.dataSources.dsPerson.updateStockData(id, args['stockId'], args['action'], args['total'], args['price']);
+                    return await makeResult();
+                } else {
+                    return await errorResult(ResultHeader.INVALID_TOKEN);
+                }
+            } catch (error) {
+                return errorResult(ResultHeader.SYSTEM_ERROR, error.toString());
+            }
         },
         removeStockData: (parent: any, args: any, context: any): Promise<number> => {
             return context.dataSources.dsPerson.removeStockData(args['id'], args['stockId']);

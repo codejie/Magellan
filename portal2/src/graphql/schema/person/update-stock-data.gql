@@ -1,0 +1,10 @@
+mutation ($stockId: Int!, $action: Int!, $total: Int!, $price: Float!) {
+    Person {
+        updateStockData(stockId: $stockId, action: $action, total: $total, price: $price) {
+            header {
+                code
+                text
+            }
+        }
+    }
+}

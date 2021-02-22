@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
-    <person-stock-data :table-data="tableData" :stock-infos="stockInfos" />
+    <person-stock-data :table-data="tableData" :stock-infos="stockInfos" :parent="self" />
   </div>
 </template>
 
@@ -18,9 +18,9 @@ export default {
   },
   data() {
     return {
-      temp: [],
+      stockInfos: [],
       tableData: [],
-      stockInfos: {}
+      self: this
     }
   },
   computed: {
@@ -28,96 +28,64 @@ export default {
       'name'
     ])
   },
-  watch: {
-    async temp() {
+  created() {
+    this.fetchStockData()
+  },
+  methods: {
+    async fetchStockData() {
+      this.listLoading = true
+
+      const stockInfoResult = await stockInfo({})
+      if (stockInfoResult.header.code === 0) {
+        this.stockInfos = stockInfoResult.body
+      }
       const sum = {
         total: 0,
         fund: 0.0,
         value: 0.0
       }
+      const stockDataResult = await stockData({})
+      this.tableData = []
+      if (stockDataResult.header.code === 0) {
+        for (let i = 0; i < stockDataResult.body.length; ++i) {
+          const item = stockDataResult.body[i]
+          // stockDataResult.body.forEach(item => {
+          item.fund = item.total * item.price
+          // const body = this.stockInfos[item.stockId]
+          const body = this.stockInfos.find(i => i.id === item.stockId)
+          if (body) {
+            item.id = body.id
+            item.name = body.name
+            item.code = body.code
+            item.market = body.market
+            item.type = body.type
+          }
 
-      for (let i = 0; i < this.temp.length; ++i) {
-        const item = this.temp[i]
-        // const { header, body } = await stockInfo({ id: item.stockId })
-        const body = this.stockInfos[item.stockId]
-        console.log(body)
-        if (body) {
-          item.id = body.id
-          item.name = body.name
-          item.code = body.code
-          item.market = body.market
-          item.type = body.type
-        }
-        // if (header.code === 0) {
-        //   if (body.length > 0) {
-        //     item.id = body[0].id
-        //     item.name = body[0].name
-        //     item.code = body[0].code
-        //     item.market = body[0].market
-        //     item.type = body[0].type
-        //   }
-        // }
-        sum.total += item.total
-        sum.fund += item.fund
-        const ret = await dayDataLatest({ id: item.stockId })
-        if (ret.header.code === 0 && ret.body.length > 0 && ret.body[0].todayopen) {
-          item.value = item.total * ret.body[0].todayopen
-          sum.value += item.value
-        }
+          sum.total += item.total
+          sum.fund += item.fund
+          const ret = await dayDataLatest({ id: item.stockId })
+          if (ret.header.code === 0 && ret.body.length > 0 && ret.body[0].todayopen) {
+            item.value = item.total * ret.body[0].todayopen
+            sum.value += item.value
+          }
 
-        this.tableData.push(item)
+          this.tableData.push(item)
+        }
       }
-
       this.tableData.push({
         name: '合计',
         total: sum.total,
         fund: sum.fund,
         value: sum.value
       })
-    }
-  },
-  created() {
-    this.fetchStockData()
-  },
-  methods: {
-    // fetchStockData() {
-    //   this.listLoading = true
-    //   stockData({}).then(result => {
-    //     console.log(result)
-    //     const { header, body } = result
-    //     if (header.code === 0) {
-    //       body.forEach(element => {
-    //         element.fund = element.total * element.price
-    //         this.temp.push(element)
-    //       })
-    //     } else {
-    //       //
-    //     }
-    //   }).catch((error) => {
-    //     console.error(error)
-    //   })
-    // },
-    async fetchStockData() {
-      this.listLoading = true
-      const stockInfoResult = await stockInfo({})
-      if (stockInfoResult.header.code === 0) {
-        stockInfoResult.body.forEach(element => {
-          this.stockInfos[element.id] = element
-          // console.log('id = ' + element.id)
-          // console.log(element)
-        })
-      }
 
-      const stockDataResult = await stockData({})
-      if (stockDataResult.header.code === 0) {
-        stockDataResult.body.forEach(element => {
-          element.fund = element.total * element.price
-          this.temp.push(element)
-        })
-      }
+      console.log(this.tableData)
 
       this.listLoading = false
     }
+  },
+  refresh() {
+    this.$forceUpdate()
   }
 }
 </script>

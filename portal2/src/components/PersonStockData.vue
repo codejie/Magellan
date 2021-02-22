@@ -41,12 +41,12 @@
         <el-table-column
           prop="updated"
           label="日期"
-          width="180"
         />
       </el-table>
     </div>
     <el-dialog
       title="添加持股记录"
+      width="20%"
       :visible.sync="showAddDialog"
       :destroy-on-close="true"
       :show-close="false"
@@ -67,7 +67,7 @@
           <el-input v-model="form.total" />
         </el-form-item>
         <el-form-item label="成本">
-          <el-input v-model="form.fund" />
+          <el-input v-model="form.price" />
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -79,6 +79,8 @@
 </template>
 
 <script>
+import { MessageBox } from 'element-ui'
+import { updateStockData } from '@/graphql/person'
 export default {
   name: 'PersonStockData',
   props: {
@@ -87,38 +89,61 @@ export default {
       default: () => []
     },
     stockInfos: {
+      type: Array,
+      default: () => []
+    },
+    parent: {
       type: Object,
-      default: () => {}
+      default: () => undefined
     }
   },
   data() {
     return {
       showAddDialog: false,
-      stocks: this.makeStocks(),
+      // stocks: [], // this.makeStocks(),
       form: {
         total: 0,
-        fund: 0.0,
-        sotckId: 0
+        price: 0,
+        stockId: undefined
       }
     }
   },
-  methods: {
-    makeStocks() {
+  computed: {
+    stocks() {
       const ret = []
-      Object.keys(this.stockInfos).forEach(element => {
-        const item = this.stockInfos[element]
+      this.stockInfos.forEach(item => {
         ret.push({
           id: item.id,
           name: item.name
         })
       })
       return ret
-    },
+    }
+  },
+  methods: {
     onAdd() {
       this.showAddDialog = true
     },
     onDialogOK() {
       console.log(this.form)
+      if (this.form.stockId && this.form.total && this.form.price) {
+        this.updateStockData(0, this.form)
+          .then(ret => {
+            this.showAddDialog = false
+            this.parent.refresh()
+          })
+      } else {
+        MessageBox('缺少必要数据')
+      }
+    },
+    updateStockData(action, form) {
+      const data = {
+        action: parseInt(action),
+        stockId: parseInt(form.stockId),
+        total: parseInt(form.total),
+        price: parseFloat(form.price)
+      }
+      return updateStockData(data)
     }
   }
 }
@@ -134,5 +159,6 @@ export default {
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   margin-top: 4px;
+  padding-left: 4px;
 }
 </style>
