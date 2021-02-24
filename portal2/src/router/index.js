@@ -56,6 +56,20 @@ export const constantRoutes = [
   },
 
   {
+    path: '/runtime',
+    component: Layout,
+    redirect: '/runtime',
+    children: [
+      {
+        path: 'runtime',
+        name: 'runtime',
+        component: () => import('@/views/runtime/index'),
+        meta: { title: 'Runtime', icon: 'dashboard' }
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
